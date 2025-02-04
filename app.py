@@ -121,6 +121,94 @@ async def update_user_profile(profile: UserProfile, token_data=Depends(verify_to
         logger.error(f"Error updating user profile: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+# Video Feed Endpoints
+class VideoResponse(BaseModel):
+    videoId: str
+    videoTitle: str
+    videoDescription: str
+    mealName: str
+    mealDescription: str
+    videoUrl: str
+    thumbnailUrl: str
+    duration: int
+    uploadedAt: str
+    source: str
+
+@app.get("/api/videos/feed")
+async def get_video_feed(
+    page_size: int = 10,
+    last_video_id: Optional[str] = None,
+    token_data=Depends(verify_token)
+):
+    """Get paginated video feed"""
+    try:
+        query = db.collection('videos').order_by('uploadedAt', direction=firestore.Query.DESCENDING)
+        
+        if last_video_id:
+            last_doc = db.collection('videos').document(last_video_id).get()
+            if last_doc.exists:
+                query = query.start_after(last_doc)
+        
+        query = query.limit(page_size)
+        docs = query.stream()
+        
+        videos = []
+        for doc in docs:
+            video_data = doc.to_dict()
+            video_data['videoId'] = doc.id
+            videos.append(video_data)
+        
+        return videos
+    except Exception as e:
+        logger.error(f"Error getting video feed: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/videos/{video_id}")
+async def get_video(video_id: str, token_data=Depends(verify_token)):
+    """Get single video details"""
+    try:
+        doc_ref = db.collection('videos').document(video_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            video_data = doc.to_dict()
+            video_data['videoId'] = doc.id
+            return video_data
+        raise HTTPException(status_code=404, detail="Video not found")
+    except Exception as e:
+        logger.error(f"Error getting video: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+class VideoUpload(BaseModel):
+    videoTitle: str
+    videoDescription: str
+    mealName: str
+    mealDescription: str
+    videoUrl: str
+    thumbnailUrl: str
+    duration: int
+
+@app.post("/api/videos/upload")
+async def upload_video(video: VideoUpload, token_data=Depends(verify_token)):
+    """Create a new video entry"""
+    try:
+        user_id = token_data['uid']
+        video_data = video.dict()
+        video_data.update({
+            'uploadedAt': datetime.datetime.utcnow().isoformat(),
+            'userId': user_id,
+            'source': 'native upload'
+        })
+        
+        doc_ref = db.collection('videos').document()
+        doc_ref.set(video_data)
+        
+        # Return the created video data with its ID
+        response_data = {**video_data, 'videoId': doc_ref.id}
+        return response_data
+    except Exception as e:
+        logger.error(f"Error uploading video: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Add more endpoints as needed based on your PRD requirements
 
 if __name__ == "__main__":
