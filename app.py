@@ -62,6 +62,15 @@ class UserProfile(BaseModel):
     updatedAt: str
     passwordHash: Optional[str] = None  # We don't expose this
 
+# Models for reactions
+class VideoReactionCreate(BaseModel):
+    videoId: str
+    reactionType: str
+
+class TryListItemCreate(BaseModel):
+    videoId: str
+    notes: Optional[str] = None
+
 # Routes
 @app.get("/")
 async def root():
@@ -207,6 +216,129 @@ async def get_user_videos(user_id: str, token_data=Depends(verify_token)):
         return videos
     except Exception as e:
         logger.error(f"Error getting user videos: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Reaction endpoints
+@app.post("/api/videos/reactions")
+async def add_reaction(reaction: VideoReactionCreate, token_data=Depends(verify_token)):
+    """Add or update a reaction to a video"""
+    try:
+        user_id = token_data['uid']
+        now = datetime.datetime.utcnow().isoformat()
+        
+        # Check if reaction already exists
+        reactions_ref = db.collection('user_video_reactions')
+        existing_reaction = reactions_ref.where('userId', '==', user_id).where('videoId', '==', reaction.videoId).get()
+        
+        reaction_data = {
+            "userId": user_id,
+            "videoId": reaction.videoId,
+            "reactionType": reaction.reactionType,
+            "reactionDate": now
+        }
+        
+        if existing_reaction:
+            # Update existing reaction
+            doc = existing_reaction[0]
+            doc.reference.update(reaction_data)
+            reaction_data['reactionId'] = doc.id
+        else:
+            # Create new reaction
+            doc_ref = reactions_ref.document()
+            doc_ref.set(reaction_data)
+            reaction_data['reactionId'] = doc_ref.id
+        
+        return reaction_data
+    except Exception as e:
+        logger.error(f"Error adding reaction: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/videos/reactions/{video_id}")
+async def remove_reaction(video_id: str, token_data=Depends(verify_token)):
+    """Remove a reaction from a video"""
+    try:
+        user_id = token_data['uid']
+        reactions_ref = db.collection('user_video_reactions')
+        reactions = reactions_ref.where('userId', '==', user_id).where('videoId', '==', video_id).get()
+        
+        for reaction in reactions:
+            reaction.reference.delete()
+            
+        return {"message": "Reaction removed successfully"}
+    except Exception as e:
+        logger.error(f"Error removing reaction: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/videos/reactions")
+async def get_user_reactions(token_data=Depends(verify_token)):
+    """Get all reactions for a user"""
+    try:
+        user_id = token_data['uid']
+        reactions_ref = db.collection('user_video_reactions')
+        reactions = reactions_ref.where('userId', '==', user_id).get()
+        
+        return [{"reactionId": reaction.id, **reaction.to_dict()} for reaction in reactions]
+    except Exception as e:
+        logger.error(f"Error getting reactions: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Try List endpoints
+@app.post("/api/videos/try-list")
+async def add_to_try_list(try_item: TryListItemCreate, token_data=Depends(verify_token)):
+    """Add a video to user's try list"""
+    try:
+        user_id = token_data['uid']
+        now = datetime.datetime.utcnow().isoformat()
+        
+        try_list_ref = db.collection('user_try_list')
+        existing_item = try_list_ref.where('userId', '==', user_id).where('videoId', '==', try_item.videoId).get()
+        
+        if existing_item:
+            raise HTTPException(status_code=400, detail="Video already in try list")
+        
+        try_list_data = {
+            "userId": user_id,
+            "videoId": try_item.videoId,
+            "notes": try_item.notes,
+            "addedDate": now
+        }
+        
+        doc_ref = try_list_ref.document()
+        doc_ref.set(try_list_data)
+        try_list_data['tryListId'] = doc_ref.id
+        
+        return try_list_data
+    except Exception as e:
+        logger.error(f"Error adding to try list: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/videos/try-list/{video_id}")
+async def remove_from_try_list(video_id: str, token_data=Depends(verify_token)):
+    """Remove a video from user's try list"""
+    try:
+        user_id = token_data['uid']
+        try_list_ref = db.collection('user_try_list')
+        items = try_list_ref.where('userId', '==', user_id).where('videoId', '==', video_id).get()
+        
+        for item in items:
+            item.reference.delete()
+            
+        return {"message": "Removed from try list successfully"}
+    except Exception as e:
+        logger.error(f"Error removing from try list: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/videos/try-list")
+async def get_try_list(token_data=Depends(verify_token)):
+    """Get user's try list"""
+    try:
+        user_id = token_data['uid']
+        try_list_ref = db.collection('user_try_list')
+        items = try_list_ref.where('userId', '==', user_id).get()
+        
+        return [{"tryListId": item.id, **item.to_dict()} for item in items]
+    except Exception as e:
+        logger.error(f"Error getting try list: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Add more endpoints as needed based on your PRD requirements
