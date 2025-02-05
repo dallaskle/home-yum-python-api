@@ -106,18 +106,12 @@ async def cleanup_orphaned_references(user_id: str, request_id: str = None):
             video_id = reaction.get('videoId')
             if video_id:
                 video = await get_video_or_none(video_id, request_id)
-                if not video:
-                    logger.warning(f"[{request_id}] Cleaning up orphaned reaction {reaction.id} for missing video {video_id}")
-                    reaction.reference.delete()
         
         # Check and clean try-list
         for item in try_list_ref.stream():
             video_id = item.get('videoId')
             if video_id:
                 video = await get_video_or_none(video_id, request_id)
-                if not video:
-                    logger.warning(f"[{request_id}] Cleaning up orphaned try-list item {item.id} for missing video {video_id}")
-                    item.reference.delete()
                     
     except Exception as e:
         logger.error(f"[{request_id}] Error during cleanup: {str(e)}")
