@@ -743,6 +743,96 @@ async def get_video(video_id: str, token_data=Depends(verify_token)):
         logger.error(f"Error getting video: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/videos/{video_id}/recipe/generate")
+async def generate_recipe_data(video_id: str, token_data=Depends(verify_token)):
+    """Generate random recipe data for a video"""
+    try:
+        # Get video to ensure it exists
+        video_ref = db.collection('videos').document(video_id)
+        video = video_ref.get()
+        if not video.exists:
+            raise HTTPException(status_code=404, detail="Video not found")
+
+        video_data = video.to_dict()
+        
+        # Generate random recipe
+        recipe_data = {
+            "videoId": video_id,
+            "title": video_data.get('mealName', 'Delicious Recipe'),
+            "summary": "A wonderful homemade recipe",
+            "additionalNotes": "Best served fresh",
+            "createdAt": datetime.datetime.utcnow().isoformat(),
+            "updatedAt": datetime.datetime.utcnow().isoformat()
+        }
+        
+        # Create recipe
+        recipe_ref = db.collection('recipes').document()
+        recipe_ref.set(recipe_data)
+        recipe_id = recipe_ref.id
+
+        # Generate random recipe items (instructions)
+        instructions = [
+            {"stepOrder": 1, "instruction": "Prepare all ingredients", "additionalDetails": "Ensure everything is at room temperature"},
+            {"stepOrder": 2, "instruction": "Mix dry ingredients", "additionalDetails": "Sift for best results"},
+            {"stepOrder": 3, "instruction": "Combine wet ingredients", "additionalDetails": "Mix until smooth"},
+            {"stepOrder": 4, "instruction": "Combine all ingredients", "additionalDetails": "Don't overmix"},
+            {"stepOrder": 5, "instruction": "Cook according to video instructions", "additionalDetails": "Follow temperature guidelines"}
+        ]
+        
+        recipe_items = []
+        for instruction in instructions:
+            item_ref = db.collection('recipe_items').document()
+            item_data = {
+                "recipeId": recipe_id,
+                **instruction
+            }
+            item_ref.set(item_data)
+            recipe_items.append({**item_data, "recipeItemId": item_ref.id})
+
+        # Generate random ingredients
+        ingredients = [
+            {"name": "All-purpose flour", "quantity": 2, "unit": "cups"},
+            {"name": "Sugar", "quantity": 1, "unit": "cup"},
+            {"name": "Eggs", "quantity": 2, "unit": "pieces"},
+            {"name": "Milk", "quantity": 1, "unit": "cup"},
+            {"name": "Butter", "quantity": 0.5, "unit": "cup"}
+        ]
+        
+        ingredient_list = []
+        for ingredient in ingredients:
+            ing_ref = db.collection('ingredients').document()
+            ing_data = {
+                "videoId": video_id,
+                **ingredient
+            }
+            ing_ref.set(ing_data)
+            ingredient_list.append({**ing_data, "ingredientId": ing_ref.id})
+
+        # Generate random nutrition data
+        nutrition_data = {
+            "videoId": video_id,
+            "calories": 350,
+            "fat": 12,
+            "protein": 8,
+            "carbohydrates": 48,
+            "fiber": 2,
+            "sugar": 24,
+            "sodium": 400
+        }
+        
+        nutrition_ref = db.collection('nutrition').document()
+        nutrition_ref.set(nutrition_data)
+        nutrition_data["nutritionId"] = nutrition_ref.id
+
+        return {
+            "recipe": {**recipe_data, "recipeId": recipe_id},
+            "recipeItems": recipe_items,
+            "ingredients": ingredient_list,
+            "nutrition": nutrition_data
+        }
+    except Exception as e:
+        logger.error(f"Error generating recipe data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Add more endpoints as needed based on your PRD requirements
 
