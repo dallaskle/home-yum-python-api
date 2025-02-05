@@ -983,4 +983,12 @@ async def get_aggregated_ratings(token_data=Depends(verify_token)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app:app", host="0.0.0.0", port=8001, reload=True)
+    
+    # Get port from environment variable or default to 8001
+    port = int(os.environ.get("PORT", 8001))
+    
+    # Bind to 0.0.0.0 instead of localhost for production
+    uvicorn.run("app:app", 
+                host="0.0.0.0",
+                port=port,
+                reload=True)
