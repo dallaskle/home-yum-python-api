@@ -593,41 +593,56 @@ async def schedule_meal(meal: MealScheduleCreate, token_data=Depends(verify_toke
 
 @app.get("/api/meals/schedule")
 async def get_scheduled_meals(token_data=Depends(verify_token)):
-    """Get all scheduled meals for a user"""
+    """Get user's scheduled meals"""
     try:
         user_id = token_data['uid']
-        logger.info(f"Fetching scheduled meals for user: {user_id}")
+        meals = db.collection('meals').where('userId', '==', user_id).get()
         
-        meals_ref = db.collection('meals')
-        meals = meals_ref.where('userId', '==', user_id).order_by('mealDate').order_by('mealTime').get()
-        logger.info(f"Found {len(meals)} scheduled meals for user: {user_id}")
+        # Get all meal ratings for this user
+        ratings = {
+            rating.to_dict()['videoId']: rating.to_dict()
+            for rating in db.collection('meal_ratings')
+                .where('userId', '==', user_id)
+                .get()
+        }
         
-        # Get all meal documents with video details
-        meal_list = []
+        # Fetch videos for all meals
+        video_ids = [meal.to_dict()['videoId'] for meal in meals]
+        
+        # Get videos by their document IDs directly
+        videos = {}
+        if video_ids:
+            for video_id in video_ids:
+                video_doc = db.collection('videos').document(video_id).get()
+                if video_doc.exists:
+                    videos[video_id] = video_doc.to_dict()
+
+        logger.info(f"Found {len(videos)} videos for {len(video_ids)} meal(s)")
+        
+        result = []
         for meal in meals:
             meal_data = meal.to_dict()
             meal_data['mealId'] = meal.id
-            logger.debug(f"Processing meal: {meal_data['mealId']} for user: {user_id}")
             
-            # Get video details
-            video_ref = db.collection('videos').document(meal_data['videoId'])
-            video_doc = video_ref.get()
-            if video_doc.exists:
-                video_data = video_doc.to_dict()
+            # Add video data if available
+            if meal_data['videoId'] in videos:
+                video_data = videos[meal_data['videoId']]
                 meal_data['video'] = {
-                    'videoId': video_doc.id,
+                    'videoId': meal_data['videoId'],
                     'mealName': video_data.get('mealName', ''),
                     'mealDescription': video_data.get('mealDescription', ''),
                     'thumbnailUrl': video_data.get('thumbnailUrl', '')
                 }
-                logger.debug(f"Added video details for meal: {meal_data['mealId']}")
             else:
-                logger.warning(f"Video not found for meal: {meal_data['mealId']}")
+                logger.warning(f"No video found for meal {meal_data['mealId']} with videoId {meal_data['videoId']}")
             
-            meal_list.append(meal_data)
-        
-        logger.info(f"Successfully retrieved {len(meal_list)} meals with video details for user: {user_id}")
-        return meal_list
+            # Add rating if available
+            if meal_data['videoId'] in ratings:
+                meal_data['rating'] = ratings[meal_data['videoId']]
+            
+            result.append(meal_data)
+            
+        return result
     except Exception as e:
         logger.error(f"Error getting scheduled meals: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
