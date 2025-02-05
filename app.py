@@ -329,21 +329,6 @@ async def get_video_feed(
         logger.error(f"Error getting video feed: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/api/videos/{video_id}")
-async def get_video(video_id: str, token_data=Depends(verify_token)):
-    """Get single video details"""
-    try:
-        doc_ref = db.collection('videos').document(video_id)
-        doc = doc_ref.get()
-        if doc.exists:
-            video_data = doc.to_dict()
-            video_data['videoId'] = doc.id
-            return video_data
-        raise HTTPException(status_code=404, detail="Video not found")
-    except Exception as e:
-        logger.error(f"Error getting video: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
 @app.get("/api/videos/user/{user_id}")
 async def get_user_videos(user_id: str, token_data=Depends(verify_token)):
     """Get videos uploaded by a specific user"""
@@ -488,7 +473,7 @@ async def add_to_try_list(try_item: TryListItemCreate, token_data=Depends(verify
         user_id = token_data['uid']
         
         # Validate video exists first
-        await get_video_or_none(try_item.videoId, request_id)
+        await get_video_or_none(try_item.videoId)
         
         now = datetime.datetime.utcnow().isoformat()
         try_list_ref = db.collection('user_try_list')
@@ -612,14 +597,18 @@ async def get_scheduled_meals(token_data=Depends(verify_token)):
     """Get all scheduled meals for a user"""
     try:
         user_id = token_data['uid']
+        logger.info(f"Fetching scheduled meals for user: {user_id}")
+        
         meals_ref = db.collection('meals')
         meals = meals_ref.where('userId', '==', user_id).order_by('mealDate').order_by('mealTime').get()
+        logger.info(f"Found {len(meals)} scheduled meals for user: {user_id}")
         
         # Get all meal documents with video details
         meal_list = []
         for meal in meals:
             meal_data = meal.to_dict()
             meal_data['mealId'] = meal.id
+            logger.debug(f"Processing meal: {meal_data['mealId']} for user: {user_id}")
             
             # Get video details
             video_ref = db.collection('videos').document(meal_data['videoId'])
@@ -632,9 +621,13 @@ async def get_scheduled_meals(token_data=Depends(verify_token)):
                     'mealDescription': video_data.get('mealDescription', ''),
                     'thumbnailUrl': video_data.get('thumbnailUrl', '')
                 }
+                logger.debug(f"Added video details for meal: {meal_data['mealId']}")
+            else:
+                logger.warning(f"Video not found for meal: {meal_data['mealId']}")
             
             meal_list.append(meal_data)
         
+        logger.info(f"Successfully retrieved {len(meal_list)} meals with video details for user: {user_id}")
         return meal_list
     except Exception as e:
         logger.error(f"Error getting scheduled meals: {str(e)}")
@@ -692,6 +685,25 @@ async def delete_meal_schedule(meal_id: str, token_data=Depends(verify_token)):
     except Exception as e:
         logger.error(f"Error deleting meal schedule: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@app.get("/api/videos/{video_id}")
+async def get_video(video_id: str, token_data=Depends(verify_token)):
+    """Get single video details"""
+    try:
+        doc_ref = db.collection('videos').document(video_id)
+        doc = doc_ref.get()
+        if doc.exists:
+            video_data = doc.to_dict()
+            video_data['videoId'] = doc.id
+            return video_data
+        raise HTTPException(status_code=404, detail="Video not found")
+    except Exception as e:
+        logger.error(f"Error getting video: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 
 # Add more endpoints as needed based on your PRD requirements
 
