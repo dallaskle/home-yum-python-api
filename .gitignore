@@ -1,3 +1,6 @@
-.venv
+venv/
+__pycache__/
+*.pyc
+*.json
 .env
 home-yum-36d51-firebase-adminsdk-fbsvc-dbc5ba14e4.json
