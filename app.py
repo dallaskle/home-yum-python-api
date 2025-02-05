@@ -2,11 +2,14 @@ from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 import firebase_admin
-from firebase_admin import credentials, auth, firestore
+from firebase_admin import credentials, auth, firestore, storage
 from pydantic import BaseModel
 import json
 import datetime
 import logging
+import tempfile
+import requests
+from urllib.parse import urlparse
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -26,10 +29,15 @@ app.add_middleware(
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("./home-yum-36d51-firebase-adminsdk-fbsvc-dbc5ba14e4.json")
-firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app(cred, {
+    'storageBucket': 'home-yum-36d51.firebasestorage.app'
+})
 
 # Get Firestore client
 db = firestore.client()
+
+# Get Storage bucket
+bucket = storage.bucket()
 
 # Dependency to verify Firebase ID token
 async def verify_token(authorization: Optional[str] = Header(None)):
@@ -187,26 +195,115 @@ class VideoUpload(BaseModel):
     thumbnailUrl: str
     duration: int
 
+async def upload_to_storage(file_url: str, destination_path: str, content_type: str) -> str:
+    """Upload a file to Firebase Storage from a URL with proper content type"""
+    try:
+        # Download the file to a temporary location
+        response = requests.get(file_url)
+        response.raise_for_status()
+        
+        with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+            temp_file.write(response.content)
+            temp_file.flush()
+            
+            # Upload to Firebase Storage with content type
+            blob = bucket.blob(destination_path)
+            blob.content_type = content_type
+            
+            # Upload with proper metadata
+            blob.upload_from_filename(
+                temp_file.name,
+                content_type=content_type
+            )
+            
+            # Make the blob publicly accessible
+            blob.make_public()
+            
+            return blob.public_url
+            
+    except Exception as e:
+        logger.error(f"Error uploading to storage: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Storage upload failed: {str(e)}")
+    finally:
+        # Clean up temporary file
+        import os
+        try:
+            os.unlink(temp_file.name)
+        except:
+            pass
+
 @app.post("/api/videos/upload")
 async def upload_video(video: VideoUpload, token_data=Depends(verify_token)):
-    """Create a new video entry"""
+    """Create a new video entry with Firebase Storage URLs"""
     try:
         user_id = token_data['uid']
+        
+        # Generate unique paths for video and thumbnail
+        timestamp = datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')
+        video_path = f"videos/{user_id}/{timestamp}_video.mp4"
+        thumbnail_path = f"thumbnails/{user_id}/{timestamp}_thumbnail.jpg"
+        
+        # Upload files to Firebase Storage with proper content types
+        logger.info(f"Uploading video for user {user_id}")
+        video_url = await upload_to_storage(
+            video.videoUrl,
+            video_path,
+            content_type="video/mp4"
+        )
+        
+        logger.info(f"Uploading thumbnail for user {user_id}")
+        thumbnail_url = await upload_to_storage(
+            video.thumbnailUrl,
+            thumbnail_path,
+            content_type="image/jpeg"
+        )
+        
+        # Prepare video data for Firestore
         video_data = video.dict()
         video_data.update({
             'uploadedAt': datetime.datetime.utcnow().isoformat(),
             'userId': user_id,
-            'source': 'native upload'
+            'source': 'native upload',
+            'videoUrl': video_url,
+            'thumbnailUrl': thumbnail_url,
+            'contentType': 'video/mp4'  # Store content type in metadata
         })
         
+        # Create new document in videos collection
         doc_ref = db.collection('videos').document()
         doc_ref.set(video_data)
+        
+        logger.info(f"Video uploaded successfully: {doc_ref.id}")
         
         # Return the created video data with its ID
         response_data = {**video_data, 'videoId': doc_ref.id}
         return response_data
+        
     except Exception as e:
         logger.error(f"Error uploading video: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/videos/user/{user_id}")
+async def get_user_videos(user_id: str, token_data=Depends(verify_token)):
+    """Get videos uploaded by a specific user"""
+    try:
+        # Query videos collection with user_id filter
+        videos_ref = db.collection('videos')
+        query = videos_ref.where('userId', '==', user_id).order_by('uploadedAt', direction=firestore.Query.DESCENDING)
+        docs = query.stream()
+        
+        videos = []
+        for doc in docs:
+            video_data = doc.to_dict()
+            video_data['videoId'] = doc.id
+            videos.append(video_data)
+        
+        logger.info(f"Found {len(videos)} videos for user {user_id}")
+        logger.info(f"Sample video data: {videos[0] if videos else 'No videos found'}")
+        
+        return videos
+    except Exception as e:
+        logger.error(f"Error getting user videos: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Add more endpoints as needed based on your PRD requirements
