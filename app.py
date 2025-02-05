@@ -71,6 +71,16 @@ class TryListItemCreate(BaseModel):
     videoId: str
     notes: Optional[str] = None
 
+# Meal Schedule Models
+class MealScheduleCreate(BaseModel):
+    videoId: str
+    mealDate: str
+    mealTime: str
+
+class MealScheduleUpdate(BaseModel):
+    mealDate: str
+    mealTime: str
+
 # Routes
 @app.get("/")
 async def root():
@@ -339,6 +349,120 @@ async def get_try_list(token_data=Depends(verify_token)):
         return [{"tryListId": item.id, **item.to_dict()} for item in items]
     except Exception as e:
         logger.error(f"Error getting try list: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Meal Schedule endpoints
+@app.post("/api/meals/schedule")
+async def schedule_meal(meal: MealScheduleCreate, token_data=Depends(verify_token)):
+    """Schedule a meal for a specific date and time"""
+    try:
+        user_id = token_data['uid']
+        now = datetime.datetime.utcnow().isoformat()
+        
+        # Create meal document
+        meal_data = {
+            "userId": user_id,
+            "videoId": meal.videoId,
+            "mealDate": meal.mealDate,
+            "mealTime": meal.mealTime,
+            "completed": False,
+            "createdAt": now,
+            "updatedAt": now
+        }
+        
+        doc_ref = db.collection('meals').document()
+        doc_ref.set(meal_data)
+        
+        meal_data['mealId'] = doc_ref.id
+        return meal_data
+    except Exception as e:
+        logger.error(f"Error scheduling meal: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/meals/schedule")
+async def get_scheduled_meals(token_data=Depends(verify_token)):
+    """Get all scheduled meals for a user"""
+    try:
+        user_id = token_data['uid']
+        meals_ref = db.collection('meals')
+        meals = meals_ref.where('userId', '==', user_id).order_by('mealDate').order_by('mealTime').get()
+        
+        # Get all meal documents with video details
+        meal_list = []
+        for meal in meals:
+            meal_data = meal.to_dict()
+            meal_data['mealId'] = meal.id
+            
+            # Get video details
+            video_ref = db.collection('videos').document(meal_data['videoId'])
+            video_doc = video_ref.get()
+            if video_doc.exists:
+                video_data = video_doc.to_dict()
+                meal_data['video'] = {
+                    'videoId': video_doc.id,
+                    'mealName': video_data.get('mealName', ''),
+                    'mealDescription': video_data.get('mealDescription', ''),
+                    'thumbnailUrl': video_data.get('thumbnailUrl', '')
+                }
+            
+            meal_list.append(meal_data)
+        
+        return meal_list
+    except Exception as e:
+        logger.error(f"Error getting scheduled meals: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/api/meals/schedule/{meal_id}")
+async def update_meal_schedule(meal_id: str, meal: MealScheduleUpdate, token_data=Depends(verify_token)):
+    """Update a scheduled meal's date and time"""
+    try:
+        user_id = token_data['uid']
+        meal_ref = db.collection('meals').document(meal_id)
+        meal_doc = meal_ref.get()
+        
+        if not meal_doc.exists:
+            raise HTTPException(status_code=404, detail="Meal schedule not found")
+            
+        meal_data = meal_doc.to_dict()
+        if meal_data['userId'] != user_id:
+            raise HTTPException(status_code=403, detail="Not authorized to update this meal schedule")
+        
+        update_data = {
+            "mealDate": meal.mealDate,
+            "mealTime": meal.mealTime,
+            "updatedAt": datetime.datetime.utcnow().isoformat()
+        }
+        
+        meal_ref.update(update_data)
+        
+        return {
+            "mealId": meal_id,
+            **meal_data,
+            **update_data
+        }
+    except Exception as e:
+        logger.error(f"Error updating meal schedule: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/meals/schedule/{meal_id}")
+async def delete_meal_schedule(meal_id: str, token_data=Depends(verify_token)):
+    """Delete a scheduled meal"""
+    try:
+        user_id = token_data['uid']
+        meal_ref = db.collection('meals').document(meal_id)
+        meal_doc = meal_ref.get()
+        
+        if not meal_doc.exists:
+            raise HTTPException(status_code=404, detail="Meal schedule not found")
+            
+        meal_data = meal_doc.to_dict()
+        if meal_data['userId'] != user_id:
+            raise HTTPException(status_code=403, detail="Not authorized to delete this meal schedule")
+        
+        meal_ref.delete()
+        return {"message": "Meal schedule deleted successfully"}
+    except Exception as e:
+        logger.error(f"Error deleting meal schedule: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Add more endpoints as needed based on your PRD requirements
