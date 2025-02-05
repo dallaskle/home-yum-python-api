@@ -834,6 +834,52 @@ async def generate_recipe_data(video_id: str, token_data=Depends(verify_token)):
         logger.error(f"Error generating recipe data: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/meals/rate")
+async def rate_meal(
+    rating_data: dict,
+    token_data=Depends(verify_token)
+):
+    """Rate a meal"""
+    try:
+        user_id = token_data['uid']
+        video_id = rating_data['videoId']
+        rating = rating_data['rating']
+        meal_id = rating_data.get('mealId')
+        comment = rating_data.get('comment')
+        
+        rating_ref = db.collection('meal_ratings').document()
+        rating_data = {
+            "userId": user_id,
+            "videoId": video_id,
+            "mealId": meal_id,
+            "rating": rating,
+            "comment": comment,
+            "ratedAt": datetime.datetime.utcnow().isoformat()
+        }
+        
+        rating_ref.set(rating_data)
+        rating_data['ratingId'] = rating_ref.id
+        
+        return rating_data
+    except Exception as e:
+        logger.error(f"Error rating meal: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/meals/ratings")
+async def get_user_ratings(token_data=Depends(verify_token)):
+    """Get user's meal ratings"""
+    try:
+        user_id = token_data['uid']
+        ratings = db.collection('meal_ratings').where('userId', '==', user_id).get()
+        
+        return [
+            {**rating.to_dict(), 'ratingId': rating.id}
+            for rating in ratings
+        ]
+    except Exception as e:
+        logger.error(f"Error getting ratings: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Add more endpoints as needed based on your PRD requirements
 
 if __name__ == "__main__":
