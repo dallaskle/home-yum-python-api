@@ -600,7 +600,7 @@ async def get_scheduled_meals(token_data=Depends(verify_token)):
         
         # Get all meal ratings for this user
         ratings = {
-            rating.to_dict()['videoId']: rating.to_dict()
+            rating.to_dict()['mealId']: rating.to_dict()  # Changed from videoId to mealId
             for rating in db.collection('meal_ratings')
                 .where('userId', '==', user_id)
                 .get()
@@ -636,9 +636,9 @@ async def get_scheduled_meals(token_data=Depends(verify_token)):
             else:
                 logger.warning(f"No video found for meal {meal_data['mealId']} with videoId {meal_data['videoId']}")
             
-            # Add rating if available
-            if meal_data['videoId'] in ratings:
-                meal_data['rating'] = ratings[meal_data['videoId']]
+            # Add rating if available for this specific meal
+            if meal_data['mealId'] in ratings:  # Changed from videoId to mealId
+                meal_data['rating'] = ratings[meal_data['mealId']]
             
             result.append(meal_data)
             
