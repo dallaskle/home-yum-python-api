@@ -84,6 +84,11 @@ async def get_video_or_none(video_id: str, request_id: str = None) -> Optional[d
         
         video_data = video.to_dict()
         video_data['videoId'] = video.id  # Include the ID in the data
+        
+        # Convert Firestore timestamps to ISO format strings
+        if 'uploadedAt' in video_data:
+            video_data['uploadedAt'] = video_data['uploadedAt'].isoformat()
+        
         execution_time = (time.time() - start_time) * 1000
         logger.info(f"[{request_id}] Retrieved video {video_id} in {execution_time:.2f}ms")
         logger.debug(f"[{request_id}] Video data: {json.dumps(video_data, indent=2)}")
