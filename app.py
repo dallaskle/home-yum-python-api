@@ -685,7 +685,48 @@ async def delete_meal_schedule(meal_id: str, token_data=Depends(verify_token)):
         logger.error(f"Error deleting meal schedule: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
+@app.get("/api/videos/{video_id}/recipe")
+async def get_recipe_data(video_id: str, token_data=Depends(verify_token)):
+    """Get recipe data for a video including ingredients, instructions, and nutrition info"""
+    try:
+        # Get recipe data
+        recipe_ref = db.collection('recipes').where('videoId', '==', video_id).limit(1).get()
+        recipe = recipe_ref[0].to_dict() if recipe_ref else None
+        
+        if recipe:
+            recipe['recipeId'] = recipe_ref[0].id
+            
+            # Get recipe items (instructions)
+            recipe_items_ref = db.collection('recipe_items').where('recipeId', '==', recipe['recipeId']).get()
+            recipe_items = []
+            for item in recipe_items_ref:
+                item_data = item.to_dict()
+                item_data['recipeItemId'] = item.id
+                recipe_items.append(item_data)
+        
+        # Get ingredients
+        ingredients_ref = db.collection('ingredients').where('videoId', '==', video_id).get()
+        ingredients = []
+        for ingredient in ingredients_ref:
+            ingredient_data = ingredient.to_dict()
+            ingredient_data['ingredientId'] = ingredient.id
+            ingredients.append(ingredient_data)
+        
+        # Get nutrition info
+        nutrition_ref = db.collection('nutrition').where('videoId', '==', video_id).limit(1).get()
+        nutrition = nutrition_ref[0].to_dict() if nutrition_ref else None
+        if nutrition:
+            nutrition['nutritionId'] = nutrition_ref[0].id
+        
+        return {
+            "recipe": recipe,
+            "recipeItems": recipe_items if recipe else [],
+            "ingredients": ingredients,
+            "nutrition": nutrition
+        }
+    except Exception as e:
+        logger.error(f"Error getting recipe data: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/videos/{video_id}")
 async def get_video(video_id: str, token_data=Depends(verify_token)):
@@ -701,7 +742,6 @@ async def get_video(video_id: str, token_data=Depends(verify_token)):
     except Exception as e:
         logger.error(f"Error getting video: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
-
 
 
 # Add more endpoints as needed based on your PRD requirements
