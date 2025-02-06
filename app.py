@@ -12,6 +12,7 @@ import requests
 from urllib.parse import urlparse
 import time
 from functools import wraps
+from extractor import TikTokMetadataExtractor
 
 # Set up logging with more detail
 logging.basicConfig(
@@ -186,6 +187,13 @@ class MealScheduleCreate(BaseModel):
 class MealScheduleUpdate(BaseModel):
     mealDate: str
     mealTime: str
+
+# Models
+class TikTokExtractionRequest(BaseModel):
+    video_url: str
+
+# Initialize TikTok extractor
+tiktok_extractor = TikTokMetadataExtractor()
 
 # Routes
 @app.get("/")
@@ -963,6 +971,24 @@ async def get_aggregated_ratings(token_data=Depends(verify_token)):
     except Exception as e:
         logger.error(f"[{request_id}] Error getting aggregated ratings: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to get aggregated ratings: {str(e)}")
+
+@app.post("/api/extract/tiktok")
+@log_operation("extract_tiktok_metadata")
+async def extract_tiktok_metadata(request: TikTokExtractionRequest):
+    """Extract metadata and subtitles from a TikTok video URL"""
+    try:
+        # Extract metadata
+        metadata = tiktok_extractor.extract_metadata(request.video_url)
+        if not metadata:
+            raise HTTPException(status_code=400, detail="Failed to extract metadata from the provided URL")
+        
+        return {
+            "success": True,
+            "metadata": metadata
+        }
+    except Exception as e:
+        logger.error(f"Error extracting TikTok metadata: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Add more endpoints as needed based on your PRD requirements
 
