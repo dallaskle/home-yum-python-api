@@ -144,7 +144,7 @@ app.add_middleware(
 )
 
 # Initialize Firebase Admin SDK
-cred = credentials.Certificate("./home-yum-36d51-firebase-adminsdk-fbsvc-dbc5ba14e4.json")
+cred = credentials.Certificate("/etc/secrets/home-yum-36d51-firebase-adminsdk-fbsvc-dbc5ba14e4.json")
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'home-yum-36d51.firebasestorage.app'
 })
