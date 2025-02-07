@@ -14,6 +14,10 @@ import time
 from functools import wraps
 from extractor import TikTokMetadataExtractor
 from whisper_extractor import WhisperExtractor
+from dotenv import load_dotenv
+from langsmith import traceable
+
+load_dotenv()
 
 # Set up logging with more detail
 logging.basicConfig(
@@ -991,6 +995,7 @@ async def extract_tiktok_metadata(request: TikTokExtractionRequest):
         logger.error(f"Error extracting TikTok metadata: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@traceable
 @app.post("/api/extract/whisper")
 @log_operation("extract_whisper_transcription")
 async def extract_whisper_transcription(request: TikTokExtractionRequest):

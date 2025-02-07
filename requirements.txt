@@ -11,3 +11,4 @@ webvtt-py==0.4.6
 requests>=2.31.0
 openai>=1.12.0
 ffmpeg-python>=0.2.0 
+langchain

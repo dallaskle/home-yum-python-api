@@ -4,15 +4,13 @@ import os
 from openai import OpenAI
 import logging
 from typing import Optional
-from dotenv import load_dotenv
-
+from langsmith import traceable
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-load_dotenv()  # Add this at the top of your file
-
 class WhisperExtractor:
+    @traceable(name="initialize_whisper_extractor")
     def __init__(self, api_key: Optional[str] = None):
         """Initialize the WhisperExtractor with OpenAI API key.
         
@@ -33,6 +31,7 @@ class WhisperExtractor:
             'outtmpl': '%(id)s.%(ext)s'
         }
 
+    @traceable(name="download_audio")
     def download_audio(self, video_url: str) -> Optional[str]:
         """Download audio from video URL using yt-dlp.
         
@@ -65,6 +64,7 @@ class WhisperExtractor:
             logger.error(f"Error downloading audio: {str(e)}")
             return None
 
+    @traceable(name="transcribe_audio")
     def transcribe_audio(self, audio_path: str, prompt: Optional[str] = None) -> Optional[dict]:
         """Transcribe audio file using OpenAI Whisper API.
         
@@ -90,6 +90,7 @@ class WhisperExtractor:
             logger.error(f"Error transcribing audio: {str(e)}")
             return None
 
+    @traceable(name="extract_transcript")
     def extract_transcript(self, video_url: str, prompt: Optional[str] = None) -> Optional[dict]:
         """Extract transcript from video URL using Whisper.
         
