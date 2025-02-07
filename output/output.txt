@@ -1,0 +1,582 @@
+Found 32 scenes in the video
+
+
+Scene 0 Analysis:
+Timestamp: 0.00s - 0.50s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients:**
+  - Potato (referred to as "Kartoffel" in German)
+
+- **Cooking Actions/Techniques:**
+  - The presence of a baking tray lined with parchment paper suggests preparation for baking or roasting.
+
+- **Contextual Details:**
+  - No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 1 Analysis:
+Timestamp: 0.50s - 1.08s
+Analysis: - **Ingredients:**
+  - Potatoes (chopped)
+  - Zucchini (chopped)
+
+- **Cooking Actions/Techniques:**
+  - Chopping: Both potatoes and zucchini are chopped into cubes.
+  - Arranging: Ingredients are placed on a baking sheet lined with parchment paper.
+
+- **Contextual Details:**
+  - The ingredients are spread out on a baking sheet, suggesting preparation for roasting or baking.
+--------------------------------------------------------------------------------
+
+Scene 2 Analysis:
+Timestamp: 1.08s - 1.53s
+Analysis: - **Ingredients Visible:**
+  - Potatoes (cubed)
+  - Zucchini (cubed)
+  - Red bell pepper (sliced)
+
+- **Cooking Actions/Techniques:**
+  - Chopping: Ingredients are cut into cubes and slices.
+  - Arranging: Ingredients are placed on a baking tray lined with parchment paper.
+
+- **Contextual Details:**
+  - The ingredients are evenly spread on the tray, suggesting preparation for roasting or baking.
+--------------------------------------------------------------------------------
+
+Scene 3 Analysis:
+Timestamp: 1.53s - 2.67s
+Analysis: - **Ingredients Visible:**
+  - Potatoes (diced)
+  - Zucchini (diced)
+  - Red bell peppers (diced)
+  - Chickpeas (canned)
+
+- **Cooking Actions:**
+  - Arranging diced vegetables on a baking tray.
+  - Pouring canned chickpeas onto the tray.
+
+- **Contextual Details:**
+  - Ingredients are spread evenly on a baking tray, suggesting preparation for roasting.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 4 Analysis:
+Timestamp: 2.67s - 3.15s
+Analysis: - **Ingredients Visible:**
+  - Potatoes (diced)
+  - Zucchini (diced)
+  - Red bell peppers (chopped)
+  - Chickpeas
+  - Garlic (whole bulb)
+
+- **Cooking Actions/Techniques:**
+  - Chopping: Vegetables are chopped into pieces.
+  - Arranging: Ingredients are arranged on a baking tray lined with parchment paper.
+
+- **Contextual Details:**
+  - The garlic bulb is being placed whole, suggesting it might be roasted with the other ingredients.
+  - The arrangement on a baking tray indicates preparation for roasting or baking.
+--------------------------------------------------------------------------------
+
+Scene 5 Analysis:
+Timestamp: 3.15s - 5.47s
+Analysis: - **Ingredients Visible:**
+  - Potatoes (diced)
+  - Zucchini (diced)
+  - Red bell peppers (diced)
+  - Chickpeas
+  - Whole garlic bulb
+  - Salt
+  - Pepper
+
+- **Cooking Actions/Techniques:**
+  - Ingredients are arranged on a baking tray lined with parchment paper.
+  - Seasoning with salt and pepper is mentioned.
+
+- **Contextual Details:**
+  - The ingredients are likely prepared for roasting, as they are spread out on a baking tray.
+  - No specific quantities or timings are provided in the image.
+--------------------------------------------------------------------------------
+
+Scene 6 Analysis:
+Timestamp: 5.47s - 5.97s
+Analysis: - **Ingredients:**
+  - Potatoes (diced)
+  - Zucchini (diced)
+  - Red bell peppers (diced)
+  - Chickpeas
+  - Whole garlic bulb
+  - Black pepper (visible seasoning)
+
+- **Cooking Actions/Techniques:**
+  - Ingredients are arranged on a baking tray lined with parchment paper.
+  - Seasoning with black pepper is visible.
+
+- **Contextual Details:**
+  - Ingredients are evenly spread on the tray, suggesting preparation for roasting.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 7 Analysis:
+Timestamp: 5.97s - 6.67s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible:**
+  - Cherry tomatoes
+  - Red bell peppers
+  - Zucchini
+  - Eggplant
+  - Chickpeas
+
+- **Cooking Actions/Techniques:**
+  - Ingredients are arranged on a baking tray, suggesting preparation for roasting or baking.
+
+- **Contextual Details:**
+  - The ingredients are neatly arranged, possibly indicating even cooking.
+  - The use of a baking tray suggests oven cooking, but no specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 8 Analysis:
+Timestamp: 6.67s - 7.63s
+Analysis: - **Ingredients Visible:**
+  - Zucchini
+  - Red bell peppers
+  - Potatoes
+  - Whole garlic bulb
+  - Black pepper (visible seasoning)
+
+- **Cooking Actions/Techniques:**
+  - Vegetables are chopped into cubes.
+  - Ingredients are arranged on a baking tray lined with parchment paper.
+
+- **Contextual Details:**
+  - The presence of a whole garlic bulb suggests roasting.
+  - The arrangement and seasoning imply preparation for oven roasting.
+--------------------------------------------------------------------------------
+
+Scene 9 Analysis:
+Timestamp: 7.63s - 8.02s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients:**
+  - No specific ingredients are visible or mentioned in this scene.
+
+- **Cooking Actions/Techniques:**
+  - A food processor is being prepared, likely for chopping or mixing.
+
+- **Contextual Details:**
+  - The presence of a food processor suggests that ingredients will be processed, but no specific quantities or timings are indicated in this scene.
+--------------------------------------------------------------------------------
+
+Scene 10 Analysis:
+Timestamp: 8.02s - 9.00s
+Analysis: - **Ingredients:**
+  - Yogurt
+
+- **Cooking Actions/Techniques:**
+  - Pouring yogurt into a mixing bowl.
+
+- **Contextual Details:**
+  - The yogurt is being added to a bowl with a blade, suggesting it might be blended or mixed.
+
+--------------------------------------------------------------------------------
+
+Scene 11 Analysis:
+Timestamp: 9.00s - 10.25s
+Analysis: - **Ingredients:**
+  - Feta cheese
+  - Yogurt (visible in the container)
+
+- **Cooking Actions/Techniques:**
+  - Breaking or crumbling feta cheese into a container.
+
+- **Contextual Details:**
+  - The container appears to be a blender or food processor, suggesting the ingredients may be blended together.
+
+--------------------------------------------------------------------------------
+
+Scene 12 Analysis:
+Timestamp: 10.25s - 11.02s
+Analysis: - **Ingredients Visible/Mentioned:**
+  - Bell pepper
+  - Paprika
+  - Cream cheese
+  - Milk
+
+- **Cooking Actions/Techniques:**
+  - Ingredients are being added to a blender or food processor.
+
+- **Contextual Details:**
+  - The scene suggests preparation for blending, likely to create a sauce or dip.
+  - No specific quantities or timings are indicated.
+--------------------------------------------------------------------------------
+
+Scene 13 Analysis:
+Timestamp: 11.02s - 11.67s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Red bell peppers
+  - Cream cheese
+  - Parsley
+
+- **Cooking Actions or Techniques:**
+  - Ingredients are placed in a food processor, indicating they will be blended or mixed.
+
+- **Contextual Details:**
+  - No specific quantities or timings are visible in the image.
+--------------------------------------------------------------------------------
+
+Scene 14 Analysis:
+Timestamp: 11.67s - 12.68s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Garlic
+  - Parsley
+  - Red chili peppers
+
+- **Cooking Actions or Techniques:**
+  - Squeezing roasted garlic cloves out of their skins
+
+- **Contextual Details:**
+  - The garlic appears to be roasted, as indicated by its soft texture.
+--------------------------------------------------------------------------------
+
+Scene 15 Analysis:
+Timestamp: 12.68s - 13.48s
+Analysis: - **Ingredients Visible:**
+  - Lemon juice
+  - Parsley
+  - Roasted or cooked onions
+  - Red bell peppers
+  - A dollop of white creamy substance (possibly yogurt or sour cream)
+
+- **Cooking Actions/Techniques:**
+  - Squeezing lemon juice over the ingredients
+
+- **Contextual Details:**
+  - The ingredients are placed in a bowl, suggesting preparation for mixing or blending.
+--------------------------------------------------------------------------------
+
+Scene 16 Analysis:
+Timestamp: 13.48s - 13.73s
+Analysis: - **Ingredients Visible:**
+  - Red bell peppers
+  - Cilantro
+  - Onion
+  - Yogurt
+
+- **Cooking Actions/Techniques:**
+  - Blending: Ingredients are placed in a blender or food processor.
+
+- **Contextual Details:**
+  - The ingredients are layered in a container, suggesting they will be blended together.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 17 Analysis:
+Timestamp: 13.73s - 14.50s
+Analysis: - **Ingredients Visible:**
+  - Red bell peppers
+  - Fresh cilantro
+  - Yogurt
+  - Garlic cloves
+
+- **Cooking Actions/Techniques:**
+  - Ingredients are placed in a blender or food processor, indicating they will be blended or pureed.
+
+- **Contextual Details:**
+  - The presence of yogurt suggests a creamy texture, possibly for a sauce or dip.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 18 Analysis:
+Timestamp: 14.50s - 15.33s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible or Mentioned:**
+  - Orange-colored mixture (likely includes ingredients like tomatoes, red peppers, or carrots)
+  - Green herbs (possibly parsley or cilantro)
+
+- **Cooking Actions or Techniques Demonstrated:**
+  - Blending or pureeing (using a food processor or blender)
+
+- **Contextual Details:**
+  - The mixture appears to be smooth, indicating thorough blending.
+  - No specific quantities or timings are visible in the image.
+--------------------------------------------------------------------------------
+
+Scene 19 Analysis:
+Timestamp: 15.33s - 15.68s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients:**
+  - Carrots (visible in the container)
+
+- **Cooking Actions/Techniques:**
+  - Blending or pureeing (using a hand blender)
+
+- **Contextual Details:**
+  - The carrots are likely being processed into a puree or soup base.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 20 Analysis:
+Timestamp: 15.68s - 16.85s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients Visible or Mentioned:**
+  - Orange-colored mixture (possibly containing ingredients like roasted red peppers, tomatoes, or spices)
+  - Herbs (small green flecks suggest herbs like parsley or cilantro)
+
+- **Cooking Actions or Techniques:**
+  - Mixing or blending (using a food processor or blender)
+
+- **Contextual Details:**
+  - The mixture appears smooth, indicating thorough blending
+  - No specific quantities or timings are visible in the scene
+--------------------------------------------------------------------------------
+
+Scene 21 Analysis:
+Timestamp: 16.85s - 17.45s
+Analysis: The image shows a scene from a cooking video with the following details:
+
+- **Ingredients:**
+  - None visible or mentioned in the image.
+
+- **Cooking Actions/Techniques:**
+  - A bowl is being placed on a wooden cutting board.
+
+- **Contextual Details:**
+  - No specific quantities or timings are indicated in the image.
+--------------------------------------------------------------------------------
+
+Scene 22 Analysis:
+Timestamp: 17.45s - 18.35s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients Visible or Mentioned:**
+  - A mixture that appears to be mashed or pureed (possibly mashed potatoes or a similar dish).
+
+- **Cooking Actions or Techniques Demonstrated:**
+  - Scooping: The mixture is being scooped onto a plate.
+
+- **Contextual Details:**
+  - The mixture is being served onto a plate, indicating it might be ready to eat.
+  - No specific quantities or timings are visible in this scene.
+--------------------------------------------------------------------------------
+
+Scene 23 Analysis:
+Timestamp: 18.35s - 19.67s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Orange-colored mixture (possibly containing spices or vegetables).
+
+- **Cooking Actions or Techniques:**
+  - Spreading: The mixture is being spread evenly in a bowl using a spoon.
+
+- **Contextual Details:**
+  - No specific quantities or timings are visible in the image.
+--------------------------------------------------------------------------------
+
+Scene 24 Analysis:
+Timestamp: 19.67s - 20.15s
+Analysis: - **Ingredients Visible:**
+  - Diced potatoes
+  - Orange-colored sauce or puree (possibly containing spices or vegetables like roasted red pepper or sweet potato)
+
+- **Cooking Actions/Techniques:**
+  - Diced potatoes are being spooned onto the sauce, indicating they may have been cooked or roasted beforehand.
+
+- **Contextual Details:**
+  - The sauce is spread evenly in a bowl, suggesting it might be a base or dip.
+  - The potatoes appear to be a topping or component of the dish, possibly indicating a warm or room-temperature serving.
+--------------------------------------------------------------------------------
+
+Scene 25 Analysis:
+Timestamp: 20.15s - 20.60s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible:**
+  - Zucchini
+  - Yellow squash
+  - Red bell pepper
+  - Orange sauce or puree (possibly a roasted red pepper sauce or similar)
+
+- **Cooking Actions or Techniques:**
+  - Diced vegetables are being spooned onto a plate.
+  - The vegetables appear to be cooked, likely roasted or sautéed.
+
+- **Contextual Details:**
+  - The vegetables are placed on top of the orange sauce, suggesting it might be a base or accompaniment.
+  - No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 26 Analysis:
+Timestamp: 20.60s - 21.33s
+Analysis: - **Ingredients Visible:**
+  - Red bell peppers
+  - Zucchini
+  - Yellow bell peppers
+  - Onion
+  - Hummus or a similar spread (as the base)
+
+- **Cooking Actions/Techniques:**
+  - Chopping: Vegetables are chopped into small pieces.
+  - Mixing: Vegetables are mixed together.
+  - Serving: Vegetables are being placed on top of the spread.
+
+- **Contextual Details:**
+  - The vegetables appear to be cooked, possibly roasted or sautéed, as they are being served warm.
+  - The spread is used as a base layer in the dish.
+--------------------------------------------------------------------------------
+
+Scene 27 Analysis:
+Timestamp: 21.33s - 22.10s
+Analysis: - **Ingredients Visible:**
+  - Red bell peppers
+  - Zucchini
+  - Chickpeas
+  - Hummus (as a base)
+
+- **Cooking Actions/Techniques:**
+  - Roasting or sautéing vegetables (indicated by their appearance)
+  - Pouring chickpeas over the dish
+
+- **Contextual Details:**
+  - The dish is served in a bowl, suggesting a single serving or a side dish.
+  - The hummus is used as a base layer, topped with vegetables and chickpeas.
+--------------------------------------------------------------------------------
+
+Scene 28 Analysis:
+Timestamp: 22.10s - 23.42s
+Analysis: - **Ingredients Visible:**
+  - Chickpeas
+  - Red bell peppers
+  - Zucchini
+  - Potatoes
+
+- **Cooking Actions/Techniques:**
+  - Roasting or sautéing (implied by the appearance of the vegetables)
+
+- **Contextual Details:**
+  - The dish is served in a bowl, suggesting it might be a warm salad or side dish.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 29 Analysis:
+Timestamp: 23.42s - 23.98s
+Analysis: - **Ingredients Visible:**
+  - Chickpeas
+  - Red bell peppers
+  - Zucchini
+  - Potatoes
+  - Fresh parsley
+
+- **Cooking Actions/Techniques:**
+  - Mixing ingredients in a bowl
+
+- **Contextual Details:**
+  - The dish appears to be a salad or roasted vegetable mix.
+  - Ingredients are likely roasted or sautéed before mixing.
+  - Fresh parsley is used as a garnish.
+--------------------------------------------------------------------------------
+
+Scene 30 Analysis:
+Timestamp: 23.98s - 25.65s
+Analysis: - **Ingredients Visible:**
+  - Chickpeas
+  - Red bell peppers
+  - Zucchini
+  - Eggplant
+  - Parsley
+
+- **Cooking Actions/Techniques:**
+  - Chopping (vegetables appear to be chopped)
+  - Mixing (ingredients are combined in a bowl)
+
+- **Contextual Details:**
+  - The dish appears to be a mixed vegetable salad or stew.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 31 Analysis:
+Timestamp: 25.65s - 27.05s
+Analysis: I'm unable to view the video, but I can help with general tips on analyzing a cooking scene. Here's what to look for:
+
+- **Ingredients:**
+  - Look for any visible ingredients on the counter or being used.
+  - Listen for any ingredients mentioned by the person in the video.
+
+- **Cooking Actions/Techniques:**
+  - Note any actions like chopping, mixing, frying, or baking.
+  - Observe any specific techniques demonstrated, such as sautéing or simmering.
+
+- **Contextual Details:**
+  - Pay attention to any measurements or quantities mentioned.
+  - Look for timers or cues indicating cooking times.
+  - Notice any equipment used, like pans or mixers, which might suggest certain methods.
+
+If you have specific questions or need further assistance, feel free to ask!
+--------------------------------------------------------------------------------
+
+Final Recipe Analysis:
+================================================================================
+Certainly! Based on the information extracted from the scenes, here is a consolidated list of ingredients and a step-by-step set of instructions for the recipe:
+
+---
+
+**Ingredients:**
+
+- Potatoes (diced)
+- Zucchini (diced)
+- Red bell peppers (diced)
+- Eggplant (diced)
+- Yellow squash (diced)
+- Cherry tomatoes
+- Chickpeas (canned)
+- Whole garlic bulb
+- Garlic cloves (roasted)
+- Onion (chopped)
+- Fresh parsley
+- Fresh cilantro
+- Red chili peppers
+- Lemon juice
+- Yogurt
+- Feta cheese
+- Cream cheese
+- Milk
+- Paprika
+- Salt
+- Black pepper
+
+**Directions:**
+
+1. **Preparation:**
+   - Preheat the oven to 400°F (200°C).
+   - Line a baking tray with parchment paper.
+
+2. **Chopping and Arranging:**
+   - Dice the potatoes, zucchini, red bell peppers, eggplant, and yellow squash into cubes.
+   - Slice the cherry tomatoes in half.
+   - Arrange the diced vegetables, cherry tomatoes, and canned chickpeas on the prepared baking tray.
+   - Place a whole garlic bulb on the tray.
+
+3. **Seasoning:**
+   - Drizzle the vegetables and chickpeas with olive oil.
+   - Season with salt and black pepper to taste.
+   - Roast in the preheated oven for about 25-30 minutes, or until the vegetables are tender and slightly caramelized.
+
+4. **Preparing the Sauce:**
+   - In a blender or food processor, combine yogurt, crumbled feta cheese, cream cheese, milk, paprika, roasted garlic cloves, fresh parsley, fresh cilantro, and lemon juice.
+   - Blend until smooth to create a creamy sauce.
+
+5. **Serving:**
+   - Once the vegetables are roasted, remove them from the oven.
+   - Spread a layer of the creamy sauce on a serving plate or bowl.
+   - Spoon the roasted vegetables and chickpeas over the sauce.
+   - Garnish with chopped fresh parsley and cilantro.
+
+6. **Optional:**
+   - For added heat, sprinkle chopped red chili peppers over the dish.
+   - Serve warm as a main dish or side.
+
+Enjoy your delicious roasted vegetable and chickpea dish with a creamy yogurt sauce!
+================================================================================
