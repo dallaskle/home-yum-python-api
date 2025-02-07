@@ -62,7 +62,7 @@ Please ensure that any duplicate ingredients are combined and the cooking steps 
                 img_file.write(scene['image_data'])
             
             # Analyze the scene
-            analysis = self.vision_analyzer.analyze_image(
+            analysis = await self.vision_analyzer.analyze_image(
                 temp_image_path,
                 self.scene_prompt
             )
