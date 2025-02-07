@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 import time
 from functools import wraps
 from extractor import TikTokMetadataExtractor
+from whisper_extractor import WhisperExtractor
 
 # Set up logging with more detail
 logging.basicConfig(
@@ -988,6 +989,31 @@ async def extract_tiktok_metadata(request: TikTokExtractionRequest):
         }
     except Exception as e:
         logger.error(f"Error extracting TikTok metadata: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/extract/whisper")
+@log_operation("extract_whisper_transcription")
+async def extract_whisper_transcription(request: TikTokExtractionRequest):
+    """Extract transcription from a video URL using Whisper"""
+    try:
+        # Initialize WhisperExtractor
+        whisper = WhisperExtractor()  # Will use OPENAI_API_KEY from environment
+        
+        logger.info(f"Starting extraction for URL: {request.video_url}")
+        
+        # Extract transcript
+        result = whisper.extract_transcript(request.video_url)
+        if not result:
+            logger.error("No result returned from whisper.extract_transcript")
+            raise HTTPException(status_code=400, detail="Failed to extract transcription from the provided URL")
+        
+        logger.info("Successfully extracted transcription")
+        return {
+            "success": True,
+            "transcription": result
+        }
+    except Exception as e:
+        logger.error(f"Error extracting Whisper transcription: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 # Add more endpoints as needed based on your PRD requirements
