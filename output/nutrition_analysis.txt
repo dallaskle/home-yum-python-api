@@ -1,0 +1,245 @@
+Recipe Nutrition Analysis
+==================================================
+
+Serving Sizes (for 4 people):
+To serve this dish for 4 people, you'll want to ensure you have enough of each ingredient to create a satisfying portion. Here's a suggested serving size for each ingredient:
+
+### Vegetables and Chickpeas:
+- **Potatoes, diced:** 2 medium potatoes
+- **Zucchini, diced:** 1 large zucchini
+- **Red bell peppers, diced:** 2 medium bell peppers
+- **Cherry tomatoes:** 1 cup
+- **Eggplant:** 1 medium eggplant
+- **Chickpeas (canned):** 1 can (about 15 ounces)
+- **Whole garlic bulb:** 1 bulb
+
+### Seasoning:
+- **Salt:** 1 teaspoon
+- **Black pepper:** 1/2 teaspoon
+- **Paprika:** 1 teaspoon (optional)
+
+### Sauce:
+- **Yogurt:** 1 cup
+- **Feta cheese:** 1/2 cup, crumbled
+- **Cream cheese:** 1/4 cup
+- **Milk:** 1/4 cup
+- **Paprika:** 1/2 teaspoon
+- **Roasted garlic cloves:** From the roasted garlic bulb
+- **Lemon juice:** 2 tablespoons
+- **Fresh parsley or cilantro:** 1/4 cup, chopped
+
+### Garnish:
+- **Fresh parsley or cilantro:** 1/4 cup, chopped
+- **Red chili peppers:** 1-2 small peppers, sliced (optional for heat)
+
+### Base:
+- **Hummus:** 1 cup
+- **Orange-colored sauce or puree:** 1 cup (if using instead of hummus)
+
+These quantities should provide a generous serving for each person. Adjust the amounts based on personal preferences or dietary needs. Enjoy your meal!
+
+Nutritional Information:
+{
+  "ingredients": [
+    {
+      "name": "Potatoes, diced",
+      "amount": 2,
+      "amountDescription": "medium potatoes",
+      "calories": 320,
+      "fat": 0.4,
+      "carbs": 72,
+      "protein": 8,
+      "fiber": 8
+    },
+    {
+      "name": "Zucchini, diced",
+      "amount": 1,
+      "amountDescription": "large zucchini",
+      "calories": 55,
+      "fat": 0.8,
+      "carbs": 11,
+      "protein": 4,
+      "fiber": 3
+    },
+    {
+      "name": "Red bell peppers, diced",
+      "amount": 2,
+      "amountDescription": "medium bell peppers",
+      "calories": 50,
+      "fat": 0.4,
+      "carbs": 12,
+      "protein": 2,
+      "fiber": 4
+    },
+    {
+      "name": "Cherry tomatoes",
+      "amount": 1,
+      "amountDescription": "cup",
+      "calories": 30,
+      "fat": 0.3,
+      "carbs": 7,
+      "protein": 1,
+      "fiber": 2
+    },
+    {
+      "name": "Eggplant",
+      "amount": 1,
+      "amountDescription": "medium eggplant",
+      "calories": 132,
+      "fat": 0.8,
+      "carbs": 32,
+      "protein": 5,
+      "fiber": 14
+    },
+    {
+      "name": "Chickpeas (canned)",
+      "amount": 1,
+      "amountDescription": "can (about 15 ounces)",
+      "calories": 210,
+      "fat": 3.5,
+      "carbs": 35,
+      "protein": 10,
+      "fiber": 9
+    },
+    {
+      "name": "Whole garlic bulb",
+      "amount": 1,
+      "amountDescription": "bulb",
+      "calories": 149,
+      "fat": 0.5,
+      "carbs": 33,
+      "protein": 6,
+      "fiber": 2
+    },
+    {
+      "name": "Salt",
+      "amount": 1,
+      "amountDescription": "teaspoon",
+      "calories": 0,
+      "fat": 0,
+      "carbs": 0,
+      "protein": 0,
+      "fiber": 0
+    },
+    {
+      "name": "Black pepper",
+      "amount": 0.5,
+      "amountDescription": "teaspoon",
+      "calories": 3,
+      "fat": 0.1,
+      "carbs": 0.7,
+      "protein": 0.1,
+      "fiber": 0.3
+    },
+    {
+      "name": "Paprika",
+      "amount": 1.5,
+      "amountDescription": "teaspoons",
+      "calories": 9,
+      "fat": 0.5,
+      "carbs": 1.8,
+      "protein": 0.5,
+      "fiber": 1.2
+    },
+    {
+      "name": "Yogurt",
+      "amount": 1,
+      "amountDescription": "cup",
+      "calories": 150,
+      "fat": 8,
+      "carbs": 11,
+      "protein": 8,
+      "fiber": 0
+    },
+    {
+      "name": "Feta cheese",
+      "amount": 0.5,
+      "amountDescription": "cup, crumbled",
+      "calories": 200,
+      "fat": 16,
+      "carbs": 2,
+      "protein": 10,
+      "fiber": 0
+    },
+    {
+      "name": "Cream cheese",
+      "amount": 0.25,
+      "amountDescription": "cup",
+      "calories": 200,
+      "fat": 20,
+      "carbs": 2,
+      "protein": 4,
+      "fiber": 0
+    },
+    {
+      "name": "Milk",
+      "amount": 0.25,
+      "amountDescription": "cup",
+      "calories": 30,
+      "fat": 1,
+      "carbs": 3,
+      "protein": 2,
+      "fiber": 0
+    },
+    {
+      "name": "Roasted garlic cloves",
+      "amount": 1,
+      "amountDescription": "from the roasted garlic bulb",
+      "calories": 13,
+      "fat": 0.1,
+      "carbs": 3,
+      "protein": 0.6,
+      "fiber": 0.2
+    },
+    {
+      "name": "Lemon juice",
+      "amount": 2,
+      "amountDescription": "tablespoons",
+      "calories": 8,
+      "fat": 0,
+      "carbs": 2.6,
+      "protein": 0.1,
+      "fiber": 0.1
+    },
+    {
+      "name": "Fresh parsley or cilantro",
+      "amount": 0.5,
+      "amountDescription": "cup, chopped",
+      "calories": 4,
+      "fat": 0.1,
+      "carbs": 0.8,
+      "protein": 0.3,
+      "fiber": 0.5
+    },
+    {
+      "name": "Red chili peppers",
+      "amount": 1,
+      "amountDescription": "1-2 small peppers, sliced",
+      "calories": 18,
+      "fat": 0.2,
+      "carbs": 4,
+      "protein": 0.8,
+      "fiber": 1.5
+    },
+    {
+      "name": "Hummus",
+      "amount": 1,
+      "amountDescription": "cup",
+      "calories": 408,
+      "fat": 24,
+      "carbs": 36,
+      "protein": 19,
+      "fiber": 12
+    },
+    {
+      "name": "Orange-colored sauce or puree",
+      "amount": 1,
+      "amountDescription": "cup",
+      "calories": 100,
+      "fat": 5,
+      "carbs": 12,
+      "protein": 2,
+      "fiber": 3
+    }
+  ]
+}
