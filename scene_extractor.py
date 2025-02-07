@@ -20,6 +20,34 @@ class VideoSceneExtractor:
         }
         # Store temp directory as instance variable
         self.temp_dir = None
+        # Target size for resized images
+        self.target_width = 360
+        self.target_height = 640
+
+    def resize_image(self, frame):
+        """
+        Resize the image while maintaining aspect ratio
+        """
+        height, width = frame.shape[:2]
+        
+        # Calculate aspect ratio
+        aspect = width / height
+        
+        # If image is portrait (taller than wide)
+        if height > width:
+            new_height = self.target_height
+            new_width = int(new_height * aspect)
+            if new_width > self.target_width:
+                new_width = self.target_width
+                new_height = int(new_width / aspect)
+        else:
+            new_width = self.target_width
+            new_height = int(new_width / aspect)
+            if new_height > self.target_height:
+                new_height = self.target_height
+                new_width = int(new_height * aspect)
+        
+        return cv2.resize(frame, (new_width, new_height), interpolation=cv2.INTER_AREA)
 
     def download_video(self, video_url: str) -> str:
         """
@@ -92,9 +120,12 @@ class VideoSceneExtractor:
                 ret, frame = video_cap.read()
                 
                 if ret:
+                    # Resize the frame
+                    resized_frame = self.resize_image(frame)
+                    
                     # Save the frame
                     image_path = os.path.join(images_dir, f'scene_{i:03d}.jpg')
-                    cv2.imwrite(image_path, frame)
+                    cv2.imwrite(image_path, resized_frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
                     
                     # Read the image back as bytes
                     with open(image_path, 'rb') as img_file:
