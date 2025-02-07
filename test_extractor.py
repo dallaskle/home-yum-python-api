@@ -13,17 +13,24 @@ logger = logging.getLogger(__name__)
 
 # Test video URLs - uncomment the one you want to test
 # TEST_VIDEO_URL = "https://vm.tiktok.com/ZNeoxtLpP/"  # TikTok example
-TEST_VIDEO_URL = "https://www.youtube.com/watch?v=8lt4S2uGbHQ"  # YouTube example
+# TEST_VIDEO_URL = "https://www.youtube.com/watch?v=8lt4S2uGbHQ"  # YouTube example
+TEST_VIDEO_URL = "https://www.instagram.com/chefshaan19/reel/C6rEZMiplWn/"  # Instagram example
 
-def validate_tiktok_url(url):
-    """Validate and potentially fix TikTok URL format."""
+def validate_url(url):
+    """Validate and potentially fix URL format."""
     if not url.startswith(('http://', 'https://')):
         url = 'https://' + url
     
+    # Handle TikTok URLs
     if 'vm.tiktok.com' in url:
         return url  # Short URL format is fine as is
     
     if 'tiktok.com' in url and not url.startswith('https://www.tiktok.com'):
+        url = url.replace('https://', 'https://www.')
+        url = url.replace('http://', 'https://www.')
+    
+    # Handle Instagram URLs
+    if 'instagram.com' in url and not url.startswith('https://www.instagram.com'):
         url = url.replace('https://', 'https://www.')
         url = url.replace('http://', 'https://www.')
     
@@ -38,7 +45,7 @@ def main():
         logger.info("Starting metadata extraction...")
         
         # Validate and fix URL format
-        validated_url = validate_tiktok_url(TEST_VIDEO_URL)
+        validated_url = validate_url(TEST_VIDEO_URL)
         
         # Create output directory if it doesn't exist
         os.makedirs('output', exist_ok=True)

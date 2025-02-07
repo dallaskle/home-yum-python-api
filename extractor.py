@@ -35,6 +35,13 @@ class VideoMetadataExtractor:
             'format': 'best'
         }
 
+        self.instagram_opts = {
+            **self.base_opts,
+            'extract_flat': False,
+            'force_generic_extractor': False,
+            'format': 'best',
+        }
+
     def get_domain(self, url: str) -> str:
         """Extract the domain from the URL."""
         domain = urlparse(url).netloc.lower()
@@ -42,6 +49,8 @@ class VideoMetadataExtractor:
             return 'tiktok'
         elif any(youtube in domain for youtube in ['youtube.com', 'youtu.be']):
             return 'youtube'
+        elif 'instagram.com' in domain:
+            return 'instagram'
         else:
             return 'unknown'
 
@@ -84,7 +93,12 @@ class VideoMetadataExtractor:
                 return {}
             
             # Select the appropriate options based on the domain
-            ydl_opts = self.tiktok_opts if domain == 'tiktok' else self.youtube_opts
+            if domain == 'tiktok':
+                ydl_opts = self.tiktok_opts
+            elif domain == 'instagram':
+                ydl_opts = self.instagram_opts
+            else:
+                ydl_opts = self.youtube_opts
             
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
