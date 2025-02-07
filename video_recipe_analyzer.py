@@ -6,6 +6,7 @@ from scene_extractor import VideoSceneExtractor
 from vision_analyzer import VisionAnalyzer
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
+import asyncio
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -44,6 +45,51 @@ Based on the above, please create a final consolidated list of ingredients (with
 
 Please ensure that any duplicate ingredients are combined and the cooking steps are in a logical order."""
 
+    async def _analyze_single_scene(self, scene: Dict[str, Any], scene_number: int) -> Dict[str, Any]:
+        """Analyze a single scene from the video.
+        
+        Args:
+            scene: Dictionary containing scene data
+            scene_number: Index of the scene
+            
+        Returns:
+            Dict containing scene analysis results
+        """
+        try:
+            # Save the scene image temporarily
+            temp_image_path = f"output/scene_{scene_number:03d}.jpg"
+            with open(temp_image_path, 'wb') as img_file:
+                img_file.write(scene['image_data'])
+            
+            # Analyze the scene
+            analysis = self.vision_analyzer.analyze_image(
+                temp_image_path,
+                self.scene_prompt
+            )
+            
+            result = {
+                'scene_number': scene_number,
+                'timestamp': f"{scene['start_time']:.2f}s - {scene['end_time']:.2f}s",
+                'analysis': analysis.get('analysis', 'Analysis failed')
+            }
+            
+            # Log to output file - using append mode to handle concurrent writes
+            with open('output/output.txt', 'a') as f:
+                f.write(f"\nScene {scene_number} Analysis:\n")
+                f.write(f"Timestamp: {scene['start_time']:.2f}s - {scene['end_time']:.2f}s\n")
+                f.write(f"Analysis: {analysis.get('analysis', 'Analysis failed')}\n")
+                f.write("-" * 80 + "\n")
+                
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error analyzing scene {scene_number}: {str(e)}")
+            return {
+                'scene_number': scene_number,
+                'timestamp': f"{scene['start_time']:.2f}s - {scene['end_time']:.2f}s",
+                'analysis': f"Analysis failed: {str(e)}"
+            }
+
     async def analyze_video(self, video_url: str) -> Dict[str, Any]:
         """
         Analyze a cooking video by extracting scenes and running vision analysis on each scene.
@@ -65,34 +111,18 @@ Please ensure that any duplicate ingredients are combined and the cooking steps 
             with open('output/output.txt', 'w') as f:
                 f.write(f"Found {len(scenes)} scenes in the video\n\n")
             
-            # Step 2: Analyze each scene
-            scene_analyses = []
-            for i, scene in enumerate(scenes):
-                logger.info(f"Analyzing scene {i+1}/{len(scenes)}...")
-                
-                # Save the scene image temporarily
-                temp_image_path = f"output/scene_{i:03d}.jpg"
-                with open(temp_image_path, 'wb') as img_file:
-                    img_file.write(scene['image_data'])
-                
-                # Analyze the scene
-                analysis = await self.vision_analyzer.analyze_image(
-                    temp_image_path,
-                    self.scene_prompt
-                )
-                
-                scene_analyses.append({
-                    'scene_number': i,
-                    'timestamp': f"{scene['start_time']:.2f}s - {scene['end_time']:.2f}s",
-                    'analysis': analysis.get('analysis', 'Analysis failed')
-                })
-                
-                # Log to output file
-                with open('output/output.txt', 'a') as f:
-                    f.write(f"\nScene {i} Analysis:\n")
-                    f.write(f"Timestamp: {scene['start_time']:.2f}s - {scene['end_time']:.2f}s\n")
-                    f.write(f"Analysis: {analysis.get('analysis', 'Analysis failed')}\n")
-                    f.write("-" * 80 + "\n")
+            # Step 2: Analyze scenes concurrently
+            logger.info(f"Analyzing {len(scenes)} scenes concurrently...")
+            analysis_tasks = [
+                self._analyze_single_scene(scene, i)
+                for i, scene in enumerate(scenes)
+            ]
+            
+            # Wait for all scene analyses to complete
+            scene_analyses = await asyncio.gather(*analysis_tasks)
+            
+            # Sort the results by scene number to maintain order
+            scene_analyses.sort(key=lambda x: x['scene_number'])
             
             # Step 3: Generate aggregate analysis
             logger.info("Generating aggregate analysis...")

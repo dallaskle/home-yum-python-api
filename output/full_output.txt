@@ -1,0 +1,239 @@
+=== Video Information ===
+URL: https://vm.tiktok.com/ZNeoxXwWy/
+
+=== Metadata and Subtitles ===
+{
+  "title": "",
+  "description": "",
+  "duration": 0,
+  "uploader": "",
+  "view_count": 0,
+  "like_count": 0,
+  "comment_count": 0,
+  "subtitle_text": "",
+  "thumbnail": "",
+  "webpage_url": "https://vm.tiktok.com/ZNeoxXwWy/"
+}
+
+=== Audio Transcription ===
+2 kg 의 몰타클을 사용하여, 1.5 컵의 물을 2.5 컵의 소금을 1컵의 몰타클을 갈아줍니다. 1.5 컵의 밀가루 2 컵의 소금 1 컵의 물 1 컵의 물 1.5 컵의 밀가루 1.5 컵의 소금 3 컵의 밀가루 1.5 컵의 물 1.5 컵의 물
+
+=== Video Analysis ===
+{
+  "success": true,
+  "scene_analyses": [
+    {
+      "scene_number": 0,
+      "timestamp": "0.00s - 0.50s",
+      "analysis": "Based on the scene from the cooking video:\n\n- **Ingredients:**\n  - Potato (referred to as \"Kartoffel\" in German)\n\n- **Cooking Actions/Techniques:**\n  - The presence of a baking tray lined with parchment paper suggests preparation for baking or roasting.\n\n- **Contextual Details:**\n  - No specific quantities or timings are visible in the image."
+    },
+    {
+      "scene_number": 1,
+      "timestamp": "0.50s - 1.08s",
+      "analysis": "- **Ingredients:**\n  - Potatoes (chopped)\n  - Zucchini (chopped)\n\n- **Cooking Actions/Techniques:**\n  - Chopping: Both potatoes and zucchini are chopped into cubes.\n  - Arranging: Ingredients are placed on a baking sheet lined with parchment paper.\n\n- **Contextual Details:**\n  - The ingredients are spread out evenly, suggesting preparation for roasting or baking.\n  - No specific quantities or timings are visible in the image."
+    },
+    {
+      "scene_number": 2,
+      "timestamp": "1.08s - 1.53s",
+      "analysis": "- **Ingredients Visible:**\n  - Potatoes\n  - Zucchini\n  - Red bell pepper\n\n- **Cooking Actions/Techniques:**\n  - Chopping: The vegetables are chopped into cubes.\n  - Arranging: The chopped vegetables are arranged on a baking tray lined with parchment paper.\n\n- **Contextual Details:**\n  - The vegetables are evenly spread on the tray, suggesting preparation for roasting or baking.\n"
+    },
+    {
+      "scene_number": 3,
+      "timestamp": "1.53s - 2.67s",
+      "analysis": "- **Ingredients Visible:**\n  - Potatoes (diced)\n  - Zucchini (diced)\n  - Red bell peppers (diced)\n  - Chickpeas (canned)\n\n- **Cooking Actions/Techniques:**\n  - Chopping: Vegetables are diced.\n  - Pouring: Chickpeas are being poured from a can onto the tray.\n\n- **Contextual Details:**\n  - Ingredients are arranged on a baking tray, suggesting preparation for roasting.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 4,
+      "timestamp": "2.67s - 3.15s",
+      "analysis": "- **Ingredients Visible:**\n  - Potatoes (diced)\n  - Zucchini (diced)\n  - Red bell peppers (sliced)\n  - Chickpeas\n  - Garlic (whole bulb)\n\n- **Cooking Actions/Techniques:**\n  - Arranging ingredients on a baking tray lined with parchment paper.\n\n- **Contextual Details:**\n  - The garlic bulb is being placed whole, suggesting it might be roasted with the other ingredients.\n  - The arrangement on a baking tray indicates preparation for roasting or baking."
+    },
+    {
+      "scene_number": 5,
+      "timestamp": "3.15s - 5.47s",
+      "analysis": "- **Ingredients:**\n  - Potatoes (diced)\n  - Zucchini (diced)\n  - Red bell peppers (diced)\n  - Chickpeas\n  - Whole garlic bulb\n  - Salt\n  - Pepper\n\n- **Cooking Actions/Techniques:**\n  - Ingredients are arranged on a baking tray lined with parchment paper.\n  - Seasoning with salt and pepper is mentioned.\n\n- **Contextual Details:**\n  - The ingredients are likely prepared for roasting, as they are spread out on a baking tray.\n  - No specific quantities or timings are provided in the image."
+    },
+    {
+      "scene_number": 6,
+      "timestamp": "5.47s - 5.97s",
+      "analysis": "- **Ingredients:**\n  - Potatoes (diced)\n  - Zucchini (diced)\n  - Red bell peppers (diced)\n  - Chickpeas\n  - Whole garlic bulb\n  - Black pepper (visible seasoning)\n\n- **Cooking Actions/Techniques:**\n  - Ingredients are arranged on a baking tray lined with parchment paper.\n  - Seasoning with black pepper is visible.\n\n- **Contextual Details:**\n  - Ingredients are evenly spread out, suggesting preparation for roasting.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 7,
+      "timestamp": "5.97s - 6.67s",
+      "analysis": "Based on the scene from the cooking video, here are the details related to the recipe:\n\n- **Ingredients Visible:**\n  - Red bell peppers\n  - Cherry tomatoes\n  - Zucchini\n  - Eggplant\n  - Chickpeas\n\n- **Cooking Actions or Techniques:**\n  - Ingredients are arranged on a baking tray, suggesting preparation for roasting or baking.\n\n- **Contextual Details:**\n  - The ingredients are neatly organized, possibly indicating equal portions.\n  - The use of a baking tray suggests the dish may be roasted at a specific temperature for a certain duration, though exact timings and temperatures are not visible."
+    },
+    {
+      "scene_number": 8,
+      "timestamp": "6.67s - 7.63s",
+      "analysis": "- **Ingredients Visible:**\n  - Zucchini (cubed)\n  - Red bell peppers (chopped)\n  - Potatoes (cubed)\n  - Whole garlic bulb\n  - Black pepper (visible seasoning)\n\n- **Cooking Actions/Techniques:**\n  - Vegetables are chopped into cubes or pieces.\n  - Ingredients are arranged on a baking tray lined with parchment paper.\n\n- **Contextual Details:**\n  - The presence of a whole garlic bulb suggests roasting.\n  - The arrangement on a baking tray indicates preparation for oven roasting.\n  - Black pepper is used as a seasoning, but no specific quantities are visible."
+    },
+    {
+      "scene_number": 9,
+      "timestamp": "7.63s - 8.02s",
+      "analysis": "Based on the scene from the cooking video:\n\n- **Ingredients Visible or Mentioned:**\n  - None visible in the image.\n\n- **Cooking Actions or Techniques Demonstrated:**\n  - A food processor is being shown, indicating preparation for blending or chopping.\n\n- **Contextual Details:**\n  - The presence of a food processor suggests that ingredients will likely be processed, but no specific quantities or timings are visible in the image."
+    },
+    {
+      "scene_number": 10,
+      "timestamp": "8.02s - 9.00s",
+      "analysis": "- **Ingredients:**\n  - Yogurt\n\n- **Cooking Actions/Techniques:**\n  - Pouring yogurt into a mixing bowl or blender.\n\n- **Contextual Details:**\n  - The presence of a blade in the bowl suggests preparation for blending or mixing.\n  - No specific quantities or timings are indicated."
+    },
+    {
+      "scene_number": 11,
+      "timestamp": "9.00s - 10.25s",
+      "analysis": "- **Ingredients:**\n  - Feta cheese\n  - Yogurt (visible in the container)\n\n- **Cooking Actions/Techniques:**\n  - Breaking or crumbling feta cheese into a container.\n\n- **Contextual Details:**\n  - The container appears to be a blender or food processor, suggesting the ingredients may be blended together.\n"
+    },
+    {
+      "scene_number": 12,
+      "timestamp": "10.25s - 11.02s",
+      "analysis": "- **Ingredients Visible or Mentioned:**\n  - Bell pepper\n  - Paprika\n  - Cream cheese\n  - Milk\n\n- **Cooking Actions or Techniques:**\n  - Ingredients are being added to a blender or food processor.\n\n- **Contextual Details:**\n  - The scene suggests preparation for blending, likely to create a sauce or dip. No specific quantities or timings are indicated."
+    },
+    {
+      "scene_number": 13,
+      "timestamp": "11.02s - 11.67s",
+      "analysis": "- **Ingredients Visible or Mentioned:**\n  - Red bell peppers\n  - Cream cheese\n  - Parsley\n\n- **Cooking Actions or Techniques:**\n  - Ingredients are placed in a food processor, indicating they will be blended or mixed.\n\n- **Contextual Details:**\n  - No specific quantities or timings are visible in the image."
+    },
+    {
+      "scene_number": 14,
+      "timestamp": "11.67s - 12.68s",
+      "analysis": "- **Ingredients Visible:**\n  - Garlic\n  - Parsley\n  - Red chili peppers\n\n- **Cooking Actions/Techniques:**\n  - Squeezing roasted garlic cloves out of their skins\n\n- **Contextual Details:**\n  - The garlic appears to be roasted, as indicated by its soft texture."
+    },
+    {
+      "scene_number": 15,
+      "timestamp": "12.68s - 13.48s",
+      "analysis": "- **Ingredients Visible:**\n  - Lemon juice\n  - Parsley\n  - Roasted or cooked onions\n  - Red bell peppers\n  - A dollop of cream or yogurt\n\n- **Cooking Actions/Techniques:**\n  - Squeezing lemon juice over the ingredients\n\n- **Contextual Details:**\n  - The lemon is being squeezed directly over the mixture, indicating fresh lemon juice is used.\n  - The presence of roasted onions suggests prior cooking or preparation.\n"
+    },
+    {
+      "scene_number": 16,
+      "timestamp": "13.48s - 13.73s",
+      "analysis": "- **Ingredients Visible:**\n  - Red bell peppers\n  - Cilantro\n  - Onion\n  - Yogurt\n\n- **Cooking Actions/Techniques:**\n  - Blending: Ingredients are placed in a blender or food processor.\n\n- **Contextual Details:**\n  - The ingredients are layered in the blender, suggesting they will be mixed together.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 17,
+      "timestamp": "13.73s - 14.50s",
+      "analysis": "- **Ingredients Visible:**\n  - Red bell peppers\n  - Fresh cilantro\n  - Yogurt\n  - Garlic cloves\n\n- **Cooking Actions/Techniques:**\n  - Ingredients are placed in a blender or food processor, indicating preparation for blending.\n\n- **Contextual Details:**\n  - The presence of yogurt suggests a creamy texture, possibly for a sauce or dip.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 18,
+      "timestamp": "14.50s - 15.33s",
+      "analysis": "Based on the image provided, here are the details related to the recipe:\n\n- **Ingredients Visible or Mentioned:**\n  - Orange mixture (likely containing ingredients such as tomatoes, peppers, or carrots)\n  - Green herbs (possibly parsley or cilantro)\n\n- **Cooking Actions or Techniques Demonstrated:**\n  - Blending or pureeing (using a food processor or blender)\n\n- **Contextual Details:**\n  - The mixture appears to be smooth, indicating thorough blending.\n  - No specific quantities or timings are visible in the image."
+    },
+    {
+      "scene_number": 19,
+      "timestamp": "15.33s - 15.68s",
+      "analysis": "Based on the scene from the cooking video:\n\n- **Ingredients:**\n  - Carrots (visible in the container)\n\n- **Cooking Actions/Techniques:**\n  - Blending or pureeing (using a hand blender)\n\n- **Contextual Details:**\n  - The carrots are likely being blended into a puree or soup.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 20,
+      "timestamp": "15.68s - 16.85s",
+      "analysis": "- **Ingredients Visible or Mentioned:**\n  - Orange-colored mixture (possibly containing ingredients like roasted red peppers, tomatoes, or spices).\n\n- **Cooking Actions or Techniques:**\n  - Mixing or blending in a food processor.\n\n- **Contextual Details:**\n  - The mixture appears smooth, indicating thorough blending.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 21,
+      "timestamp": "16.85s - 17.45s",
+      "analysis": "The image shows a scene from a cooking video with the following details:\n\n- **Ingredients:**\n  - None visible or mentioned in the image.\n\n- **Cooking Actions/Techniques:**\n  - A bowl is being placed on a wooden cutting board, indicating preparation for mixing or serving.\n\n- **Contextual Details:**\n  - No specific quantities or timings are indicated in the image."
+    },
+    {
+      "scene_number": 22,
+      "timestamp": "17.45s - 18.35s",
+      "analysis": "Based on the scene from the cooking video:\n\n- **Ingredients Visible or Mentioned:**\n  - A mixture that appears to be mashed or pureed, possibly containing potatoes or a similar starchy ingredient.\n\n- **Cooking Actions or Techniques Demonstrated:**\n  - Scooping: The mixture is being scooped onto a plate.\n\n- **Contextual Details:**\n  - The mixture is being served onto a plate, suggesting it might be ready to eat or part of a final dish presentation.\n  - No specific quantities or timings are visible in this scene."
+    },
+    {
+      "scene_number": 23,
+      "timestamp": "18.35s - 19.67s",
+      "analysis": "- **Ingredients Visible or Mentioned:**\n  - Orange-colored mixture (possibly containing spices or vegetables).\n\n- **Cooking Actions or Techniques:**\n  - Spreading: The mixture is being spread evenly in a bowl using a spoon.\n\n- **Contextual Details:**\n  - No specific quantities or timings are visible in the image."
+    },
+    {
+      "scene_number": 24,
+      "timestamp": "19.67s - 20.15s",
+      "analysis": "- **Ingredients:**\n  - Diced potatoes\n  - Orange-colored sauce or puree (possibly containing spices or vegetables like roasted red pepper or sweet potato)\n\n- **Cooking Actions/Techniques:**\n  - Diced potatoes are being spooned onto a plate.\n  - The plate has a base layer of an orange-colored sauce or puree.\n\n- **Contextual Details:**\n  - The potatoes appear to be cooked, possibly roasted or saut\u00e9ed, given their appearance.\n  - The sauce is spread evenly on the plate, suggesting it might be used as a base or dip."
+    },
+    {
+      "scene_number": 25,
+      "timestamp": "20.15s - 20.60s",
+      "analysis": "- **Ingredients:**\n  - Zucchini\n  - Yellow squash\n  - Red bell pepper\n  - Orange sauce or puree (possibly a roasted red pepper sauce or similar)\n\n- **Cooking Actions/Techniques:**\n  - Diced vegetables are being spooned onto a plate.\n  - The vegetables appear to be cooked, likely roasted or saut\u00e9ed.\n\n- **Contextual Details:**\n  - The vegetables are placed on top of the orange sauce, suggesting it serves as a base.\n  - The vegetables are evenly diced, indicating uniform cooking.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 26,
+      "timestamp": "20.60s - 21.33s",
+      "analysis": "- **Ingredients Visible:**\n  - Red bell peppers\n  - Zucchini\n  - Yellow bell peppers\n  - Onion\n  - Chickpeas\n  - A base that appears to be a red sauce or spread (possibly hummus or a similar dip)\n\n- **Cooking Actions/Techniques:**\n  - Vegetables appear to be chopped into small pieces.\n  - Ingredients are being spooned onto a plate, suggesting they may have been roasted or saut\u00e9ed.\n\n- **Contextual Details:**\n  - The vegetables are placed on top of the red spread, indicating it might be a serving suggestion.\n  - No specific quantities or timings are visible in the image."
+    },
+    {
+      "scene_number": 27,
+      "timestamp": "21.33s - 22.10s",
+      "analysis": "- **Ingredients Visible:**\n  - Red bell peppers\n  - Zucchini\n  - Chickpeas\n  - Hummus (as a base)\n\n- **Cooking Actions/Techniques:**\n  - Roasting or saut\u00e9ing vegetables (indicated by their cooked appearance)\n  - Pouring chickpeas over the dish\n\n- **Contextual Details:**\n  - Vegetables are cut into chunks\n  - Chickpeas are added as a topping\n  - Hummus is used as a base layer in the dish"
+    },
+    {
+      "scene_number": 28,
+      "timestamp": "22.10s - 23.42s",
+      "analysis": "- **Ingredients Visible:**\n  - Chickpeas\n  - Red bell peppers\n  - Zucchini\n  - Potatoes\n\n- **Cooking Actions/Techniques:**\n  - Roasting or saut\u00e9ing (implied by the appearance of the vegetables)\n\n- **Contextual Details:**\n  - The dish is served in a bowl, suggesting it might be a warm salad or side dish.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 29,
+      "timestamp": "23.42s - 23.98s",
+      "analysis": "- **Ingredients Visible:**\n  - Chickpeas\n  - Red bell peppers\n  - Zucchini\n  - Potatoes\n  - Fresh parsley\n\n- **Cooking Actions/Techniques:**\n  - Mixing ingredients in a bowl\n  - Garnishing with fresh herbs\n\n- **Contextual Details:**\n  - The dish appears to be a salad or roasted vegetable mix.\n  - The presence of a spoon suggests serving or mixing.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 30,
+      "timestamp": "23.98s - 25.65s",
+      "analysis": "Based on the scene from the cooking video, here are the details related to the recipe:\n\n- **Ingredients Visible:**\n  - Chickpeas\n  - Red bell peppers\n  - Zucchini\n  - Eggplant\n  - Parsley (garnish)\n\n- **Cooking Actions or Techniques:**\n  - Chopping (vegetables appear to be chopped)\n  - Mixing (ingredients are mixed together in the bowl)\n\n- **Contextual Details:**\n  - The dish appears to be a mixed vegetable and chickpea salad or stew.\n  - No specific quantities or timings are visible."
+    },
+    {
+      "scene_number": 31,
+      "timestamp": "25.65s - 27.05s",
+      "analysis": "I'm unable to view the video, but I can help you analyze the scene based on the description you provide. Please describe any visible ingredients, cooking actions, or contextual details you notice in the video."
+    }
+  ],
+  "final_recipe": "**Ingredients:**\n\n- Potatoes (diced)\n- Zucchini (diced)\n- Red bell peppers (diced)\n- Chickpeas (canned)\n- Whole garlic bulb\n- Salt\n- Black pepper\n- Cherry tomatoes\n- Eggplant\n- Yogurt\n- Feta cheese\n- Paprika\n- Cream cheese\n- Milk\n- Parsley\n- Red chili peppers\n- Lemon juice\n- Roasted or cooked onions\n- Cilantro\n- Carrots\n\n**Directions:**\n\n1. Preheat your oven and line a baking tray with parchment paper.\n2. Dice the potatoes, zucchini, and red bell peppers. Arrange them evenly on the baking tray.\n3. Pour the canned chickpeas onto the tray.\n4. Place a whole garlic bulb on the tray.\n5. Season the ingredients on the tray with salt and black pepper.\n6. Place the tray in the oven to roast the vegetables and chickpeas.\n7. While the vegetables are roasting, prepare the sauce. Pour yogurt into a blender or food processor.\n8. Crumble feta cheese into the blender with the yogurt.\n9. Add paprika, cream cheese, and milk to the blender.\n10. Add diced red bell peppers and parsley to the blender.\n11. Squeeze the roasted garlic cloves out of their skins and add them to the blender.\n12. Squeeze fresh lemon juice over the ingredients in the blender.\n13. Add roasted or cooked onions to the blender.\n14. Blend the ingredients until smooth to create a sauce.\n15. Once the vegetables are roasted, remove the tray from the oven.\n16. Spread the sauce evenly on a plate or in a bowl.\n17. Spoon the roasted vegetables and chickpeas onto the sauce.\n18. Garnish with fresh parsley before serving."
+}
+
+=== Final Recipe ===
+Based on the information provided from the audio transcription and video analysis, it seems there is a discrepancy between the two sources. The audio transcription appears to be a mix of ingredients and measurements that don't align with the video analysis results. Therefore, I will focus on creating a coherent recipe based on the video analysis, as it provides a more structured set of ingredients and directions.
+
+**Ingredients:**
+
+- Potatoes (diced)
+- Zucchini (diced)
+- Red bell peppers (diced)
+- Chickpeas (canned)
+- Whole garlic bulb
+- Salt
+- Black pepper
+- Cherry tomatoes
+- Eggplant
+- Yogurt
+- Feta cheese
+- Paprika
+- Cream cheese
+- Milk
+- Parsley
+- Red chili peppers
+- Lemon juice
+- Roasted or cooked onions
+- Cilantro
+- Carrots
+
+**Directions:**
+
+1. Preheat your oven to 200°C (400°F) and line a baking tray with parchment paper.
+2. Dice the potatoes, zucchini, red bell peppers, eggplant, and carrots. Arrange them evenly on the baking tray.
+3. Add the canned chickpeas and cherry tomatoes to the tray.
+4. Place a whole garlic bulb on the tray.
+5. Season the ingredients on the tray with salt and black pepper.
+6. Place the tray in the oven and roast the vegetables and chickpeas for about 25-30 minutes, or until they are tender and slightly caramelized.
+7. While the vegetables are roasting, prepare the sauce. In a blender or food processor, combine yogurt, crumbled feta cheese, paprika, cream cheese, and milk.
+8. Add diced red chili peppers and parsley to the blender.
+9. Once the garlic is roasted, squeeze the cloves out of their skins and add them to the blender.
+10. Squeeze fresh lemon juice over the ingredients in the blender.
+11. Add roasted or cooked onions to the blender.
+12. Blend the ingredients until smooth to create a sauce.
+13. Once the vegetables are roasted, remove the tray from the oven.
+14. Spread the sauce evenly on a serving plate or in a bowl.
+15. Spoon the roasted vegetables and chickpeas onto the sauce.
+16. Garnish with fresh parsley and cilantro before serving.
+
+**Notes:**
+
+- The roasting time for the vegetables may vary depending on your oven and the size of the vegetable pieces. Check for tenderness and adjust the time as needed.
+- The sauce can be adjusted to taste by adding more or less of the ingredients like lemon juice, paprika, or feta cheese.
+- This dish can be served warm or at room temperature, making it versatile for different occasions.
+- If you prefer a spicier dish, consider adding more red chili peppers or a pinch of cayenne pepper to the sauce.
