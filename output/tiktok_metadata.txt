@@ -1,4 +1,4 @@
-TikTok Video Metadata
+Tiktok Video Metadata
 ==================================================
 
 {
@@ -11,5 +11,6 @@ TikTok Video Metadata
   "comment_count": 487,
   "subtitle_text": "If you're looking for a easy and delicious high protein meal, these Loaded Beef Taco Potato Bowls are only 470 calories of 47 grams of protein. It's incredibly simple to make and perfect for meal prep. Grab your diced potatoes, drizzle a bit of olive oil, then add salt, oregano, garlic powder and paprika. Mix it together and air fry or oven bake it with the settings on screen. For a quick salsa in a bowl, add tomato, jalapeno, red onion, lime juice, cilantro, salt and pepper. Then mix it and set it aside. Now cook some extra lean beef mince on high heat. And for the taco seasoning, add all of the seasonings listed on screen. And once the beef has some color, add some tomato paste, mix it and let it fully cook through. Now all that's left to do is equally distribute everything into 4 servings. Drizzle on some Sriracha, Mayo, add any additional toppings that you like and enjoy.",
   "thumbnail": "https://p16-sign-sg.tiktokcdn.com/obj/tos-alisg-p-0037/c9bd0d4afd7a45bb853a0687b766c84e_1708253709?lk3s=81f88b70&x-expires=1739084400&x-signature=Jr6Nst1L6cZnoZU3uEf5WmX1R%2F8%3D&shp=81f88b70&shcp=-",
-  "webpage_url": "https://www.tiktok.com/@aussiefitness/video/7336893782996110610?_t=ZN-8ti9Xgo3p7G&_r=1"
+  "webpage_url": "https://www.tiktok.com/@aussiefitness/video/7336893782996110610?_t=ZN-8ti9Xgo3p7G&_r=1",
+  "platform": "tiktok"
 }

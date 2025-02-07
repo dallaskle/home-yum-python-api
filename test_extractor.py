@@ -1,7 +1,7 @@
 import logging
 import json
 import os
-from extractor import TikTokMetadataExtractor
+from extractor import VideoMetadataExtractor
 import re
 
 # Set up logging with detailed format
@@ -12,9 +12,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Test video URLs - uncomment the one you want to test
-TEST_VIDEO_URL = "https://vm.tiktok.com/ZNeoxtLpP/"  # Current format
-# TEST_VIDEO_URL = "https://www.tiktok.com/@username/video/1234567890123456789"  # Standard format
-# TEST_VIDEO_URL = "https://vm.tiktok.com/ZNeoxtLpP/"  # Short format
+# TEST_VIDEO_URL = "https://vm.tiktok.com/ZNeoxtLpP/"  # TikTok example
+TEST_VIDEO_URL = "https://www.youtube.com/watch?v=8lt4S2uGbHQ"  # YouTube example
 
 def validate_tiktok_url(url):
     """Validate and potentially fix TikTok URL format."""
@@ -32,8 +31,8 @@ def validate_tiktok_url(url):
     return url
 
 def main():
-    # Initialize the TikTok metadata extractor
-    extractor = TikTokMetadataExtractor()
+    # Initialize the video metadata extractor
+    extractor = VideoMetadataExtractor()
     
     try:
         logger.info("Starting metadata extraction...")
@@ -54,14 +53,16 @@ def main():
             
             # Write results to a file
             logger.info("Writing results to file...")
-            with open('output/tiktok_metadata.txt', 'w') as f:
-                f.write("TikTok Video Metadata\n")
+            output_file = f"output/{metadata_result['platform']}_metadata.txt"
+            with open(output_file, 'w') as f:
+                f.write(f"{metadata_result['platform'].title()} Video Metadata\n")
                 f.write("=" * 50 + "\n\n")
                 f.write(json.dumps(metadata_result, indent=2))
-            logger.info("Results written to output/tiktok_metadata.txt")
+            logger.info(f"Results written to {output_file}")
             
             # Log specific important fields
-            logger.info(f"\nTitle: {metadata_result.get('title', 'N/A')}")
+            logger.info(f"\nPlatform: {metadata_result.get('platform', 'N/A')}")
+            logger.info(f"Title: {metadata_result.get('title', 'N/A')}")
             logger.info(f"Description: {metadata_result.get('description', 'N/A')}")
             logger.info(f"Duration: {metadata_result.get('duration', 'N/A')} seconds")
             logger.info(f"View Count: {metadata_result.get('view_count', 'N/A')}")

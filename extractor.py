@@ -5,24 +5,45 @@ import webvtt
 import tempfile
 import os
 import logging
+from urllib.parse import urlparse
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class TikTokMetadataExtractor:
+class VideoMetadataExtractor:
     def __init__(self):
-        self.ydl_opts = {
+        self.base_opts = {
             'quiet': True,
-            'extract_flat': False,
             'writesubtitles': True,
             'writeautomaticsub': True,
             'subtitlesformat': 'vtt',
-            'force_generic_extractor': False,
             'no_warnings': True,
+        }
+        
+        self.youtube_opts = {
+            **self.base_opts,
+            'extract_flat': True,
+            'force_generic_extractor': False,
+        }
+        
+        self.tiktok_opts = {
+            **self.base_opts,
+            'extract_flat': False,
+            'force_generic_extractor': False,
             'extractor_args': {'tiktok': {'api-hostname': 'api16-normal-c-useast1a.tiktokv.com'}},
             'format': 'best'
         }
+
+    def get_domain(self, url: str) -> str:
+        """Extract the domain from the URL."""
+        domain = urlparse(url).netloc.lower()
+        if any(tiktok in domain for tiktok in ['tiktok.com', 'vm.tiktok']):
+            return 'tiktok'
+        elif any(youtube in domain for youtube in ['youtube.com', 'youtu.be']):
+            return 'youtube'
+        else:
+            return 'unknown'
 
     def download_and_parse_subtitles(self, subtitle_url: str) -> str:
         try:
@@ -53,7 +74,19 @@ class TikTokMetadataExtractor:
     def extract_metadata(self, video_url: str) -> Dict[str, Any]:
         try:
             logger.info(f"Attempting to extract metadata from URL: {video_url}")
-            with yt_dlp.YoutubeDL(self.ydl_opts) as ydl:
+            
+            # Determine the domain and select appropriate options
+            domain = self.get_domain(video_url)
+            logger.info(f"Detected domain type: {domain}")
+            
+            if domain == 'unknown':
+                logger.error("Unsupported URL domain")
+                return {}
+            
+            # Select the appropriate options based on the domain
+            ydl_opts = self.tiktok_opts if domain == 'tiktok' else self.youtube_opts
+            
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 try:
                     info = ydl.extract_info(video_url, download=False)
                     if not info:
@@ -79,7 +112,8 @@ class TikTokMetadataExtractor:
                         'comment_count': info.get('comment_count', 0),
                         'subtitle_text': subtitle_text,
                         'thumbnail': info.get('thumbnail', ''),
-                        'webpage_url': info.get('webpage_url', video_url)
+                        'webpage_url': info.get('webpage_url', video_url),
+                        'platform': domain
                     }
                     
                     # Log what we found
