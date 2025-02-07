@@ -12,12 +12,14 @@ import requests
 from urllib.parse import urlparse
 import time
 from functools import wraps
-from extractor import TikTokMetadataExtractor
+from extractor import VideoMetadataExtractor
 from whisper_extractor import WhisperExtractor
 from dotenv import load_dotenv
 from langsmith import traceable
 from vision_analyzer import VisionAnalyzer
 import os
+from video_recipe_analyzer import VideoRecipeAnalyzer
+from nutrition import NutritionAnalyzer
 
 load_dotenv()
 
@@ -199,11 +201,13 @@ class MealScheduleUpdate(BaseModel):
 class TikTokExtractionRequest(BaseModel):
     video_url: str
 
-# Initialize TikTok extractor
-tiktok_extractor = TikTokMetadataExtractor()
-
 # Initialize VisionAnalyzer
 vision_analyzer = VisionAnalyzer()
+
+# Initialize additional extractors/analyzers
+video_metadata_extractor = VideoMetadataExtractor()
+video_recipe_analyzer = VideoRecipeAnalyzer()
+nutrition_analyzer = NutritionAnalyzer()
 
 # Routes
 @app.get("/")
@@ -982,98 +986,138 @@ async def get_aggregated_ratings(token_data=Depends(verify_token)):
         logger.error(f"[{request_id}] Error getting aggregated ratings: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Failed to get aggregated ratings: {str(e)}")
 
-@app.post("/api/extract/tiktok")
-@log_operation("extract_tiktok_metadata")
-async def extract_tiktok_metadata(request: TikTokExtractionRequest):
-    """Extract metadata and subtitles from a TikTok video URL"""
+@app.post("/api/extract/metadata")
+@log_operation("extract_video_metadata")
+async def extract_video_metadata(video_url: str):
+    """Extract metadata from a video URL (YouTube, TikTok, Instagram)"""
     try:
-        # Extract metadata
-        metadata = tiktok_extractor.extract_metadata(request.video_url)
+        logger.info(f"Extracting metadata from URL: {video_url}")
+        metadata = video_metadata_extractor.extract_metadata(video_url)
+        
         if not metadata:
-            raise HTTPException(status_code=400, detail="Failed to extract metadata from the provided URL")
+            raise HTTPException(
+                status_code=400,
+                detail="Failed to extract metadata from the provided URL"
+            )
         
         return {
             "success": True,
             "metadata": metadata
         }
     except Exception as e:
-        logger.error(f"Error extracting TikTok metadata: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error extracting video metadata: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to extract metadata: {str(e)}"
+        )
 
-@traceable
-@app.post("/api/extract/whisper")
-@log_operation("extract_whisper_transcription")
-async def extract_whisper_transcription(request: TikTokExtractionRequest):
-    """Extract transcription from a video URL using Whisper"""
+@app.post("/api/extract/whisper/enhanced")
+@log_operation("extract_enhanced_whisper")
+async def extract_enhanced_whisper(
+    video_url: str,
+    prompt: Optional[str] = None
+):
+    """Enhanced whisper extraction with optional prompt guidance"""
     try:
         # Initialize WhisperExtractor
-        whisper = WhisperExtractor()  # Will use OPENAI_API_KEY from environment
+        whisper = WhisperExtractor()
         
-        logger.info(f"Starting extraction for URL: {request.video_url}")
+        logger.info(f"Starting enhanced extraction for URL: {video_url}")
         
-        # Extract transcript
-        result = whisper.extract_transcript(request.video_url)
+        # Extract transcript with prompt if provided
+        result = whisper.extract_transcript(video_url, prompt)
         if not result:
             logger.error("No result returned from whisper.extract_transcript")
-            raise HTTPException(status_code=400, detail="Failed to extract transcription from the provided URL")
+            raise HTTPException(
+                status_code=400,
+                detail="Failed to extract transcription"
+            )
         
-        logger.info("Successfully extracted transcription")
+        logger.info("Successfully extracted enhanced transcription")
         return {
             "success": True,
             "transcription": result
         }
     except Exception as e:
-        logger.error(f"Error extracting Whisper transcription: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/api/analyze/image")
-@log_operation("analyze_image")
-async def analyze_image(
-    image_url: str = None,
-    image_file: UploadFile = File(None),
-    prompt: str = "What's in this image? Describe the meal and any visible ingredients or cooking steps."
-):
-    """Analyze an image using GPT-4 Vision"""
-    try:
-        if image_file:
-            # Save uploaded file temporarily
-            temp_path = f"/tmp/{image_file.filename}"
-            with open(temp_path, "wb") as buffer:
-                content = await image_file.read()
-                buffer.write(content)
-            
-            # Analyze the local file
-            result = await vision_analyzer.analyze_image(
-                image_path=temp_path,
-                prompt=prompt
-            )
-            
-            # Clean up
-            os.remove(temp_path)
-        elif image_url:
-            result = await vision_analyzer.analyze_image_from_url(
-                image_url=image_url,
-                prompt=prompt
-            )
-        else:
-            raise HTTPException(
-                status_code=400,
-                detail="Either image_url or image_file must be provided"
-            )
-        
-        if not result.get("success"):
-            raise HTTPException(
-                status_code=500,
-                detail=result.get("error", "Failed to analyze image")
-            )
-            
-        return result
-        
-    except Exception as e:
-        logger.error(f"Error analyzing image: {str(e)}")
+        logger.error(f"Error extracting enhanced Whisper transcription: {str(e)}")
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to analyze image: {str(e)}"
+            detail=f"Failed to extract transcription: {str(e)}"
+        )
+
+@app.post("/api/analyze/recipe/video")
+@log_operation("analyze_video_recipe")
+async def analyze_video_recipe(
+    video_url: str,
+    scene_analysis: bool = False
+):
+    """Analyze a video for recipe information with optional scene-by-scene analysis"""
+    try:
+        logger.info(f"Starting recipe analysis for URL: {video_url}")
+        
+        # Analyze the video
+        analysis = await video_recipe_analyzer.analyze_video(video_url)
+        
+        if not analysis.get('success'):
+            raise HTTPException(
+                status_code=400,
+                detail="Failed to analyze video recipe"
+            )
+        
+        # Remove scene analyses if not requested
+        if not scene_analysis and 'scene_analyses' in analysis:
+            del analysis['scene_analyses']
+        
+        return analysis
+    except Exception as e:
+        logger.error(f"Error analyzing video recipe: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to analyze recipe: {str(e)}"
+        )
+
+@app.post("/api/analyze/nutrition/serving-size")
+@log_operation("analyze_serving_size")
+async def analyze_serving_size(recipe_info: str):
+    """Analyze recipe for serving sizes for 4 people"""
+    try:
+        logger.info("Starting serving size analysis")
+        
+        result = await nutrition_analyzer.get_serving_sizes(recipe_info)
+        if not result.get('success'):
+            raise HTTPException(
+                status_code=400,
+                detail="Failed to analyze serving sizes"
+            )
+        
+        return result
+    except Exception as e:
+        logger.error(f"Error analyzing serving sizes: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to analyze serving sizes: {str(e)}"
+        )
+
+@app.post("/api/analyze/nutrition/info")
+@log_operation("analyze_nutrition_info")
+async def analyze_nutrition_info(serving_sizes: str):
+    """Get nutritional information based on serving sizes"""
+    try:
+        logger.info("Starting nutritional information analysis")
+        
+        result = await nutrition_analyzer.get_nutrition_info(serving_sizes)
+        if not result.get('success'):
+            raise HTTPException(
+                status_code=400,
+                detail="Failed to analyze nutritional information"
+            )
+        
+        return result
+    except Exception as e:
+        logger.error(f"Error analyzing nutritional information: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to analyze nutritional information: {str(e)}"
         )
 
 # Add more endpoints as needed based on your PRD requirements
