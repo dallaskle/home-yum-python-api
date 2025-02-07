@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Header, Request
+from fastapi import FastAPI, HTTPException, Depends, Header, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional, List
 import firebase_admin
@@ -16,6 +16,8 @@ from extractor import TikTokMetadataExtractor
 from whisper_extractor import WhisperExtractor
 from dotenv import load_dotenv
 from langsmith import traceable
+from vision_analyzer import VisionAnalyzer
+import os
 
 load_dotenv()
 
@@ -199,6 +201,9 @@ class TikTokExtractionRequest(BaseModel):
 
 # Initialize TikTok extractor
 tiktok_extractor = TikTokMetadataExtractor()
+
+# Initialize VisionAnalyzer
+vision_analyzer = VisionAnalyzer()
 
 # Routes
 @app.get("/")
@@ -1020,6 +1025,56 @@ async def extract_whisper_transcription(request: TikTokExtractionRequest):
     except Exception as e:
         logger.error(f"Error extracting Whisper transcription: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/analyze/image")
+@log_operation("analyze_image")
+async def analyze_image(
+    image_url: str = None,
+    image_file: UploadFile = File(None),
+    prompt: str = "What's in this image? Describe the meal and any visible ingredients or cooking steps."
+):
+    """Analyze an image using GPT-4 Vision"""
+    try:
+        if image_file:
+            # Save uploaded file temporarily
+            temp_path = f"/tmp/{image_file.filename}"
+            with open(temp_path, "wb") as buffer:
+                content = await image_file.read()
+                buffer.write(content)
+            
+            # Analyze the local file
+            result = await vision_analyzer.analyze_image(
+                image_path=temp_path,
+                prompt=prompt
+            )
+            
+            # Clean up
+            os.remove(temp_path)
+        elif image_url:
+            result = await vision_analyzer.analyze_image_from_url(
+                image_url=image_url,
+                prompt=prompt
+            )
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail="Either image_url or image_file must be provided"
+            )
+        
+        if not result.get("success"):
+            raise HTTPException(
+                status_code=500,
+                detail=result.get("error", "Failed to analyze image")
+            )
+            
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error analyzing image: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to analyze image: {str(e)}"
+        )
 
 # Add more endpoints as needed based on your PRD requirements
 
