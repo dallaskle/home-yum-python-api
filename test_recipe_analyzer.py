@@ -13,7 +13,8 @@ async def main():
     nutrition_analyzer = NutritionAnalyzer()
     
     # Example cooking video URL - replace with an actual cooking video URL
-    video_url = "https://vm.tiktok.com/ZNeoxXwWy/"
+    #video_url = "https://vm.tiktok.com/ZNeoxXwWy/"
+    video_url = "https://www.instagram.com/chefshaan19/reel/C6rEZMiplWn/"
     
     try:
         # Analyze the video

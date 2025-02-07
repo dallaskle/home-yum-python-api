@@ -1,573 +1,659 @@
-Found 32 scenes in the video
+Found 42 scenes in the video
 
 
 Scene 0 Analysis:
 Timestamp: 0.00s - 0.50s
-Analysis: Based on the scene from the cooking video:
-
-- **Ingredients:**
-  - Potato (referred to as "Kartoffel" in German)
-
-- **Cooking Actions/Techniques:**
-  - The presence of a baking tray lined with parchment paper suggests preparation for baking or roasting.
-
-- **Contextual Details:**
-  - No specific quantities or timings are visible in the image.
---------------------------------------------------------------------------------
-
-Scene 4 Analysis:
-Timestamp: 2.67s - 3.15s
-Analysis: - **Ingredients Visible:**
-  - Potatoes (diced)
-  - Zucchini (diced)
-  - Red bell peppers (chopped)
-  - Chickpeas
-  - Garlic (whole bulb)
-
-- **Cooking Actions/Techniques:**
-  - Arranging ingredients on a baking tray lined with parchment paper.
-
-- **Contextual Details:**
-  - The garlic bulb is being placed whole, suggesting it might be roasted with the other ingredients.
-  - The arrangement on a baking tray indicates preparation for roasting.
---------------------------------------------------------------------------------
-
-Scene 1 Analysis:
-Timestamp: 0.50s - 1.08s
-Analysis: - **Ingredients Visible:**
-  - Potatoes (chopped)
-  - Zucchini (chopped)
-
-- **Cooking Actions/Techniques:**
-  - Chopping: Both potatoes and zucchini are chopped into cubes.
-  - Arranging: Ingredients are placed on a baking sheet lined with parchment paper.
-
-- **Contextual Details:**
-  - The ingredients are spread out on a baking sheet, suggesting preparation for roasting or baking.
-  - No specific quantities or timings are visible in the scene.
---------------------------------------------------------------------------------
-
-Scene 3 Analysis:
-Timestamp: 1.53s - 2.67s
-Analysis: - **Ingredients Visible:**
-  - Potatoes (diced)
-  - Zucchini (diced)
-  - Red bell peppers (diced)
-  - Chickpeas (canned)
-
-- **Cooking Actions/Techniques:**
-  - Chopping: Vegetables are diced.
-  - Pouring: Chickpeas are being poured from a can onto the tray.
-
-- **Contextual Details:**
-  - Ingredients are arranged on a baking tray, suggesting preparation for roasting.
-  - No specific quantities or timings are visible.
---------------------------------------------------------------------------------
-
-Scene 2 Analysis:
-Timestamp: 1.08s - 1.53s
-Analysis: - **Ingredients Visible:**
-  - Potatoes
-  - Zucchini
-  - Red bell pepper
-
-- **Cooking Actions/Techniques:**
-  - Chopping: Vegetables are chopped into cubes.
-
-- **Contextual Details:**
-  - Vegetables are placed on a baking tray lined with parchment paper.
-  - No specific quantities or timings are indicated.
---------------------------------------------------------------------------------
-
-Scene 5 Analysis:
-Timestamp: 3.15s - 5.47s
-Analysis: - **Ingredients Visible:**
-  - Potatoes (diced)
-  - Zucchini (diced)
-  - Red bell peppers (diced)
-  - Chickpeas
-  - Whole garlic bulb
-  - Salt
-  - Pepper
-
-- **Cooking Actions/Techniques:**
-  - Ingredients are arranged on a baking tray lined with parchment paper.
-  - Seasoning with salt and pepper is mentioned.
-
-- **Contextual Details:**
-  - The ingredients are likely prepared for roasting, as they are spread out on a baking tray.
-  - No specific quantities or timings are provided in the image.
---------------------------------------------------------------------------------
-
-Scene 7 Analysis:
-Timestamp: 5.97s - 6.67s
 Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
 
 - **Ingredients Visible:**
-  - Cherry tomatoes
-  - Zucchini
-  - Red bell peppers
-  - Chickpeas
-  - Eggplant
+  - Sausages
+  - Green onions or chives
+  - Rice
+  - Cauliflower
 
 - **Cooking Actions or Techniques:**
-  - Ingredients are arranged on a baking tray, suggesting preparation for roasting or baking.
+  - The dish appears to be mixed or combined, possibly indicating a stir-fry or one-pot cooking method.
 
 - **Contextual Details:**
-  - The ingredients are neatly arranged, possibly indicating even cooking.
-  - The use of a baking tray suggests the dish may be roasted or baked, but no specific quantities or timings are visible.
+  - The presence of green onions or chives as a garnish suggests they are added at the end.
+  - The dish is served in a bowl, indicating it might be a single serving or a side dish.
+
+No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 1 Analysis:
+Timestamp: 0.50s - 1.30s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible:**
+  - Rice
+  - Green onions (scallions)
+  - Sausages or meatballs
+  - Bell peppers (possibly yellow and green)
+  - Carrots
+
+- **Cooking Actions or Techniques:**
+  - The dish appears to be a mixed rice dish, likely involving frying or sautéing the ingredients together.
+
+- **Contextual Details:**
+  - The dish is served in a bowl, suggesting it might be a single serving or a side dish.
+  - The presence of green onions as a garnish indicates they were added at the end for freshness.
+
+No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 2 Analysis:
+Timestamp: 1.30s - 2.40s
+Analysis: - **Ingredients Visible:**
+  - Rice
+  - Sausage (possibly chorizo or similar)
+  - Scrambled eggs
+  - Green onions (scallions)
+  - Carrots (diced)
+
+- **Cooking Actions/Techniques:**
+  - Mixing: The ingredients appear to be mixed together.
+  - Scrambling: Eggs are scrambled and mixed into the dish.
+  - Slicing: Sausages are sliced before being added.
+
+- **Contextual Details:**
+  - The dish is served in a bowl, suggesting it might be a single serving or a side dish.
+  - The presence of scrambled eggs and sausage indicates a possible breakfast or brunch dish.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 3 Analysis:
+Timestamp: 2.40s - 3.00s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible:**
+  - Kidney beans
+  - Corn
+  - Chopped green herbs (possibly cilantro or parsley)
+
+- **Cooking Actions or Techniques:**
+  - The dish appears to be mixed or combined, as ingredients are evenly distributed in the bowl.
+
+- **Contextual Details:**
+  - The dish is served in a bowl, suggesting it might be a salad or a side dish.
+  - No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 7 Analysis:
+Timestamp: 11.87s - 14.33s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients Visible or Mentioned:**
+  - Raw chicken pieces
+  - Flour or a similar powdery substance (possibly for coating)
+
+- **Cooking Actions or Techniques Demonstrated:**
+  - Mixing or coating the chicken pieces with the flour using hands
+
+- **Contextual Details:**
+  - The action suggests preparation for frying or baking, as coating is often a step before these cooking methods. 
+  - No specific quantities or timings are visible.
 --------------------------------------------------------------------------------
 
 Scene 6 Analysis:
-Timestamp: 5.47s - 5.97s
-Analysis: - **Ingredients:**
-  - Potatoes (diced)
-  - Zucchini (diced)
-  - Red bell peppers (chopped)
-  - Chickpeas
-  - Whole garlic bulb
-  - Black pepper (visible seasoning)
-
-- **Cooking Actions/Techniques:**
-  - Ingredients are arranged on a baking tray lined with parchment paper.
-  - Seasoning with black pepper is visible.
-
-- **Contextual Details:**
-  - Ingredients are evenly spread, suggesting preparation for roasting.
-  - The presence of a whole garlic bulb indicates it may be roasted along with the vegetables.
---------------------------------------------------------------------------------
-
-Scene 8 Analysis:
-Timestamp: 6.67s - 7.63s
-Analysis: - **Ingredients Visible:**
-  - Zucchini
-  - Red bell peppers
-  - Potatoes
-  - Whole garlic bulb
-  - Black pepper (visible seasoning)
-
-- **Cooking Actions/Techniques:**
-  - Vegetables are chopped into cubes.
-  - Ingredients are arranged on a baking tray lined with parchment paper.
-
-- **Contextual Details:**
-  - The presence of a whole garlic bulb suggests roasting.
-  - The arrangement and seasoning imply preparation for oven roasting.
---------------------------------------------------------------------------------
-
-Scene 11 Analysis:
-Timestamp: 9.00s - 10.25s
-Analysis: - **Ingredients Visible or Mentioned:**
-  - Feta cheese
-  - Yogurt (or a similar creamy substance)
-
-- **Cooking Actions or Techniques:**
-  - Breaking or crumbling feta cheese into a bowl or container.
-
-- **Contextual Details:**
-  - The feta cheese is being added to a creamy base, likely for blending or mixing.
-  - No specific quantities or timings are indicated.
---------------------------------------------------------------------------------
-
-Scene 9 Analysis:
-Timestamp: 7.63s - 8.02s
+Timestamp: 5.60s - 11.87s
 Analysis: Based on the scene from the cooking video:
 
-- **Ingredients Visible or Mentioned:**
-  - None visible in the image.
+- **Ingredients Visible:**
+  - Diced chicken pieces
 
-- **Cooking Actions or Techniques Demonstrated:**
-  - A food processor is being shown, indicating preparation for blending or chopping ingredients.
+- **Cooking Actions or Techniques:**
+  - The chicken is already diced, indicating preparation for cooking.
 
 - **Contextual Details:**
-  - No specific quantities or timings are visible in the image.
+  - The quantity of chicken is approximately a bowlful, but exact measurements are not visible.
+  - No specific timings or additional ingredients are shown in this scene.
 --------------------------------------------------------------------------------
 
 Scene 10 Analysis:
-Timestamp: 8.02s - 9.00s
-Analysis: - **Ingredients:**
-  - Yogurt
-
-- **Cooking Actions/Techniques:**
-  - Pouring yogurt into a mixing bowl or blender.
-
-- **Contextual Details:**
-  - The presence of a blade in the bowl suggests preparation for blending or mixing.
-  - No specific quantities or timings are indicated in the image.
---------------------------------------------------------------------------------
-
-Scene 14 Analysis:
-Timestamp: 11.67s - 12.68s
+Timestamp: 16.53s - 17.47s
 Analysis: - **Ingredients Visible or Mentioned:**
-  - Garlic
-  - Parsley
-  - Red chili peppers
-
-- **Cooking Actions or Techniques:**
-  - Squeezing roasted garlic cloves out of their skins
-
-- **Contextual Details:**
-  - The garlic appears to be roasted, as indicated by its soft texture.
---------------------------------------------------------------------------------
-
-Scene 15 Analysis:
-Timestamp: 12.68s - 13.48s
-Analysis: - **Ingredients Visible:**
-  - Lemon juice
-  - Parsley
-  - Roasted or cooked onions
-  - Red bell peppers
-  - A dollop of white creamy substance (possibly yogurt or sour cream)
-
-- **Cooking Actions/Techniques:**
-  - Squeezing lemon juice over the ingredients
-
-- **Contextual Details:**
-  - The lemon is being freshly squeezed, indicating the use of fresh lemon juice.
-  - The presence of roasted onions suggests prior cooking or preparation.
---------------------------------------------------------------------------------
-
-Scene 16 Analysis:
-Timestamp: 13.48s - 13.73s
-Analysis: - **Ingredients Visible:**
-  - Red bell peppers
-  - Cilantro
-  - Onion
-  - Yogurt
-
-- **Cooking Actions/Techniques:**
-  - Blending: Ingredients are placed in a blender or food processor.
-
-- **Contextual Details:**
-  - The ingredients are layered in the blender, suggesting they will be mixed together.
-  - No specific quantities or timings are visible.
---------------------------------------------------------------------------------
-
-Scene 12 Analysis:
-Timestamp: 10.25s - 11.02s
-Analysis: - **Ingredients Visible or Mentioned:**
-  - Bell pepper
-  - Paprika
-  - Cream cheese
-  - Milk
-
-- **Cooking Actions or Techniques:**
-  - Ingredients are being placed into a blender or food processor.
-
-- **Contextual Details:**
-  - The scene suggests preparation for blending, likely to create a sauce or dip.
-  - No specific quantities or timings are indicated.
---------------------------------------------------------------------------------
-
-Scene 13 Analysis:
-Timestamp: 11.02s - 11.67s
-Analysis: - **Ingredients:**
-  - Red bell peppers (chopped)
-  - Cream cheese
-  - Parsley
-
-- **Cooking Actions/Techniques:**
-  - Chopping (red bell peppers)
-  - Adding ingredients to a food processor
-
-- **Contextual Details:**
-  - No specific quantities or timings are visible.
---------------------------------------------------------------------------------
-
-Scene 17 Analysis:
-Timestamp: 13.73s - 14.50s
-Analysis: - **Ingredients Visible:**
-  - Red bell peppers
-  - Fresh cilantro
-  - Yogurt
-  - Garlic cloves
-
-- **Cooking Actions/Techniques:**
-  - Ingredients are placed in a blender or food processor, indicating preparation for blending.
-
-- **Contextual Details:**
-  - The presence of yogurt suggests a creamy texture, possibly for a sauce or dip.
-  - No specific quantities or timings are visible.
---------------------------------------------------------------------------------
-
-Scene 18 Analysis:
-Timestamp: 14.50s - 15.33s
-Analysis: - **Ingredients Visible or Mentioned:**
-  - Orange mixture (possibly containing ingredients like tomatoes, peppers, or carrots)
-  - Green herbs (possibly parsley or cilantro)
+  - Pieces of food being fried (possibly chicken or a similar protein).
 
 - **Cooking Actions or Techniques Demonstrated:**
-  - Blending or processing in a food processor
+  - Deep frying: The food is being cooked in hot oil.
 
 - **Contextual Details:**
-  - The mixture appears to be smooth, indicating thorough blending
-  - No specific quantities or timings are visible
---------------------------------------------------------------------------------
-
-Scene 19 Analysis:
-Timestamp: 15.33s - 15.68s
-Analysis: Based on the scene from the cooking video:
-
-- **Ingredients:**
-  - Carrots (visible in the container)
-
-- **Cooking Actions/Techniques:**
-  - Blending or pureeing (using a hand blender)
-
-- **Contextual Details:**
-  - The carrots are being processed, likely indicating preparation for a puree or soup.
+  - The food is submerged in oil, indicating deep frying.
+  - The oil is bubbling, suggesting it is at a high temperature.
   - No specific quantities or timings are visible.
 --------------------------------------------------------------------------------
 
-Scene 20 Analysis:
-Timestamp: 15.68s - 16.85s
-Analysis: - **Ingredients Visible or Mentioned:**
-  - Orange-colored mixture (possibly containing ingredients like roasted red peppers, spices, or a creamy base such as yogurt or mayonnaise).
+Scene 5 Analysis:
+Timestamp: 4.93s - 5.60s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible or Mentioned:**
+  - Sausage (possibly chorizo)
+  - Green onions or scallions
+  - Rice
+  - Corn
+  - Red beans
+  - Bell peppers (possibly red or yellow)
+
+- **Cooking Actions or Techniques Demonstrated:**
+  - Mixing ingredients together (implied by the dish presentation)
+
+- **Contextual Details:**
+  - The dish appears to be a mixed rice dish, possibly a type of jambalaya or paella.
+  - No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 4 Analysis:
+Timestamp: 3.00s - 4.93s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible or Mentioned:**
+  - Dates
+  - Green onions or chives
+  - Potatoes
 
 - **Cooking Actions or Techniques:**
-  - Mixing or blending: The mixture is being stirred or processed in a small food processor or blender.
+  - The dish appears to be assembled or garnished, as the ingredients are visible on top.
 
 - **Contextual Details:**
-  - The consistency suggests a dip or sauce.
-  - No specific quantities or timings are visible.
+  - The dish is served in a bowl, suggesting it might be a salad or a side dish.
+  - No specific quantities or timings are indicated in the scene.
 --------------------------------------------------------------------------------
 
-Scene 21 Analysis:
-Timestamp: 16.85s - 17.45s
-Analysis: Based on the image provided, here are the details:
-
-- **Ingredients:**
-  - None visible or mentioned.
-
-- **Cooking Actions/Techniques:**
-  - A bowl is being placed on a wooden cutting board.
-
-- **Contextual Details:**
-  - No specific quantities or timings are indicated. The scene appears to be in preparation for further cooking steps.
---------------------------------------------------------------------------------
-
-Scene 22 Analysis:
-Timestamp: 17.45s - 18.35s
+Scene 8 Analysis:
+Timestamp: 14.33s - 14.97s
 Analysis: Based on the scene from the cooking video:
 
 - **Ingredients Visible or Mentioned:**
-  - A mixture that appears to be mashed or pureed, possibly containing sweet potatoes or a similar orange ingredient.
+  - Chicken pieces
+  - Marinade (appears to be a creamy or yogurt-based sauce, possibly with spices)
 
 - **Cooking Actions or Techniques Demonstrated:**
-  - Scooping: The mixture is being scooped onto a plate.
+  - Marinating: The chicken is being shown in a marinade, indicating preparation for cooking.
 
 - **Contextual Details:**
-  - The mixture is being served onto a plate, suggesting it might be ready to eat or part of a final dish.
-  - No specific quantities or timings are visible in this scene.
+  - The marinade suggests the chicken is being prepared for a dish that requires marination, possibly for grilling or baking.
+  - No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 9 Analysis:
+Timestamp: 14.97s - 16.53s
+Analysis: - **Ingredients:**
+  - A mixture that appears to be a batter or dough (specific ingredients not visible).
+
+- **Cooking Actions/Techniques:**
+  - Frying: The batter/dough is being placed into a pan with oil.
+
+- **Contextual Details:**
+  - The batter/dough is being shaped by hand before being placed in the pan.
+  - The pan is on a stovetop, indicating the use of medium to high heat for frying.
+--------------------------------------------------------------------------------
+
+Scene 13 Analysis:
+Timestamp: 19.73s - 20.23s
+Analysis: The image provided does not contain any visible ingredients or cooking actions related to a recipe. It appears to show a person holding a towel to their face, which does not provide any relevant details for a cooking video analysis.
+--------------------------------------------------------------------------------
+
+Scene 12 Analysis:
+Timestamp: 19.20s - 19.73s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients Visible:**
+  - Pieces of food being fried (possibly meat or vegetables).
+
+- **Cooking Actions/Techniques:**
+  - Frying: The food is being deep-fried in oil.
+
+- **Contextual Details:**
+  - The food is being fried in a pan or wok.
+  - The oil is bubbling, indicating a high temperature.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 11 Analysis:
+Timestamp: 17.47s - 19.20s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Fried food (possibly chicken or a similar item)
+  - Cooking oil (in the wok)
+
+- **Cooking Actions or Techniques:**
+  - Deep frying: The food is being fried in a wok filled with oil.
+  - Stirring or turning: The food is being moved with a slotted spoon or ladle.
+
+- **Contextual Details:**
+  - The food is being cooked on a gas stove.
+  - The wok is used for deep frying, indicating a significant amount of oil.
+  - The food appears to be golden brown, suggesting it is close to being fully cooked.
+--------------------------------------------------------------------------------
+
+Scene 14 Analysis:
+Timestamp: 20.23s - 22.27s
+Analysis: The image provided does not contain any visible ingredients or cooking actions related to a recipe. It shows a person wiping their face with a towel in a kitchen setting. There are no details available about ingredients, cooking techniques, or recipe-related context.
+--------------------------------------------------------------------------------
+
+Scene 16 Analysis:
+Timestamp: 24.07s - 24.93s
+Analysis: - **Ingredients Visible:**
+  - Cabbage
+
+- **Cooking Actions or Techniques:**
+  - Chopping: The cabbage is being sliced on a cutting board.
+
+- **Contextual Details:**
+  - No specific quantities or timings are visible in the image.
+--------------------------------------------------------------------------------
+
+Scene 19 Analysis:
+Timestamp: 28.40s - 28.90s
+Analysis: - **Ingredients Visible:**
+  - Chopped cabbage
+  - Chopped green beans
+
+- **Cooking Actions or Techniques:**
+  - Chopping (cabbage and green beans are chopped)
+
+- **Contextual Details:**
+  - No specific quantities or timings are indicated in the image.
+--------------------------------------------------------------------------------
+
+Scene 15 Analysis:
+Timestamp: 22.27s - 24.07s
+Analysis: I'm unable to analyze the scene from the video as it doesn't show any cooking activity or ingredients. If you have more specific details or another image showing the cooking process, feel free to share!
+--------------------------------------------------------------------------------
+
+Scene 20 Analysis:
+Timestamp: 28.90s - 29.40s
+Analysis: - **Ingredients Visible:**
+  - Chopped carrots
+  - Chopped green beans
+  - Shredded cabbage
+
+- **Cooking Actions or Techniques:**
+  - Chopping vegetables
+
+- **Contextual Details:**
+  - The vegetables are finely chopped, suggesting they may be used for a stir-fry or similar dish.
+  - No specific quantities or timings are indicated in the image.
+--------------------------------------------------------------------------------
+
+Scene 21 Analysis:
+Timestamp: 29.40s - 30.10s
+Analysis: - **Ingredients Visible:**
+  - Chopped carrots
+  - Chopped green bell peppers
+  - Chopped red onions
+  - Chopped green beans
+  - Shredded cabbage
+
+- **Cooking Actions/Techniques:**
+  - Chopping vegetables
+
+- **Contextual Details:**
+  - No specific quantities or timings are indicated in the image.
+--------------------------------------------------------------------------------
+
+Scene 22 Analysis:
+Timestamp: 30.10s - 30.93s
+Analysis: - **Ingredients Visible:**
+  - Carrots (diced)
+  - Red onions (chopped)
+  - Green bell peppers (diced)
+  - Green beans (sliced)
+
+- **Cooking Actions/Techniques:**
+  - Chopping/dicing vegetables
+
+- **Contextual Details:**
+  - No specific quantities or timings are indicated in the image.
+--------------------------------------------------------------------------------
+
+Scene 18 Analysis:
+Timestamp: 25.77s - 28.40s
+Analysis: - **Ingredients Visible:**
+  - Cabbage
+  - Green bell pepper
+
+- **Cooking Actions/Techniques:**
+  - Chopping cabbage
+  - Preparing to chop green bell pepper
+
+- **Contextual Details:**
+  - No specific quantities or timings are indicated in the image.
+--------------------------------------------------------------------------------
+
+Scene 17 Analysis:
+Timestamp: 24.93s - 25.77s
+Analysis: - **Ingredients:**
+  - Cabbage (visible)
+
+- **Cooking Actions/Techniques:**
+  - Chopping: The cabbage is being finely chopped on a cutting board.
+
+- **Contextual Details:**
+  - No specific quantities or timings are visible in the image.
 --------------------------------------------------------------------------------
 
 Scene 23 Analysis:
-Timestamp: 18.35s - 19.67s
-Analysis: - **Ingredients Visible or Mentioned:**
-  - Orange-colored mixture (possibly containing spices or vegetables).
-
-- **Cooking Actions or Techniques:**
-  - Spreading: The mixture is being spread evenly in a bowl using a spoon.
-
-- **Contextual Details:**
-  - The mixture appears smooth, suggesting it may have been blended or pureed.
-  - No specific quantities or timings are visible in the image.
+Timestamp: 30.93s - 40.47s
+Analysis: I'm unable to analyze the scene from the video as it only shows a person speaking. There are no visible ingredients or cooking actions demonstrated in this image. If you have more images or details from the video, feel free to share!
 --------------------------------------------------------------------------------
 
 Scene 24 Analysis:
-Timestamp: 19.67s - 20.15s
+Timestamp: 40.47s - 41.93s
 Analysis: - **Ingredients:**
-  - Roasted or sautéed potatoes
-  - Orange-colored sauce or puree (possibly containing spices or vegetables like bell peppers or tomatoes)
+  - Chopped garlic (visible on the knife).
 
 - **Cooking Actions/Techniques:**
-  - Potatoes appear to be cooked (roasted or sautéed) before being added to the dish.
-  - Sauce or puree is spread evenly in a bowl.
+  - Heating a wok on a gas stove.
+  - Preparing to add chopped garlic to the wok.
 
 - **Contextual Details:**
-  - The potatoes are being spooned onto the sauce, suggesting a layering or topping technique.
-  - No specific quantities or timings are visible.
+  - The wok is preheated, indicating readiness for stir-frying or sautéing.
+  - The flame is medium to high, suggesting a quick cooking method.
 --------------------------------------------------------------------------------
 
 Scene 25 Analysis:
-Timestamp: 20.15s - 20.60s
+Timestamp: 41.93s - 43.30s
 Analysis: - **Ingredients Visible:**
-  - Zucchini
-  - Yellow squash
-  - Red bell pepper
-  - Orange sauce or puree (possibly a roasted red pepper sauce or similar)
+  - Chopped onions
 
 - **Cooking Actions/Techniques:**
-  - Diced vegetables are being spooned onto a plate.
-  - The vegetables appear to be cooked, likely roasted or sautéed.
+  - Sautéing onions in a pan
 
 - **Contextual Details:**
-  - The vegetables are placed on top of the orange sauce, suggesting it serves as a base.
-  - No specific quantities or timings are visible in the image.
+  - The onions are being stirred with a wooden spatula.
+  - The pan is on a gas stove with a visible flame, indicating medium to high heat.
 --------------------------------------------------------------------------------
 
 Scene 26 Analysis:
-Timestamp: 20.60s - 21.33s
-Analysis: - **Ingredients Visible:**
-  - Red bell peppers
-  - Zucchini
-  - Yellow bell peppers
-  - Onion
-  - Chickpeas
-  - A base that appears to be a red sauce or spread (possibly hummus or a similar dip)
+Timestamp: 43.30s - 44.03s
+Analysis: Based on the scene from the cooking video:
+
+- **Ingredients Visible:**
+  - Chopped carrots
+  - Chopped green bell peppers
+  - Chopped onions
 
 - **Cooking Actions/Techniques:**
-  - Vegetables appear to be chopped.
-  - Likely roasted or sautéed (based on appearance).
-  - Ingredients are being spooned onto a plate.
+  - Stir-frying in a wok
 
 - **Contextual Details:**
-  - No specific quantities or timings are visible.
-  - The dish is being assembled, suggesting prior cooking/preparation of ingredients.
+  - The ingredients are being cooked over a flame, indicating a high-heat cooking method.
+  - A wooden spatula is used for stirring, suggesting gentle mixing to combine ingredients evenly.
 --------------------------------------------------------------------------------
 
 Scene 27 Analysis:
-Timestamp: 21.33s - 22.10s
-Analysis: - **Ingredients Visible:**
-  - Red bell peppers
-  - Zucchini
-  - Chickpeas
-  - Hummus (as a base)
+Timestamp: 44.03s - 47.47s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Chopped green bell peppers
+  - Chopped carrots
+  - Chopped onions
+  - Salt (being added from a small bowl)
 
-- **Cooking Actions/Techniques:**
-  - Roasting or sautéing vegetables (indicated by their appearance)
-  - Pouring chickpeas over the dish
-
-- **Contextual Details:**
-  - The dish is served on a plate with hummus as a base.
-  - The vegetables are cut into chunks, suggesting they were prepped before cooking.
-  - No specific quantities or timings are visible.
---------------------------------------------------------------------------------
-
-Scene 28 Analysis:
-Timestamp: 22.10s - 23.42s
-Analysis: - **Ingredients Visible:**
-  - Chickpeas
-  - Red bell peppers
-  - Zucchini
-  - Potatoes
-
-- **Cooking Actions/Techniques:**
-  - Roasting or sautéing (implied by the appearance of the vegetables)
+- **Cooking Actions or Techniques:**
+  - Stir-frying vegetables in a wok
 
 - **Contextual Details:**
-  - The dish is served in a bowl, suggesting it might be a warm salad or side dish.
-  - No specific quantities or timings are visible.
+  - The vegetables are being cooked over a flame, indicating medium to high heat.
+  - Salt is being added, suggesting seasoning to taste.
 --------------------------------------------------------------------------------
 
 Scene 29 Analysis:
-Timestamp: 23.42s - 23.98s
-Analysis: - **Ingredients Visible:**
-  - Chickpeas
-  - Red bell peppers
-  - Zucchini
-  - Potatoes
-  - Fresh parsley
+Timestamp: 49.83s - 59.47s
+Analysis: I'm unable to view the video, but I can help you analyze it if you provide a description of the scene, including any visible ingredients, cooking actions, or contextual details mentioned.
+--------------------------------------------------------------------------------
 
-- **Cooking Actions/Techniques:**
-  - Mixing ingredients in a bowl
-
-- **Contextual Details:**
-  - The dish appears to be garnished with fresh parsley.
-  - The ingredients are likely roasted or sautéed, as indicated by their appearance.
+Scene 28 Analysis:
+Timestamp: 47.47s - 49.83s
+Analysis: I'm unable to analyze the scene or extract details from the video. However, if you provide a description of the scene, I can help you identify potential ingredients, cooking actions, and any contextual details related to the recipe.
 --------------------------------------------------------------------------------
 
 Scene 30 Analysis:
-Timestamp: 23.98s - 25.65s
-Analysis: Based on the image provided, here are the details related to the recipe:
-
-- **Ingredients Visible:**
-  - Chickpeas
-  - Red bell peppers
-  - Zucchini
-  - Eggplant
-  - Parsley or cilantro (garnish)
+Timestamp: 59.47s - 61.87s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Rice
+  - Seasoning or spice (being sprinkled from a spoon)
 
 - **Cooking Actions or Techniques:**
-  - The ingredients appear to be roasted or sautéed, as indicated by their cooked appearance.
+  - Stir-frying in a wok
+  - Sprinkling seasoning over the rice
 
 - **Contextual Details:**
-  - The dish is served in a bowl, suggesting it might be a salad or a warm vegetable dish.
-  - The presence of chickpeas indicates a protein-rich component, possibly making it a main dish or a hearty side.
-
-No specific quantities or timings are visible in the image.
+  - The rice is already cooked and being stir-fried.
+  - The seasoning is added while the rice is in the wok on the stove.
 --------------------------------------------------------------------------------
 
 Scene 31 Analysis:
-Timestamp: 25.65s - 27.05s
-Analysis: I'm unable to view the video, but I can help you analyze a scene if you describe it. Please provide details about the ingredients, actions, or any other elements you notice, and I'll assist you with the analysis.
+Timestamp: 61.87s - 63.60s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Cooked rice
+  - Diced vegetables (possibly carrots and green beans)
+  - Sauce (reddish-brown, possibly soy sauce or a chili sauce)
+
+- **Cooking Actions or Techniques:**
+  - Stir-frying in a wok
+  - Pouring sauce over the rice and vegetables
+
+- **Contextual Details:**
+  - The rice and vegetables are already in the wok, indicating they have been pre-cooked or prepped.
+  - The sauce is being added, suggesting a step towards the end of the cooking process.
+--------------------------------------------------------------------------------
+
+Scene 32 Analysis:
+Timestamp: 63.60s - 64.13s
+Analysis: - **Ingredients Visible:**
+  - Fried rice
+  - Diced vegetables (possibly carrots, peas)
+  - Cooked chicken pieces
+
+- **Cooking Actions/Techniques:**
+  - Stir-frying in a wok
+  - Adding cooked chicken to the fried rice
+
+- **Contextual Details:**
+  - The wok is on a gas stove with a visible flame, indicating high heat.
+  - The chicken is being added towards the end of the cooking process.
+--------------------------------------------------------------------------------
+
+Scene 33 Analysis:
+Timestamp: 64.13s - 65.17s
+Analysis: - **Ingredients Visible:**
+  - Rice
+  - Kidney beans
+  - Chopped green bell peppers
+  - Chopped carrots
+  - Chopped onions
+
+- **Cooking Actions/Techniques:**
+  - Stir-frying in a wok or large pan
+
+- **Contextual Details:**
+  - The ingredients are being mixed together over heat, suggesting they are being cooked simultaneously.
+  - No specific quantities or timings are visible.
+--------------------------------------------------------------------------------
+
+Scene 34 Analysis:
+Timestamp: 65.17s - 67.00s
+Analysis: - **Ingredients:**
+  - Egg yolk (being poured into the pan)
+  - Garlic (visible in the pan)
+
+- **Cooking Actions/Techniques:**
+  - Pouring egg yolk into a heated pan
+  - Sautéing garlic (as it is already in the pan)
+
+- **Contextual Details:**
+  - The pan is on a gas stove, indicating active cooking.
+  - The presence of sautéed garlic suggests it was cooked prior to adding the egg yolk.
+--------------------------------------------------------------------------------
+
+Scene 35 Analysis:
+Timestamp: 67.00s - 69.07s
+Analysis: - **Ingredients Visible:**
+  - Cooked rice
+  - Kidney beans
+  - Mixed vegetables (possibly including carrots and peas)
+
+- **Cooking Actions/Techniques:**
+  - Pouring ingredients from a bowl into a wok or pan
+  - Stir-frying on a stovetop
+
+- **Contextual Details:**
+  - The rice and vegetables are being combined and cooked together, likely indicating a stir-fry dish.
+  - The presence of a flame suggests medium to high heat cooking.
+--------------------------------------------------------------------------------
+
+Scene 36 Analysis:
+Timestamp: 69.07s - 70.27s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Rice
+  - Sausages or meat pieces
+  - Scrambled eggs
+  - Carrots
+  - Green peas
+  - Green onions (being sprinkled on top)
+
+- **Cooking Actions or Techniques Demonstrated:**
+  - Sprinkling green onions on top of the dish
+
+- **Contextual Details:**
+  - The dish appears to be a type of fried rice.
+  - The presence of scrambled eggs suggests they were cooked separately and mixed in.
+  - The sausages or meat pieces are likely cooked and mixed with the rice and vegetables.
+--------------------------------------------------------------------------------
+
+Scene 37 Analysis:
+Timestamp: 70.27s - 71.90s
+Analysis: - **Ingredients:**
+  - Rice
+  - Sausage (sliced)
+  - Scrambled eggs
+  - Green onions
+  - Carrots
+  - Peas
+
+- **Cooking Actions/Techniques:**
+  - Scrambling eggs
+  - Mixing ingredients together
+
+- **Contextual Details:**
+  - The dish appears to be a type of fried rice.
+  - Sausages are sliced and likely cooked before mixing.
+  - Green onions are used as a garnish.
+--------------------------------------------------------------------------------
+
+Scene 38 Analysis:
+Timestamp: 71.90s - 72.80s
+Analysis: - **Ingredients Visible or Mentioned:**
+  - Rice
+  - Scrambled eggs
+  - Green onions
+  - Carrots
+  - Cabbage
+  - Meat pieces (possibly chicken or pork)
+
+- **Cooking Actions or Techniques:**
+  - Mixing (ingredients appear to be mixed together)
+  - Frying (likely for the rice and meat)
+
+- **Contextual Details:**
+  - The dish appears to be a type of fried rice.
+  - The presence of scrambled eggs suggests they were cooked separately and then mixed in.
+  - Green onions are used as a garnish.
+--------------------------------------------------------------------------------
+
+Scene 39 Analysis:
+Timestamp: 72.80s - 76.33s
+Analysis: Based on the scene from the cooking video, here are the details related to the recipe:
+
+- **Ingredients Visible or Mentioned:**
+  - Sausage (possibly chorizo or similar)
+  - Green onions or scallions
+  - Yellow or orange bell peppers
+  - Mushrooms
+
+- **Cooking Actions or Techniques Demonstrated:**
+  - The ingredients appear to be cooked together, possibly sautéed or stir-fried.
+
+- **Contextual Details:**
+  - The dish is likely served on a spoon, suggesting it might be a tasting or small portion.
+  - No specific quantities or timings are visible in the scene.
+--------------------------------------------------------------------------------
+
+Scene 40 Analysis:
+Timestamp: 76.33s - 76.93s
+Analysis: I'm unable to analyze the scene from the video as it only shows a person. There are no visible ingredients or cooking actions in the image provided. If you have more specific details or another image showing the cooking process, feel free to share!
+--------------------------------------------------------------------------------
+
+Scene 41 Analysis:
+Timestamp: 76.93s - 79.13s
+Analysis: I'm unable to analyze the scene from the video as it only shows a person. There are no visible ingredients or cooking actions demonstrated in the image provided. If you have more specific details or another image showing the cooking process, feel free to share!
 --------------------------------------------------------------------------------
 
 Final Recipe Analysis:
 ================================================================================
-Certainly! Based on the information extracted from the scenes, here is a consolidated list of ingredients and a step-by-step set of instructions for the recipe:
+Certainly! Based on the details extracted from the scenes, I'll consolidate the ingredients and directions into a coherent recipe. Since specific quantities are not provided, I'll list the ingredients without quantities, and you can adjust them based on your preference or serving size.
 
 ---
 
 **Ingredients:**
 
-- Potatoes, diced
-- Zucchini, diced
-- Red bell peppers, diced
-- Cherry tomatoes
-- Eggplant
-- Chickpeas (canned)
-- Whole garlic bulb
-- Garlic cloves
-- Onion
-- Roasted or cooked onions
-- Fresh parsley or cilantro (for garnish)
-- Fresh cilantro
-- Red chili peppers
-- Lemon juice
-- Yogurt
-- Feta cheese
-- Cream cheese
-- Milk
-- Paprika
-- Salt
-- Black pepper
-- Orange-colored sauce or puree (possibly containing roasted red peppers, spices, or a creamy base such as yogurt or mayonnaise)
-- Hummus (as a base)
-
----
+- Sausages (possibly chorizo or similar)
+- Green onions or scallions
+- Rice
+- Cauliflower
+- Bell peppers (yellow, green, or red)
+- Carrots
+- Scrambled eggs
+- Kidney beans
+- Corn
+- Chopped green herbs (cilantro or parsley)
+- Dates
+- Potatoes
+- Diced chicken pieces
+- Flour (for coating)
+- Marinade (creamy or yogurt-based with spices)
+- Cooking oil
+- Cabbage
+- Green beans
+- Red onions
+- Garlic
+- Sauce (reddish-brown, possibly soy sauce or chili sauce)
+- Peas
+- Mushrooms
 
 **Directions:**
 
 1. **Preparation:**
-   - Preheat your oven to 400°F (200°C).
-   - Line a baking tray with parchment paper.
+   - Dice the chicken pieces and marinate them in a creamy or yogurt-based sauce with spices. Set aside for at least 30 minutes.
+   - Slice the sausages and chop the green onions, bell peppers, carrots, cabbage, green beans, and red onions.
+   - Prepare scrambled eggs and set aside.
 
-2. **Chop and Arrange Vegetables:**
-   - Dice the potatoes, zucchini, red bell peppers, and eggplant into cubes.
-   - Arrange the diced vegetables, cherry tomatoes, and canned chickpeas on the prepared baking tray.
-   - Add a whole garlic bulb to the tray.
+2. **Cooking the Chicken:**
+   - Coat the marinated chicken pieces in flour.
+   - Heat oil in a pan and fry the chicken pieces until golden brown. Remove and set aside.
 
-3. **Season:**
-   - Season the vegetables and chickpeas with salt and black pepper.
-   - Optionally, add paprika for extra flavor.
+3. **Cooking the Vegetables:**
+   - In a wok or large pan, heat oil over medium to high heat.
+   - Add chopped garlic and sauté until fragrant.
+   - Add chopped onions and sauté until translucent.
+   - Add chopped carrots, bell peppers, and green beans. Stir-fry until they are slightly tender.
+   - Add cabbage and continue stir-frying until all vegetables are cooked to your liking.
 
-4. **Roast:**
-   - Roast the vegetables and chickpeas in the preheated oven for about 25-30 minutes, or until the vegetables are tender and slightly caramelized.
+4. **Cooking the Rice:**
+   - In the same wok, add cooked rice and stir-fry with the vegetables.
+   - Sprinkle seasoning or spices over the rice and mix well.
+   - Pour a reddish-brown sauce (such as soy sauce or chili sauce) over the rice and vegetables, stirring to combine.
 
-5. **Prepare the Sauce:**
-   - In a blender or food processor, combine yogurt, feta cheese, cream cheese, milk, paprika, roasted garlic cloves (squeezed out of their skins), parsley, and lemon juice.
-   - Blend until smooth to create a creamy sauce.
+5. **Combining Ingredients:**
+   - Add the fried chicken pieces, scrambled eggs, kidney beans, corn, and peas to the rice mixture.
+   - Stir-fry everything together until well combined and heated through.
 
-6. **Assemble the Dish:**
-   - Spread a layer of hummus or the prepared orange-colored sauce on a serving plate or bowl.
-   - Spoon the roasted vegetables and chickpeas over the sauce.
-   - Garnish with fresh parsley or cilantro.
+6. **Final Touches:**
+   - Add sliced sausages and mix them into the rice.
+   - Sprinkle chopped green onions and chopped green herbs (cilantro or parsley) on top as a garnish.
+   - Serve the dish hot, optionally with a side of dates and potatoes for added flavor.
 
-7. **Serve:**
-   - Serve the dish warm as a main course or a hearty side dish.
-
----
-
-This recipe combines roasted vegetables with a creamy sauce, offering a flavorful and nutritious dish. Adjust seasoning and ingredient quantities to taste. Enjoy!
+This recipe combines elements from various scenes to create a flavorful stir-fried rice dish with a mix of proteins, vegetables, and seasonings. Adjust the ingredients and steps as needed to suit your taste and dietary preferences. Enjoy your cooking!
 ================================================================================
