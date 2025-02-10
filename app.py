@@ -22,6 +22,7 @@ from video_processing.video_recipe_analyzer import VideoRecipeAnalyzer
 from video_processing.nutrition import NutritionAnalyzer
 from features.add_recipe.add_recipe_service import AddRecipeService
 from features.user.user_service import UserService
+from features.ratings.ratings_service import RatingsService
 
 load_dotenv()
 
@@ -217,6 +218,7 @@ nutrition_analyzer = NutritionAnalyzer()
 # Initialize services
 add_recipe_service = AddRecipeService(db)
 user_service = UserService(db)
+ratings_service = RatingsService(db)
 
 # Routes
 @app.get("/")
@@ -848,119 +850,21 @@ async def generate_recipe_data(video_id: str, token_data=Depends(verify_token)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/meals/rate")
-async def rate_meal(
-    rating_data: dict,
-    token_data=Depends(verify_token)
-):
+async def rate_meal(rating_data: dict, token_data=Depends(verify_token)):
     """Rate a meal"""
-    try:
-        user_id = token_data['uid']
-        video_id = rating_data['videoId']
-        rating = rating_data['rating']
-        meal_id = rating_data.get('mealId')
-        comment = rating_data.get('comment')
-        
-        rating_ref = db.collection('meal_ratings').document()
-        rating_data = {
-            "userId": user_id,
-            "videoId": video_id,
-            "mealId": meal_id,
-            "rating": rating,
-            "comment": comment,
-            "ratedAt": datetime.datetime.utcnow().isoformat()
-        }
-        
-        rating_ref.set(rating_data)
-        rating_data['ratingId'] = rating_ref.id
-        
-        return rating_data
-    except Exception as e:
-        logger.error(f"Error rating meal: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await ratings_service.rate_meal(token_data['uid'], rating_data)
 
 @app.get("/api/meals/ratings")
 async def get_user_ratings(token_data=Depends(verify_token)):
     """Get user's meal ratings"""
-    try:
-        user_id = token_data['uid']
-        ratings = db.collection('meal_ratings').where('userId', '==', user_id).get()
-        
-        return [
-            {**rating.to_dict(), 'ratingId': rating.id}
-            for rating in ratings
-        ]
-    except Exception as e:
-        logger.error(f"Error getting ratings: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await ratings_service.get_user_ratings(token_data['uid'])
 
 @app.get("/api/meals/ratings/aggregated")
 @log_operation("get_aggregated_ratings")
 async def get_aggregated_ratings(token_data=Depends(verify_token)):
     """Get aggregated ratings for each video with video details"""
     request_id = f"get-agg-ratings-{int(time.time())}"
-    logger.info(f"[{request_id}] Getting aggregated ratings for user {token_data['uid']}")
-    
-    try:
-        user_id = token_data['uid']
-        ratings_ref = db.collection('meal_ratings').where('userId', '==', user_id)
-        ratings = ratings_ref.get()
-        
-        # Group ratings by videoId
-        video_ratings = {}
-        for rating in ratings:
-            rating_data = rating.to_dict()
-            video_id = rating_data['videoId']
-            
-            if video_id not in video_ratings:
-                video_ratings[video_id] = {
-                    'ratings': [],
-                    'comments': [],
-                    'lastRated': rating_data['ratedAt']
-                }
-            
-            video_ratings[video_id]['ratings'].append(rating_data['rating'])
-            if rating_data.get('comment'):
-                video_ratings[video_id]['comments'].append(rating_data['comment'])
-            
-            # Update lastRated if this rating is more recent
-            if rating_data['ratedAt'] > video_ratings[video_id]['lastRated']:
-                video_ratings[video_id]['lastRated'] = rating_data['ratedAt']
-        
-        # Calculate averages and get video details
-        result = []
-        for video_id, data in video_ratings.items():
-            # Get video details
-            video_doc = db.collection('videos').document(video_id).get()
-            if not video_doc.exists:
-                logger.warning(f"[{request_id}] Video {video_id} not found")
-                continue
-                
-            video_data = video_doc.to_dict()
-            
-            # Calculate average rating
-            avg_rating = sum(data['ratings']) / len(data['ratings'])
-            
-            result.append({
-                'videoId': video_id,
-                'averageRating': round(avg_rating, 1),
-                'numberOfRatings': len(data['ratings']),
-                'lastRated': data['lastRated'],
-                'comments': data['comments'],
-                'video': {
-                    'mealName': video_data.get('mealName', ''),
-                    'mealDescription': video_data.get('mealDescription', ''),
-                    'thumbnailUrl': video_data.get('thumbnailUrl', '')
-                }
-            })
-        
-        # Sort by lastRated date (most recent first)
-        result.sort(key=lambda x: x['lastRated'], reverse=True)
-        
-        logger.info(f"[{request_id}] Returning {len(result)} aggregated ratings")
-        return result
-    except Exception as e:
-        logger.error(f"[{request_id}] Error getting aggregated ratings: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to get aggregated ratings: {str(e)}")
+    return await ratings_service.get_aggregated_ratings(token_data['uid'], request_id)
 
 @app.post("/api/extract/metadata")
 @log_operation("extract_video_metadata")
