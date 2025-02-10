@@ -2,27 +2,55 @@ import datetime
 import logging
 from firebase_admin import firestore
 from fastapi import HTTPException
+from video_processing.extractor import VideoMetadataExtractor
 
 logger = logging.getLogger(__name__)
 
 class AddRecipeService:
     def __init__(self, db: firestore.Client):
         self.db = db
+        self.metadata_extractor = VideoMetadataExtractor()
 
     async def create_recipe_log(self, user_id: str, video_url: str, request_id: str) -> dict:
-        """Create a new recipe log entry"""
+        """Create a new recipe log entry and extract metadata"""
         logger.info(f"[{request_id}] Creating recipe log for video URL: {video_url}")
         
         try:
             now = datetime.datetime.utcnow().isoformat()
             
-            # Create recipe log document
+            # Extract metadata first
+            logger.info(f"[{request_id}] Extracting metadata from video URL")
+            metadata = self.metadata_extractor.extract_metadata(video_url)
+            platform = metadata.get('platform', 'unknown')
+            
+            # Create recipe log document with metadata
             log_data = {
                 "userId": user_id,
                 "videoUrl": video_url,
-                "status": "pending",
+                "platform": platform,
+                "status": "processing",
                 "createdAt": now,
-                "updatedAt": now
+                "updatedAt": now,
+                "metadata": {
+                    "title": metadata.get('title', ''),
+                    "description": metadata.get('description', ''),
+                    "duration": metadata.get('duration', 0),
+                    "uploader": metadata.get('uploader', ''),
+                    "view_count": metadata.get('view_count', 0),
+                    "like_count": metadata.get('like_count', 0),
+                    "comment_count": metadata.get('comment_count', 0),
+                    "subtitle_text": metadata.get('subtitle_text', ''),
+                    "thumbnail": metadata.get('thumbnail', ''),
+                    "platform": platform
+                },
+                "processingSteps": [
+                    {
+                        "step": "metadata_extraction",
+                        "status": "completed",
+                        "timestamp": now,
+                        "success": bool(metadata)
+                    }
+                ]
             }
             
             # Add to Firestore
@@ -37,12 +65,15 @@ class AddRecipeService:
                 "logId": log_id,
                 "userId": user_id,
                 "videoUrl": video_url,
-                "status": "pending",
+                "platform": platform,
+                "status": "processing",
+                "metadata": log_data["metadata"],
+                "processingSteps": log_data["processingSteps"],
                 "createdAt": now,
                 "updatedAt": now
             }
             
-            logger.info(f"[{request_id}] Created recipe log {log_id}")
+            logger.info(f"[{request_id}] Created recipe log {log_id} with metadata for {platform} video")
             return response_data
             
         except Exception as e:
@@ -76,7 +107,10 @@ class AddRecipeService:
                 "logId": log_id,
                 "userId": log_data['userId'],
                 "videoUrl": log_data['videoUrl'],
+                "platform": log_data.get('platform', 'unknown'),
                 "status": log_data['status'],
+                "metadata": log_data.get('metadata', {}),
+                "processingSteps": log_data.get('processingSteps', []),
                 "logMessage": log_data.get('logMessage'),
                 "createdAt": log_data['createdAt'],
                 "updatedAt": log_data['updatedAt']
