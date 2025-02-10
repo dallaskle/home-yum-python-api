@@ -25,6 +25,7 @@ from features.user.user_service import UserService
 from features.ratings.ratings_service import RatingsService
 from features.schedule.schedule_service import ScheduleService
 from features.try_list.try_list_service import TryListService
+from features.reactions.reactions_service import ReactionsService
 
 load_dotenv()
 
@@ -223,6 +224,7 @@ user_service = UserService(db)
 ratings_service = RatingsService(db)
 schedule_service = ScheduleService(db)
 try_list_service = TryListService(db)
+reactions_service = ReactionsService(db)
 
 # Routes
 @app.get("/")
@@ -361,112 +363,19 @@ async def get_user_videos(user_id: str, token_data=Depends(verify_token)):
 async def add_reaction(reaction: VideoReactionCreate, token_data=Depends(verify_token)):
     """Add or update a reaction to a video"""
     request_id = f"reaction-{int(time.time())}"
-    logger.info(f"[{request_id}] Adding reaction for video {reaction.videoId}")
-    logger.debug(f"[{request_id}] Reaction data: {json.dumps(reaction.dict(), indent=2)}")
-    
-    try:
-        user_id = token_data['uid']
-        
-        # Validate video exists first
-        await get_video_or_none(reaction.videoId, request_id)
-        
-        now = datetime.datetime.utcnow().isoformat()
-        reactions_ref = db.collection('user_video_reactions')
-        
-        # Check if reaction already exists
-        existing_reaction = reactions_ref.where('userId', '==', user_id).where('videoId', '==', reaction.videoId).get()
-        
-        reaction_data = {
-            "userId": user_id,
-            "videoId": reaction.videoId,
-            "reactionType": reaction.reactionType,
-            "reactionDate": now
-        }
-        
-        if existing_reaction:
-            # Update existing reaction
-            doc = existing_reaction[0]
-            logger.info(f"[{request_id}] Updating existing reaction {doc.id}")
-            doc.reference.update(reaction_data)
-            reaction_data['reactionId'] = doc.id
-            logger.info(f"[{request_id}] Updated reaction {doc.id} for video {reaction.videoId}")
-        else:
-            # Create new reaction
-            doc_ref = reactions_ref.document()
-            logger.info(f"[{request_id}] Creating new reaction")
-            doc_ref.set(reaction_data)
-            reaction_data['reactionId'] = doc_ref.id
-            logger.info(f"[{request_id}] Created new reaction {doc_ref.id} for video {reaction.videoId}")
-        
-        logger.debug(f"[{request_id}] Final reaction data: {json.dumps(reaction_data, indent=2)}")
-        return reaction_data
-    except VideoNotFoundException as e:
-        raise e
-    except Exception as e:
-        logger.error(f"[{request_id}] Error adding reaction: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to add reaction: {str(e)}")
+    return await reactions_service.add_reaction(token_data['uid'], reaction.dict(), request_id)
 
 @app.get("/api/videos/reactions")
 @log_operation("get_user_reactions")
 async def get_user_reactions(token_data=Depends(verify_token)):
     """Get all reactions for a user with video data"""
     request_id = f"get-reactions-{int(time.time())}"
-    logger.info(f"[{request_id}] Getting reactions for user {token_data['uid']}")
-    
-    try:
-        user_id = token_data['uid']
-        reactions_ref = db.collection('user_video_reactions')
-        reactions = reactions_ref.where('userId', '==', user_id).get()
-        
-        logger.info(f"[{request_id}] Found {len(list(reactions))} reactions")
-        
-        reaction_list = []
-        missing_videos = []
-        for reaction in reactions:
-            reaction_data = reaction.to_dict()
-            reaction_data['reactionId'] = reaction.id
-            logger.debug(f"[{request_id}] Processing reaction {reaction.id}")
-            
-            # Get video data
-            video_data = await get_video_or_none(reaction_data['videoId'], request_id)
-            if video_data:
-                reaction_data['video'] = video_data
-                reaction_list.append(reaction_data)
-                logger.debug(f"[{request_id}] Added reaction with video data: {json.dumps(reaction_data, indent=2)}")
-            else:
-                missing_videos.append(reaction_data['videoId'])
-                logger.warning(f"[{request_id}] Missing video {reaction_data['videoId']} for reaction {reaction.id}")
-        
-        if missing_videos:
-            logger.warning(f"[{request_id}] Found {len(missing_videos)} missing videos: {missing_videos}")
-            # Trigger cleanup in background
-            await cleanup_orphaned_references(user_id, request_id)
-        
-        logger.info(f"[{request_id}] Returning {len(reaction_list)} valid reactions")
-        return reaction_list
-    except Exception as e:
-        logger.error(f"[{request_id}] Error getting reactions: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to get reactions: {str(e)}")
+    return await reactions_service.get_user_reactions(token_data['uid'], request_id)
 
 @app.delete("/api/videos/reactions/{video_id}")
 async def remove_reaction(video_id: str, token_data=Depends(verify_token)):
     """Remove a reaction from a video"""
-    try:
-        user_id = token_data['uid']
-        reactions_ref = db.collection('user_video_reactions')
-        reactions = reactions_ref.where('userId', '==', user_id).where('videoId', '==', video_id).get()
-        
-        if not reactions:
-            raise HTTPException(status_code=404, detail="Reaction not found")
-        
-        for reaction in reactions:
-            reaction.reference.delete()
-            logger.info(f"Deleted reaction {reaction.id} for video {video_id}")
-            
-        return {"message": "Reaction removed successfully"}
-    except Exception as e:
-        logger.error(f"Error removing reaction: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to remove reaction: {str(e)}")
+    return await reactions_service.remove_reaction(token_data['uid'], video_id)
 
 # Try List endpoints
 @app.post("/api/videos/try-list")
