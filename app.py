@@ -23,6 +23,7 @@ from video_processing.nutrition import NutritionAnalyzer
 from features.add_recipe.add_recipe_service import AddRecipeService
 from features.user.user_service import UserService
 from features.ratings.ratings_service import RatingsService
+from features.schedule.schedule_service import ScheduleService
 
 load_dotenv()
 
@@ -219,6 +220,7 @@ nutrition_analyzer = NutritionAnalyzer()
 add_recipe_service = AddRecipeService(db)
 user_service = UserService(db)
 ratings_service = RatingsService(db)
+schedule_service = ScheduleService(db)
 
 # Routes
 @app.get("/")
@@ -567,138 +569,22 @@ async def remove_from_try_list(video_id: str, token_data=Depends(verify_token)):
 @app.post("/api/meals/schedule")
 async def schedule_meal(meal: MealScheduleCreate, token_data=Depends(verify_token)):
     """Schedule a meal for a specific date and time"""
-    try:
-        user_id = token_data['uid']
-        now = datetime.datetime.utcnow().isoformat()
-        
-        # Create meal document
-        meal_data = {
-            "userId": user_id,
-            "videoId": meal.videoId,
-            "mealDate": meal.mealDate,
-            "mealTime": meal.mealTime,
-            "completed": False,
-            "createdAt": now,
-            "updatedAt": now
-        }
-        
-        doc_ref = db.collection('meals').document()
-        doc_ref.set(meal_data)
-        
-        meal_data['mealId'] = doc_ref.id
-        return meal_data
-    except Exception as e:
-        logger.error(f"Error scheduling meal: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await schedule_service.schedule_meal(token_data['uid'], meal.dict())
 
 @app.get("/api/meals/schedule")
 async def get_scheduled_meals(token_data=Depends(verify_token)):
     """Get user's scheduled meals"""
-    try:
-        user_id = token_data['uid']
-        meals = db.collection('meals').where('userId', '==', user_id).get()
-        
-        # Get all meal ratings for this user
-        ratings = {
-            rating.to_dict()['mealId']: rating.to_dict()  # Changed from videoId to mealId
-            for rating in db.collection('meal_ratings')
-                .where('userId', '==', user_id)
-                .get()
-        }
-        
-        # Fetch videos for all meals
-        video_ids = [meal.to_dict()['videoId'] for meal in meals]
-        
-        # Get videos by their document IDs directly
-        videos = {}
-        if video_ids:
-            for video_id in video_ids:
-                video_doc = db.collection('videos').document(video_id).get()
-                if video_doc.exists:
-                    videos[video_id] = video_doc.to_dict()
-
-        logger.info(f"Found {len(videos)} videos for {len(video_ids)} meal(s)")
-        
-        result = []
-        for meal in meals:
-            meal_data = meal.to_dict()
-            meal_data['mealId'] = meal.id
-            
-            # Add video data if available
-            if meal_data['videoId'] in videos:
-                video_data = videos[meal_data['videoId']]
-                meal_data['video'] = {
-                    'videoId': meal_data['videoId'],
-                    'mealName': video_data.get('mealName', ''),
-                    'mealDescription': video_data.get('mealDescription', ''),
-                    'thumbnailUrl': video_data.get('thumbnailUrl', '')
-                }
-            else:
-                logger.warning(f"No video found for meal {meal_data['mealId']} with videoId {meal_data['videoId']}")
-            
-            # Add rating if available for this specific meal
-            if meal_data['mealId'] in ratings:  # Changed from videoId to mealId
-                meal_data['rating'] = ratings[meal_data['mealId']]
-            
-            result.append(meal_data)
-            
-        return result
-    except Exception as e:
-        logger.error(f"Error getting scheduled meals: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await schedule_service.get_scheduled_meals(token_data['uid'])
 
 @app.put("/api/meals/schedule/{meal_id}")
 async def update_meal_schedule(meal_id: str, meal: MealScheduleUpdate, token_data=Depends(verify_token)):
     """Update a scheduled meal's date and time"""
-    try:
-        user_id = token_data['uid']
-        meal_ref = db.collection('meals').document(meal_id)
-        meal_doc = meal_ref.get()
-        
-        if not meal_doc.exists:
-            raise HTTPException(status_code=404, detail="Meal schedule not found")
-            
-        meal_data = meal_doc.to_dict()
-        if meal_data['userId'] != user_id:
-            raise HTTPException(status_code=403, detail="Not authorized to update this meal schedule")
-        
-        update_data = {
-            "mealDate": meal.mealDate,
-            "mealTime": meal.mealTime,
-            "updatedAt": datetime.datetime.utcnow().isoformat()
-        }
-        
-        meal_ref.update(update_data)
-        
-        return {
-            "mealId": meal_id,
-            **meal_data,
-            **update_data
-        }
-    except Exception as e:
-        logger.error(f"Error updating meal schedule: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await schedule_service.update_meal_schedule(token_data['uid'], meal_id, meal.dict())
 
 @app.delete("/api/meals/schedule/{meal_id}")
 async def delete_meal_schedule(meal_id: str, token_data=Depends(verify_token)):
     """Delete a scheduled meal"""
-    try:
-        user_id = token_data['uid']
-        meal_ref = db.collection('meals').document(meal_id)
-        meal_doc = meal_ref.get()
-        
-        if not meal_doc.exists:
-            raise HTTPException(status_code=404, detail="Meal schedule not found")
-            
-        meal_data = meal_doc.to_dict()
-        if meal_data['userId'] != user_id:
-            raise HTTPException(status_code=403, detail="Not authorized to delete this meal schedule")
-        
-        meal_ref.delete()
-        return {"message": "Meal schedule deleted successfully"}
-    except Exception as e:
-        logger.error(f"Error deleting meal schedule: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await schedule_service.delete_meal_schedule(token_data['uid'], meal_id)
 
 @app.get("/api/videos/{video_id}/recipe")
 async def get_recipe_data(video_id: str, token_data=Depends(verify_token)):
