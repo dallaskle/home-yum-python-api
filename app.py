@@ -21,6 +21,7 @@ import os
 from video_processing.video_recipe_analyzer import VideoRecipeAnalyzer
 from video_processing.nutrition import NutritionAnalyzer
 from features.add_recipe.add_recipe_service import AddRecipeService
+from features.user.user_service import UserService
 
 load_dotenv()
 
@@ -215,6 +216,7 @@ nutrition_analyzer = NutritionAnalyzer()
 
 # Initialize services
 add_recipe_service = AddRecipeService(db)
+user_service = UserService(db)
 
 # Routes
 @app.get("/")
@@ -224,64 +226,17 @@ async def root():
 @app.get("/api/user/profile")
 async def get_user_profile(token_data=Depends(verify_token)):
     """Get user profile data from Firestore"""
-    user_id = token_data['uid']
-    try:
-        doc_ref = db.collection('users').document(user_id)
-        doc = doc_ref.get()
-        if doc.exists:
-            user_data = doc.to_dict()
-            # Remove sensitive data
-            if 'passwordHash' in user_data:
-                del user_data['passwordHash']
-            return user_data
-        logger.error(f"User profile not found for ID: {user_id}")
-        raise HTTPException(status_code=404, detail="User profile not found")
-    except Exception as e:
-        logger.error(f"Error getting user profile: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await user_service.get_user_profile(token_data['uid'])
 
 @app.post("/api/user/create")
 async def create_user_profile(token_data=Depends(verify_token)):
     """Create a new user profile in Firestore after signup"""
-    user_id = token_data['uid']
-    try:
-        # Get user email from Firebase Auth
-        user = auth.get_user(user_id)
-        
-        # Create user document
-        now = datetime.datetime.utcnow().isoformat()
-        user_data = {
-            "userId": user_id,
-            "email": user.email,
-            "username": user.email.split('@')[0],  # Default username from email
-            "createdAt": now,
-            "updatedAt": now
-        }
-        
-        doc_ref = db.collection('users').document(user_id)
-        doc_ref.set(user_data)
-        return user_data
-    except Exception as e:
-        logger.error(f"Error creating user profile: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await user_service.create_user_profile(token_data['uid'])
 
 @app.put("/api/user/profile")
 async def update_user_profile(profile: UserProfile, token_data=Depends(verify_token)):
     """Update user profile in Firestore"""
-    user_id = token_data['uid']
-    if user_id != profile.userId:
-        raise HTTPException(status_code=403, detail="Cannot update other user's profile")
-        
-    try:
-        profile_dict = profile.dict(exclude={'passwordHash'})  # Never update password hash
-        profile_dict["updatedAt"] = datetime.datetime.utcnow().isoformat()
-        
-        doc_ref = db.collection('users').document(user_id)
-        doc_ref.update(profile_dict)
-        return {"message": "Profile updated successfully"}
-    except Exception as e:
-        logger.error(f"Error updating user profile: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await user_service.update_user_profile(token_data['uid'], profile.dict())
 
 # Video Feed Endpoints
 class VideoResponse(BaseModel):
