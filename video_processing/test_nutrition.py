@@ -2,7 +2,7 @@ import asyncio
 import logging
 import json
 import os
-from nutrition import NutritionAnalyzer
+from video_processing.nutrition import NutritionAnalyzer
 
 # Set up logging with more detailed format
 logging.basicConfig(

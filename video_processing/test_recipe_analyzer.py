@@ -1,7 +1,7 @@
 import asyncio
 import logging
-from video_recipe_analyzer import VideoRecipeAnalyzer
-from nutrition import NutritionAnalyzer
+from video_processing.video_recipe_analyzer import VideoRecipeAnalyzer
+from video_processing.nutrition import NutritionAnalyzer
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

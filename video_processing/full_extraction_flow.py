@@ -3,9 +3,9 @@ import os
 import json
 import asyncio
 from typing import Dict, Any, Optional
-from extractor import TikTokMetadataExtractor
-from whisper_extractor import WhisperExtractor
-from video_recipe_analyzer import VideoRecipeAnalyzer
+from video_processing.extractor import TikTokMetadataExtractor
+from video_processing.whisper_extractor import WhisperExtractor
+from video_processing.video_recipe_analyzer import VideoRecipeAnalyzer
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 

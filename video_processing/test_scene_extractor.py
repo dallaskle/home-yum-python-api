@@ -1,4 +1,4 @@
-from scene_extractor import VideoSceneExtractor
+from video_processing.scene_extractor import VideoSceneExtractor
 import os
 import argparse
 

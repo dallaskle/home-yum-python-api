@@ -2,8 +2,8 @@ import logging
 import os
 import json
 from typing import List, Dict, Any
-from scene_extractor import VideoSceneExtractor
-from vision_analyzer import VisionAnalyzer
+from video_processing.scene_extractor import VideoSceneExtractor
+from video_processing.vision_analyzer import VisionAnalyzer
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 import asyncio

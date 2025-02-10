@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from full_extraction_flow import FullExtractionFlow
+from video_processing.full_extraction_flow import FullExtractionFlow
 import argparse
 
 # Set up logging

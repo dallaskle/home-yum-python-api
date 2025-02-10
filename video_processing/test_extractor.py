@@ -1,7 +1,7 @@
 import logging
 import json
 import os
-from extractor import VideoMetadataExtractor
+from video_processing.extractor import VideoMetadataExtractor
 import re
 
 # Set up logging with detailed format
