@@ -26,6 +26,7 @@ from features.ratings.ratings_service import RatingsService
 from features.schedule.schedule_service import ScheduleService
 from features.try_list.try_list_service import TryListService
 from features.reactions.reactions_service import ReactionsService
+from features.feed.feed_service import FeedService
 
 load_dotenv()
 
@@ -225,6 +226,7 @@ ratings_service = RatingsService(db)
 schedule_service = ScheduleService(db)
 try_list_service = TryListService(db)
 reactions_service = ReactionsService(db)
+feed_service = FeedService(db)
 
 # Routes
 @app.get("/")
@@ -280,82 +282,12 @@ async def get_video_feed(
     token_data=Depends(verify_token)
 ):
     """Get paginated video feed with user reactions and try list status"""
-    try:
-        user_id = token_data['uid']
-        query = db.collection('videos').order_by('uploadedAt', direction=firestore.Query.DESCENDING)
-        
-        if last_video_id:
-            last_doc = db.collection('videos').document(last_video_id).get()
-            if last_doc.exists:
-                query = query.start_after(last_doc)
-        
-        query = query.limit(page_size)
-        docs = query.stream()
-        
-        videos = []
-        for doc in docs:
-            video_data = doc.to_dict()
-            video_data['videoId'] = doc.id
-            
-            # Get user's reaction for this video
-            reactions_ref = db.collection('user_video_reactions')
-            reaction = reactions_ref.where('userId', '==', user_id).where('videoId', '==', doc.id).get()
-            
-            # Add reaction data if exists
-            if reaction:
-                reaction_data = reaction[0].to_dict()
-                video_data['userReaction'] = {
-                    'reactionId': reaction[0].id,
-                    'reactionType': reaction_data['reactionType'],
-                    'reactionDate': reaction_data['reactionDate']
-                }
-            else:
-                video_data['userReaction'] = None
-
-            # Get try list status for this video
-            try_list_ref = db.collection('user_try_list')
-            try_list_item = try_list_ref.where('userId', '==', user_id).where('videoId', '==', doc.id).get()
-            
-            # Add try list data if exists
-            if try_list_item:
-                try_list_data = try_list_item[0].to_dict()
-                video_data['tryListItem'] = {
-                    'tryListId': try_list_item[0].id,
-                    'addedDate': try_list_data['addedDate'],
-                    'notes': try_list_data.get('notes')
-                }
-            else:
-                video_data['tryListItem'] = None
-            
-            videos.append(video_data)
-        
-        return videos
-    except Exception as e:
-        logger.error(f"Error getting video feed: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await feed_service.get_video_feed(token_data['uid'], page_size, last_video_id)
 
 @app.get("/api/videos/user/{user_id}")
 async def get_user_videos(user_id: str, token_data=Depends(verify_token)):
     """Get videos uploaded by a specific user"""
-    try:
-        # Query videos collection with user_id filter
-        videos_ref = db.collection('videos')
-        query = videos_ref.where('userId', '==', user_id).order_by('uploadedAt', direction=firestore.Query.DESCENDING)
-        docs = query.stream()
-        
-        videos = []
-        for doc in docs:
-            video_data = doc.to_dict()
-            video_data['videoId'] = doc.id
-            videos.append(video_data)
-        
-        logger.info(f"Found {len(videos)} videos for user {user_id}")
-        logger.info(f"Sample video data: {videos[0] if videos else 'No videos found'}")
-        
-        return videos
-    except Exception as e:
-        logger.error(f"Error getting user videos: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
+    return await feed_service.get_user_videos(user_id)
 
 # Reaction endpoints
 @app.post("/api/videos/reactions")
