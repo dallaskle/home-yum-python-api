@@ -12,14 +12,15 @@ import requests
 from urllib.parse import urlparse
 import time
 from functools import wraps
-from extractor import VideoMetadataExtractor
-from whisper_extractor import WhisperExtractor
+from video_processing.extractor import VideoMetadataExtractor
+from video_processing.whisper_extractor import WhisperExtractor
 from dotenv import load_dotenv
 from langsmith import traceable
-from vision_analyzer import VisionAnalyzer
+from video_processing.vision_analyzer import VisionAnalyzer
 import os
-from video_recipe_analyzer import VideoRecipeAnalyzer
-from nutrition import NutritionAnalyzer
+from video_processing.video_recipe_analyzer import VideoRecipeAnalyzer
+from video_processing.nutrition import NutritionAnalyzer
+from features.add_recipe.add_recipe_service import AddRecipeService
 
 load_dotenv()
 
@@ -212,6 +213,9 @@ video_metadata_extractor = VideoMetadataExtractor()
 video_recipe_analyzer = VideoRecipeAnalyzer()
 nutrition_analyzer = NutritionAnalyzer()
 
+# Initialize services
+add_recipe_service = AddRecipeService(db)
+
 # Routes
 @app.get("/")
 async def root():
@@ -297,94 +301,14 @@ class VideoResponse(BaseModel):
 async def create_recipe_log(recipe_log: RecipeLogCreate, token_data=Depends(verify_token)):
     """Create a new recipe log entry and start processing the video"""
     request_id = f"create-recipe-log-{int(time.time())}"
-    logger.info(f"[{request_id}] Creating recipe log for video URL: {recipe_log.video_url}")
-    
-    try:
-        user_id = token_data['uid']
-        now = datetime.datetime.utcnow().isoformat()
-        
-        # Create recipe log document
-        log_data = {
-            "userId": user_id,
-            "videoUrl": recipe_log.video_url,
-            "status": "pending",
-            "createdAt": now,
-            "updatedAt": now
-        }
-        
-        # Add to Firestore
-        log_ref = db.collection('recipe_logs').document()
-        log_ref.set(log_data)
-        log_id = log_ref.id
-        
-        # Start processing in background
-        # TODO: Add background task processing here using your video processing pipeline
-        
-        response_data = {
-            "logId": log_id,
-            "userId": user_id,
-            "videoUrl": recipe_log.video_url,
-            "status": "pending",
-            "createdAt": now,
-            "updatedAt": now
-        }
-        
-        logger.info(f"[{request_id}] Created recipe log {log_id}")
-        return response_data
-        
-    except Exception as e:
-        logger.error(f"[{request_id}] Error creating recipe log: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to create recipe log: {str(e)}"
-        )
+    return await add_recipe_service.create_recipe_log(token_data['uid'], recipe_log.video_url, request_id)
 
 @app.get("/api/recipe-log/{log_id}")
 @log_operation("get_recipe_log")
 async def get_recipe_log(log_id: str, token_data=Depends(verify_token)):
     """Get the status of a recipe log"""
     request_id = f"get-recipe-log-{int(time.time())}"
-    logger.info(f"[{request_id}] Getting recipe log {log_id}")
-    
-    try:
-        user_id = token_data['uid']
-        
-        # Get recipe log document
-        log_ref = db.collection('recipe_logs').document(log_id)
-        log = log_ref.get()
-        
-        if not log.exists:
-            logger.error(f"[{request_id}] Recipe log {log_id} not found")
-            raise HTTPException(status_code=404, detail="Recipe log not found")
-            
-        log_data = log.to_dict()
-        
-        # Verify user owns this log
-        if log_data['userId'] != user_id:
-            logger.error(f"[{request_id}] User {user_id} not authorized to access log {log_id}")
-            raise HTTPException(status_code=403, detail="Not authorized to access this recipe log")
-        
-        response_data = {
-            "logId": log_id,
-            "userId": log_data['userId'],
-            "videoUrl": log_data['videoUrl'],
-            "status": log_data['status'],
-            "logMessage": log_data.get('logMessage'),
-            "createdAt": log_data['createdAt'],
-            "updatedAt": log_data['updatedAt']
-        }
-        
-        logger.info(f"[{request_id}] Retrieved recipe log {log_id}")
-        return response_data
-        
-    except HTTPException as he:
-        raise he
-    except Exception as e:
-        logger.error(f"[{request_id}] Error getting recipe log: {str(e)}")
-        raise HTTPException(
-            status_code=500,
-            detail=f"Failed to get recipe log: {str(e)}"
-        )
+    return await add_recipe_service.get_recipe_log(token_data['uid'], log_id, request_id)
 
 @app.get("/api/videos/feed")
 async def get_video_feed(
