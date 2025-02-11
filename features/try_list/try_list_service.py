@@ -20,6 +20,12 @@ class DuplicateEntryException(HTTPException):
             detail=message
         )
 
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (datetime.datetime,)):
+            return obj.isoformat()
+        return super().default(obj)
+
 class TryListService:
     def __init__(self, db: firestore.Client):
         self.db = db
@@ -110,7 +116,8 @@ class TryListService:
                 if video_data:
                     try_list_data['video'] = video_data
                     try_list.append(try_list_data)
-                    logger.debug(f"[{request_id}] Added try list item with video data: {json.dumps(try_list_data, indent=2)}")
+                    # Use custom encoder for logging
+                    logger.debug(f"[{request_id}] Added try list item with video data: {json.dumps(try_list_data, indent=2, cls=CustomJSONEncoder)}")
                 else:
                     missing_videos.append(try_list_data['videoId'])
                     logger.warning(f"[{request_id}] Missing video {try_list_data['videoId']} for try list item {item.id}")
