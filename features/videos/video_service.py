@@ -27,19 +27,18 @@ class VideoService:
                     item_data['recipeItemId'] = item.id
                     recipe_items.append(item_data)
             
-            # Get ingredients
-            ingredients_ref = self.db.collection('ingredients').where('videoId', '==', video_id).get()
-            ingredients = []
-            for ingredient in ingredients_ref:
-                ingredient_data = ingredient.to_dict()
-                ingredient_data['ingredientId'] = ingredient.id
-                ingredients.append(ingredient_data)
-            
-            # Get nutrition info
+            # Get nutrition info (which now includes ingredients)
             nutrition_ref = self.db.collection('nutrition').where('videoId', '==', video_id).limit(1).get()
             nutrition = nutrition_ref[0].to_dict() if nutrition_ref else None
+            ingredients = []
+            
             if nutrition:
                 nutrition['nutritionId'] = nutrition_ref[0].id
+                # Extract ingredients from nutrition data
+                ingredients = nutrition.get('ingredients', [])
+                # Add ingredient IDs using index as we don't store them separately anymore
+                for idx, ingredient in enumerate(ingredients):
+                    ingredient['ingredientId'] = f"{nutrition['nutritionId']}_ingredient_{idx}"
             
             return {
                 "recipe": recipe,
