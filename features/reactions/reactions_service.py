@@ -13,6 +13,12 @@ class VideoNotFoundException(HTTPException):
             detail=f"Video with ID {video_id} not found"
         )
 
+class CustomJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, (datetime.datetime,)):
+            return obj.isoformat()
+        return super().default(obj)
+
 class ReactionsService:
     def __init__(self, db: firestore.Client):
         self.db = db
@@ -93,6 +99,13 @@ class ReactionsService:
             logger.error(f"[{request_id}] Error adding reaction: {str(e)}")
             raise HTTPException(status_code=500, detail=f"Failed to add reaction: {str(e)}")
 
+    def convert_timestamps(self, data):
+        """Convert datetime objects in the dictionary to ISO format strings."""
+        for key, value in data.items():
+            if hasattr(value, "isoformat"):
+                data[key] = value.isoformat()
+        return data
+
     async def get_user_reactions(self, user_id: str, request_id: str) -> list:
         """Get all reactions for a user with video data"""
         logger.info(f"[{request_id}] Getting reactions for user {user_id}")
@@ -115,7 +128,8 @@ class ReactionsService:
                 if video_data:
                     reaction_data['video'] = video_data
                     reaction_list.append(reaction_data)
-                    logger.debug(f"[{request_id}] Added reaction with video data: {json.dumps(reaction_data, indent=2)}")
+                    # Use custom encoder for logging
+                    logger.debug(f"[{request_id}] Added reaction with video data: {json.dumps(reaction_data, indent=2, cls=CustomJSONEncoder)}")
                 else:
                     missing_videos.append(reaction_data['videoId'])
                     logger.warning(f"[{request_id}] Missing video {reaction_data['videoId']} for reaction {reaction.id}")
