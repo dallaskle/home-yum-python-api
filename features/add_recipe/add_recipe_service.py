@@ -6,6 +6,7 @@ from video_processing.extractor import VideoMetadataExtractor
 from video_processing.whisper_extractor import WhisperExtractor
 from video_processing.video_recipe_analyzer import VideoRecipeAnalyzer
 from video_processing.nutrition import NutritionAnalyzer
+from features.add_recipe.generate_recipe_items import RecipeGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,7 @@ class AddRecipeService:
         self.whisper_extractor = WhisperExtractor()
         self.video_analyzer = VideoRecipeAnalyzer()
         self.nutrition_analyzer = NutritionAnalyzer()
+        self.recipe_generator = RecipeGenerator(db)
 
     async def process_transcription(self, log_ref, video_url: str, request_id: str) -> dict:
         """Process video transcription using Whisper"""
@@ -96,6 +98,45 @@ class AddRecipeService:
                     "success": analysis_result.get('success', False)
                 }])
             })
+            
+            # If analysis was successful, generate structured recipe data
+            if analysis['success'] and analysis['recipe']:
+                logger.info(f"[{request_id}] Generating structured recipe data")
+                
+                # Get video ID from the video URL
+                video_ref = self.db.collection('videos').where('videoUrl', '==', video_url).limit(1).get()
+                video_id = video_ref[0].id if video_ref else None
+                
+                recipe_result = await self.recipe_generator.generate_recipe_data(
+                    recipe_text=analysis['recipe'],
+                    video_id=video_id
+                )
+                
+                if recipe_result['success']:
+                    # Add recipe data to the analysis
+                    analysis['structured_recipe'] = recipe_result
+                    
+                    # Update log with structured recipe data
+                    log_ref.update({
+                        "analysis": analysis,
+                        "updatedAt": now,
+                        "processingSteps": firestore.ArrayUnion([{
+                            "step": "recipe_generation",
+                            "status": "completed",
+                            "timestamp": now,
+                            "success": True
+                        }])
+                    })
+                else:
+                    logger.error(f"[{request_id}] Failed to generate structured recipe: {recipe_result.get('error')}")
+                    log_ref.update({
+                        "processingSteps": firestore.ArrayUnion([{
+                            "step": "recipe_generation",
+                            "status": "failed",
+                            "timestamp": now,
+                            "error": recipe_result.get('error')
+                        }])
+                    })
             
             return analysis
             
