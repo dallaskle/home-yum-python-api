@@ -24,7 +24,8 @@ class VisionAnalyzer:
         self.model = ChatOpenAI(
             model="gpt-4o",
             max_tokens=300,
-            temperature=0
+            temperature=0,
+            streaming=False
         )
 
     @traceable(name="analyze_image")
@@ -63,11 +64,9 @@ class VisionAnalyzer:
                 ]
             )
 
-            # Invoke the model
-            logger.info("Sending request to analyze image")
-            response = self.model.invoke([message])
+            # Use ainvoke for async operation
+            response = await self.model.ainvoke([message])
             
-            logger.info("Successfully analyzed image")
             return {
                 "success": True,
                 "analysis": response.content
