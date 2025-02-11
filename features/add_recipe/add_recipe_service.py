@@ -266,6 +266,12 @@ class AddRecipeService:
             metadata = self.metadata_extractor.extract_metadata(video_url)
             platform = metadata.get('platform', 'unknown')
             
+            # Download the video to videos directory
+            logger.info(f"[{request_id}] Downloading video to videos directory")
+            success, video_path = self.metadata_extractor.download_video(video_url)
+            if success:
+                metadata['local_video_path'] = video_path
+            
             # Create recipe log document with metadata
             log_data = {
                 "userId": user_id,
@@ -284,7 +290,8 @@ class AddRecipeService:
                     "comment_count": metadata.get('comment_count', 0),
                     "subtitle_text": metadata.get('subtitle_text', ''),
                     "thumbnail": metadata.get('thumbnail', ''),
-                    "platform": platform
+                    "platform": platform,
+                    "local_video_path": metadata.get('local_video_path', '')
                 },
                 "processingSteps": [
                     {
