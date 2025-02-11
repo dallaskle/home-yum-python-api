@@ -1,6 +1,5 @@
 import logging
 import os
-import json
 from typing import List, Dict, Any
 from video_processing.scene_extractor import VideoSceneExtractor
 from video_processing.vision_analyzer import VisionAnalyzer
@@ -62,20 +61,11 @@ Please ensure that any duplicate ingredients are combined and the cooking steps 
                 self.scene_prompt
             )
             
-            result = {
+            return {
                 'scene_number': scene_number,
                 'timestamp': f"{scene['start_time']:.2f}s - {scene['end_time']:.2f}s",
                 'analysis': analysis.get('analysis', 'Analysis failed')
             }
-            
-            # Log to output file - using append mode to handle concurrent writes
-            with open('output/output.txt', 'a') as f:
-                f.write(f"\nScene {scene_number} Analysis:\n")
-                f.write(f"Timestamp: {scene['start_time']:.2f}s - {scene['end_time']:.2f}s\n")
-                f.write(f"Analysis: {analysis.get('analysis', 'Analysis failed')}\n")
-                f.write("-" * 80 + "\n")
-                
-            return result
             
         except Exception as e:
             logger.error(f"Error analyzing scene {scene_number}: {str(e)}")
@@ -96,15 +86,9 @@ Please ensure that any duplicate ingredients are combined and the cooking steps 
             Dict[str, Any]: Complete analysis including scene-by-scene and aggregate analysis
         """
         try:
-            # Create output directory if it doesn't exist
-            os.makedirs('output', exist_ok=True)
-            
             # Step 1: Extract scenes from video
             logger.info("Extracting scenes from video...")
             scenes = self.scene_extractor.get_video_scenes(video_url)
-            
-            with open('output/output.txt', 'w') as f:
-                f.write(f"Found {len(scenes)} scenes in the video\n\n")
             
             # Step 2: Analyze scenes concurrently
             logger.info(f"Analyzing {len(scenes)} scenes concurrently...")
@@ -134,13 +118,6 @@ Please ensure that any duplicate ingredients are combined and the cooking steps 
             )
             
             aggregate_response = self.chat_model.invoke([aggregate_message])
-            
-            # Log final analysis to output file
-            with open('output/output.txt', 'a') as f:
-                f.write("\nFinal Recipe Analysis:\n")
-                f.write("=" * 80 + "\n")
-                f.write(aggregate_response.content)
-                f.write("\n" + "=" * 80 + "\n")
             
             return {
                 'success': True,

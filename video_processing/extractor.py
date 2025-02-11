@@ -130,80 +130,89 @@ class VideoMetadataExtractor:
         Returns:
             Tuple of (success: bool, storage_url: str)
         """
+        temp_dir = None
         try:
             # Create a temporary directory for downloading
-            with tempfile.TemporaryDirectory() as temp_dir:
-                domain = self.get_domain(video_url)
-                
-                # Configure download options
-                download_opts = {
-                    **self.base_opts,
-                    'format': 'best',  # Get the best quality
-                    'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
-                    'quiet': False,  # Show download progress
-                }
-                
-                # Add domain-specific options
-                if domain == 'tiktok':
-                    download_opts.update(self.tiktok_opts)
-                elif domain == 'instagram':
-                    download_opts.update(self.instagram_opts)
-                
-                # Download video in a separate thread to not block the event loop
-                loop = asyncio.get_event_loop()
-                video_info = await loop.run_in_executor(None, self._download_video, video_url, download_opts)
-                
-                if not video_info or not video_info.get('video_path'):
-                    logger.error("No information extracted from the URL")
-                    return False, ""
-                
-                video_path = video_info['video_path']
-                logger.info(f"Video downloaded successfully to: {video_path}")
-                
-                # Upload to Supabase storage
-                try:
-                    with open(video_path, 'rb') as f:
-                        # First sanitize the filename
-                        original_filename = os.path.basename(video_path)
-                        sanitized_filename = self._sanitize_filename(original_filename)
+            temp_dir = tempfile.mkdtemp()
+            domain = self.get_domain(video_url)
+            
+            # Configure download options
+            download_opts = {
+                **self.base_opts,
+                'format': 'best',  # Get the best quality
+                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
+                'quiet': False,  # Show download progress
+            }
+            
+            # Add domain-specific options
+            if domain == 'tiktok':
+                download_opts.update(self.tiktok_opts)
+            elif domain == 'instagram':
+                download_opts.update(self.instagram_opts)
+            
+            # Download video in a separate thread to not block the event loop
+            loop = asyncio.get_event_loop()
+            video_info = await loop.run_in_executor(None, self._download_video, video_url, download_opts)
+            
+            if not video_info or not video_info.get('video_path'):
+                logger.error("No information extracted from the URL")
+                return False, ""
+            
+            video_path = video_info['video_path']
+            logger.info(f"Video downloaded successfully to: {video_path}")
+            
+            # Upload to Supabase storage
+            try:
+                with open(video_path, 'rb') as f:
+                    # First sanitize the filename
+                    original_filename = os.path.basename(video_path)
+                    sanitized_filename = self._sanitize_filename(original_filename)
+                    
+                    # Ensure the storage path is clean
+                    storage_path = f"videos/{sanitized_filename}"
+                    logger.info(f"Uploading to Supabase storage with path: {storage_path}")
+                    
+                    # Upload to Supabase storage bucket using run_in_executor for blocking operation
+                    try:
+                        # Create a function that captures the upload operation
+                        def upload_to_supabase():
+                            return supabase.storage.from_('home-yum').upload(
+                                path=storage_path,
+                                file=f,
+                                file_options={"content-type": "video/mp4"}
+                            )
                         
-                        # Ensure the storage path is clean
-                        storage_path = f"videos/{sanitized_filename}"
-                        logger.info(f"Uploading to Supabase storage with path: {storage_path}")
+                        # Run the upload in a separate thread
+                        result = await loop.run_in_executor(None, upload_to_supabase)
                         
-                        # Upload to Supabase storage bucket using run_in_executor for blocking operation
-                        try:
-                            # Create a function that captures the upload operation
-                            def upload_to_supabase():
-                                return supabase.storage.from_('home-yum').upload(
-                                    path=storage_path,
-                                    file=f,
-                                    file_options={"content-type": "video/mp4"}
-                                )
-                            
-                            # Run the upload in a separate thread
-                            result = await loop.run_in_executor(None, upload_to_supabase)
-                            
-                            # Get the public URL (this is synchronous and fast, no need for executor)
-                            public_url = supabase.storage.from_('home-yum').get_public_url(storage_path)
-                            
-                            # Clean the URL by removing query parameters
-                            cleaned_url = public_url.split('?')[0] if '?' in public_url else public_url
-                            logger.info(f"Video uploaded to Supabase storage: {cleaned_url}")
-                            
-                            return True, cleaned_url
-                            
-                        except Exception as upload_error:
-                            logger.error(f"Supabase upload error - Path: {storage_path}, Error: {str(upload_error)}")
-                            return False, ""
-                            
-                except Exception as e:
-                    logger.error(f"Error uploading to Supabase storage: {str(e)}")
-                    return False, ""
+                        # Get the public URL (this is synchronous and fast, no need for executor)
+                        public_url = supabase.storage.from_('home-yum').get_public_url(storage_path)
+                        
+                        # Clean the URL by removing query parameters
+                        cleaned_url = public_url.split('?')[0] if '?' in public_url else public_url
+                        logger.info(f"Video uploaded to Supabase storage: {cleaned_url}")
+                        
+                        return True, cleaned_url
+                        
+                    except Exception as upload_error:
+                        logger.error(f"Supabase upload error - Path: {storage_path}, Error: {str(upload_error)}")
+                        return False, ""
+                        
+            except Exception as e:
+                logger.error(f"Error uploading to Supabase storage: {str(e)}")
+                return False, ""
                 
         except Exception as e:
             logger.error(f"Error downloading video: {str(e)}")
             return False, ""
+        finally:
+            # Clean up temporary directory and its contents
+            if temp_dir and os.path.exists(temp_dir):
+                try:
+                    import shutil
+                    shutil.rmtree(temp_dir)
+                except Exception as e:
+                    logger.error(f"Error cleaning up temp directory: {str(e)}")
 
     def _download_video(self, video_url: str, download_opts: dict) -> Dict[str, Any]:
         """Helper method to download video using yt-dlp in a separate thread."""

@@ -41,9 +41,10 @@ class WhisperExtractor:
         Returns:
             Path to downloaded audio file or None if download fails
         """
+        temp_dir = None
         try:
-            # Use the existing temp directory
-            temp_dir = tempfile.gettempdir()
+            # Create a temporary directory
+            temp_dir = tempfile.mkdtemp()
             
             # Update output template to use temp directory
             self.ydl_opts['outtmpl'] = os.path.join(temp_dir, '%(id)s.%(ext)s')
@@ -63,6 +64,13 @@ class WhisperExtractor:
         except Exception as e:
             logger.error(f"Error downloading audio: {str(e)}")
             return None
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                try:
+                    import shutil
+                    shutil.rmtree(temp_dir)
+                except Exception as e:
+                    logger.error(f"Error cleaning up temp directory: {str(e)}")
 
     @traceable(name="transcribe_audio")
     def transcribe_audio(self, audio_path: str, prompt: Optional[str] = None) -> Optional[dict]:
@@ -102,22 +110,22 @@ class WhisperExtractor:
             Transcription result or None if extraction fails
         """
         try:
-            # Create a temporary directory that will persist until we're done
-            temp_dir = tempfile.mkdtemp()
-            try:
-                # Download audio from video
-                audio_path = self.download_audio(video_url)
-                if not audio_path:
-                    return None
-                    
-                # Transcribe the audio
-                result = self.transcribe_audio(audio_path, prompt)
-                return result
+            # Download audio from video
+            audio_path = self.download_audio(video_url)
+            if not audio_path:
+                return None
                 
-            finally:
-                # Clean up temp directory after we're done
-                import shutil
-                shutil.rmtree(temp_dir, ignore_errors=True)
+            # Transcribe the audio
+            result = self.transcribe_audio(audio_path, prompt)
+            
+            # Clean up the audio file if it still exists
+            if os.path.exists(audio_path):
+                try:
+                    os.remove(audio_path)
+                except Exception as e:
+                    logger.error(f"Error removing audio file: {str(e)}")
+            
+            return result
                 
         except Exception as e:
             logger.error(f"Error extracting transcript: {str(e)}")
