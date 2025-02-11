@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 import re
 import uuid
 import asyncio
+import aiofiles
 
 # Load environment variables
 load_dotenv()
@@ -189,60 +190,54 @@ class VideoMetadataExtractor:
             video_path = video_info['video_path']
             logger.info(f"Video downloaded successfully to: {video_path}")
             
+            # Prepare for upload
+            title = video_info.get('info', {}).get('title', '')
+            video_id = video_info.get('info', {}).get('id', str(uuid.uuid4()))
+            ext = os.path.splitext(video_path)[1] or '.mp4'
+            
+            # Generate sanitized filename
+            sanitized_filename = self._sanitize_filename(title) if title else f"video_{video_id}"
+            sanitized_filename = f"{sanitized_filename}{ext}"
+            storage_path = f"videos/{sanitized_filename}"
+            
             # Upload to Supabase storage
             try:
-                with open(video_path, 'rb') as f:
-                    # First sanitize the filename using video title if available
-                    title = video_info.get('info', {}).get('title', '')
-                    if title:
-                        sanitized_filename = self._sanitize_filename(title)
-                    else:
-                        # Fallback to using the video ID
-                        video_id = video_info.get('info', {}).get('id', str(uuid.uuid4()))
-                        sanitized_filename = f"video_{video_id}"
+                async with aiofiles.open(video_path, 'rb') as f:
+                    file_content = await f.read()
                     
-                    # Add extension
-                    ext = os.path.splitext(video_path)[1] or '.mp4'
-                    sanitized_filename = f"{sanitized_filename}{ext}"
+                    # Create upload function
+                    def upload_to_supabase(file_content):
+                        return supabase.storage.from_('home-yum').upload(
+                            path=storage_path,
+                            file=file_content,
+                            file_options={"content-type": "video/mp4"}
+                        )
                     
-                    # Ensure the storage path is clean
-                    storage_path = f"videos/{sanitized_filename}"
-                    logger.info(f"Uploading to Supabase storage with path: {storage_path}")
+                    # Run upload in executor
+                    await loop.run_in_executor(None, upload_to_supabase, file_content)
                     
-                    # Upload to Supabase storage bucket using run_in_executor for blocking operation
-                    try:
-                        # Create a function that captures the upload operation
-                        def upload_to_supabase():
-                            return supabase.storage.from_('home-yum').upload(
-                                path=storage_path,
-                                file=f,
-                                file_options={"content-type": "video/mp4"}
-                            )
-                        
-                        # Run the upload in a separate thread
-                        result = await loop.run_in_executor(None, upload_to_supabase)
-                        
-                        # Get the public URL (this is synchronous and fast, no need for executor)
-                        public_url = supabase.storage.from_('home-yum').get_public_url(storage_path)
-                        
-                        # Clean the URL by removing query parameters
-                        cleaned_url = public_url.split('?')[0] if '?' in public_url else public_url
-                        logger.info(f"Video uploaded to Supabase storage: {cleaned_url}")
-                        
-                        return True, cleaned_url
-                        
-                    except Exception as upload_error:
-                        logger.error(f"Supabase upload error - Path: {storage_path}, Error: {str(upload_error)}")
-                        return False, ""
-                        
-            except Exception as e:
-                logger.error(f"Error uploading to Supabase storage: {str(e)}")
+                    # Get public URL
+                    public_url = supabase.storage.from_('home-yum').get_public_url(storage_path)
+                    cleaned_url = public_url.split('?')[0] if '?' in public_url else public_url
+                    
+                    logger.info(f"Video uploaded to Supabase storage: {cleaned_url}")
+                    return True, cleaned_url
+                    
+            except Exception as upload_error:
+                logger.error(f"Supabase upload error - Path: {storage_path}, Error: {str(upload_error)}")
                 return False, ""
                 
         except Exception as e:
             logger.error(f"Error downloading video: {str(e)}")
             return False, ""
+            
         finally:
+            # Ensure cleanup happens in all cases
+            await self._cleanup_temp_files(video_path, temp_dir)
+
+    async def _cleanup_temp_files(self, video_path: Optional[str], temp_dir: Optional[str]) -> None:
+        """Helper method to clean up temporary files and directories."""
+        try:
             # Clean up the video file if it exists
             if video_path and os.path.exists(video_path):
                 try:
@@ -259,6 +254,8 @@ class VideoMetadataExtractor:
                     logger.info(f"Cleaned up temporary directory: {temp_dir}")
                 except Exception as e:
                     logger.error(f"Error cleaning up temp directory: {str(e)}")
+        except Exception as e:
+            logger.error(f"Error in cleanup: {str(e)}")
 
     def _download_video(self, video_url: str, download_opts: dict) -> Dict[str, Any]:
         """Helper method to download video using yt-dlp in a separate thread."""
@@ -266,10 +263,16 @@ class VideoMetadataExtractor:
             with yt_dlp.YoutubeDL(download_opts) as ydl:
                 info = ydl.extract_info(video_url, download=True)
                 if not info:
+                    logger.error("No video information extracted")
+                    return {}
+                
+                video_path = ydl.prepare_filename(info)
+                if not os.path.exists(video_path):
+                    logger.error(f"Downloaded video file not found at: {video_path}")
                     return {}
                 
                 return {
-                    'video_path': ydl.prepare_filename(info),
+                    'video_path': video_path,
                     'info': info
                 }
         except Exception as e:
