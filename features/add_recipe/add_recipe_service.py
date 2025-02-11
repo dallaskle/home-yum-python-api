@@ -263,12 +263,12 @@ class AddRecipeService:
             
             # Extract metadata first
             logger.info(f"[{request_id}] Extracting metadata from video URL")
-            metadata = self.metadata_extractor.extract_metadata(video_url)
+            metadata = await self.metadata_extractor.extract_metadata(video_url)
             platform = metadata.get('platform', 'unknown')
             
             # Download the video to videos directory
             logger.info(f"[{request_id}] Downloading video to videos directory")
-            success, video_path = self.metadata_extractor.download_video(video_url)
+            success, video_path = await self.metadata_extractor.download_video(video_url)
             if success:
                 metadata['local_video_path'] = video_path
             
