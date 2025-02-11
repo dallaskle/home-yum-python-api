@@ -56,14 +56,9 @@ Please ensure that any duplicate ingredients are combined and the cooking steps 
             Dict containing scene analysis results
         """
         try:
-            # Save the scene image temporarily
-            temp_image_path = f"output/scene_{scene_number:03d}.jpg"
-            with open(temp_image_path, 'wb') as img_file:
-                img_file.write(scene['image_data'])
-            
-            # Analyze the scene
+            # Analyze the scene directly with image data
             analysis = await self.vision_analyzer.analyze_image(
-                temp_image_path,
+                scene['image_data'],
                 self.scene_prompt
             )
             

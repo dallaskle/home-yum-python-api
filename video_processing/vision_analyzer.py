@@ -18,44 +18,25 @@ logger = logging.getLogger(__name__)
 class VisionAnalyzer:
     @traceable(name="initialize_vision_analyzer")
     def __init__(self):
-        """Initialize the VisionAnalyzer with LangChain configuration."""
+        """Initialize the vision analyzer with GPT-4 Vision model."""
         load_dotenv()
         
-        # Initialize ChatOpenAI with GPT-4 Vision
         self.model = ChatOpenAI(
             model="gpt-4o",
             max_tokens=300,
             temperature=0
         )
 
-    @traceable(name="encode_image")
-    def encode_image(self, image_path: str) -> Optional[str]:
-        """
-        Read and encode an image file to base64.
-        
-        Args:
-            image_path (str): Path to the image file
-            
-        Returns:
-            Optional[str]: Base64 encoded image string or None if failed
-        """
-        try:
-            with open(image_path, "rb") as image_file:
-                return base64.b64encode(image_file.read()).decode('utf-8')
-        except Exception as e:
-            logger.error(f"Error encoding image: {str(e)}")
-            return None
-
     @traceable(name="analyze_image")
     async def analyze_image(self, 
-                     image_path: str, 
+                     image_data: bytes, 
                      prompt: str = "What's in this image?", 
                      max_tokens: int = 300) -> Dict[str, Any]:
         """
         Analyze an image using GPT-4 Vision via LangChain.
         
         Args:
-            image_path (str): Path to the image file
+            image_data (bytes): Raw image data
             prompt (str): Text prompt to accompany the image
             max_tokens (int): Maximum tokens in the response
             
@@ -63,10 +44,8 @@ class VisionAnalyzer:
             Dict[str, Any]: Analysis results or error message
         """
         try:
-            # Encode the image
-            base64_image = self.encode_image(image_path)
-            if not base64_image:
-                return {"error": "Failed to encode image"}
+            # Encode the image data directly
+            base64_image = base64.b64encode(image_data).decode('utf-8')
 
             # Create message content with text and image
             message = HumanMessage(
@@ -85,7 +64,7 @@ class VisionAnalyzer:
             )
 
             # Invoke the model
-            logger.info(f"Sending request to analyze image: {image_path}")
+            logger.info("Sending request to analyze image")
             response = self.model.invoke([message])
             
             logger.info("Successfully analyzed image")

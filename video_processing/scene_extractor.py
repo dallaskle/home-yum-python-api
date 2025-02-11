@@ -74,7 +74,7 @@ class VideoSceneExtractor:
     def extract_scenes(self, video_url: str, threshold: float = 30.0) -> List[Dict[str, Any]]:
         """
         Extract scenes from a video URL and return a list of scene information
-        including timestamps and image paths
+        including timestamps and image data
         
         Args:
             video_url: URL of the video to process
@@ -91,10 +91,6 @@ class VideoSceneExtractor:
                 logger.error(f"Downloaded video not found at: {video_path}")
                 return []
             
-            # Create a subdirectory for images in the temp directory
-            images_dir = os.path.join(self.temp_dir, 'scenes')
-            os.makedirs(images_dir, exist_ok=True)
-            
             # Detect scenes
             logger.info("Detecting scenes...")
             scene_list = detect(video_path, ContentDetector(threshold=threshold))
@@ -105,7 +101,7 @@ class VideoSceneExtractor:
             
             logger.info(f"Found {len(scene_list)} scenes")
             
-            # Save scene images
+            # Extract scene images
             scene_images = []
             video_cap = cv2.VideoCapture(video_path)
             fps = video_cap.get(cv2.CAP_PROP_FPS)
@@ -123,20 +119,18 @@ class VideoSceneExtractor:
                     # Resize the frame
                     resized_frame = self.resize_image(frame)
                     
-                    # Save the frame
-                    image_path = os.path.join(images_dir, f'scene_{i:03d}.jpg')
-                    cv2.imwrite(image_path, resized_frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
-                    
-                    # Read the image back as bytes
-                    with open(image_path, 'rb') as img_file:
-                        image_bytes = img_file.read()
+                    # Convert frame to JPEG bytes
+                    success, buffer = cv2.imencode('.jpg', resized_frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+                    if not success:
+                        logger.error(f"Failed to encode scene {i} image")
+                        continue
                     
                     scene_info = {
                         'scene_number': i,
                         'start_time': start_time,
                         'end_time': end_time,
                         'duration': end_time - start_time,
-                        'image_data': image_bytes
+                        'image_data': buffer.tobytes()
                     }
                     scene_images.append(scene_info)
             
