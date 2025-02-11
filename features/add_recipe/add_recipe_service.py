@@ -254,6 +254,42 @@ class AddRecipeService:
             
             return error_nutrition
 
+    async def save_video(self, user_id: str, metadata: dict, request_id: str) -> str:
+        """Save video data to the videos collection"""
+        logger.info(f"[{request_id}] Saving video data to videos collection")
+        
+        try:
+            # Create video document data
+            video_data = {
+                "userId": user_id,
+                "videoTitle": metadata.get('title', ''),
+                "videoDescription": metadata.get('description', ''),
+                "mealName": metadata.get('title', ''),  # Using title as meal name initially
+                "mealDescription": "Restaurant quality meal made right at home.",  # Default description
+                "videoUrl": metadata.get('local_video_path', ''),
+                "thumbnailUrl": metadata.get('thumbnail', ''),
+                "duration": metadata.get('duration', 0),
+                "uploadedAt": datetime.datetime.utcnow().isoformat(),
+                "source": metadata.get('platform', 'unknown'),
+                "createdAt": datetime.datetime.utcnow().isoformat(),
+                "updatedAt": datetime.datetime.utcnow().isoformat()
+            }
+            
+            # Add to Firestore
+            video_ref = self.db.collection('videos').document()
+            video_ref.set(video_data)
+            video_id = video_ref.id
+            
+            logger.info(f"[{request_id}] Successfully saved video with ID: {video_id}")
+            return video_id
+            
+        except Exception as e:
+            logger.error(f"[{request_id}] Error saving video data: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to save video data: {str(e)}"
+            )
+
     async def create_recipe_log(self, user_id: str, video_url: str, request_id: str) -> dict:
         """Create a new recipe log entry and process video data"""
         logger.info(f"[{request_id}] Creating recipe log for video URL: {video_url}")
@@ -271,10 +307,14 @@ class AddRecipeService:
             success, video_path = await self.metadata_extractor.download_video(video_url)
             if success:
                 metadata['local_video_path'] = video_path
+
+            # Save video data first
+            video_id = await self.save_video(user_id, metadata, request_id)
             
             # Create recipe log document with metadata
             log_data = {
                 "userId": user_id,
+                "videoId": video_id,  # Add the video ID reference
                 "videoUrl": video_url,
                 "platform": platform,
                 "status": "processing",
@@ -327,6 +367,7 @@ class AddRecipeService:
             response_data = {
                 "logId": log_id,
                 "userId": user_id,
+                "videoId": video_id,  # Include video ID in response
                 "videoUrl": video_url,
                 "platform": platform,
                 "status": log_data["status"],
