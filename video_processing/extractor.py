@@ -107,7 +107,8 @@ class VideoMetadataExtractor:
         Sanitize filename for Supabase storage by:
         1. Removing special characters and spaces
         2. Converting to lowercase
-        3. Adding a unique identifier to prevent collisions
+        3. Truncating to a reasonable length
+        4. Adding a unique identifier to prevent collisions
         """
         # Get the name and extension
         name, ext = os.path.splitext(filename)
@@ -118,6 +119,9 @@ class VideoMetadataExtractor:
         
         # Remove multiple consecutive underscores
         sanitized_name = re.sub(r'_+', '_', sanitized_name)
+        
+        # Truncate to 32 characters
+        sanitized_name = sanitized_name[:32]
         
         # Add a unique identifier
         unique_id = str(uuid.uuid4())[:8]
