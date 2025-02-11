@@ -35,6 +35,11 @@ class VideoMetadataExtractor:
             'writeautomaticsub': True,
             'subtitlesformat': 'vtt',
             'no_warnings': True,
+            # Use video ID for all files including subtitles
+            'outtmpl': {
+                'default': '%(id)s.%(ext)s',
+                'subtitle': '%(id)s.%(ext)s'
+            }
         }
         
         self.youtube_opts = {
@@ -119,6 +124,25 @@ class VideoMetadataExtractor:
         # Combine everything
         return f"{sanitized_name}_{unique_id}{ext}"
 
+    def _sanitize_download_filename(self, title: str) -> str:
+        """
+        Sanitize filename for downloading to prevent "filename too long" errors.
+        Keeps only the first 50 characters of the title and removes problematic characters.
+        
+        Args:
+            title: The original title/filename
+            
+        Returns:
+            Sanitized filename safe for downloading
+        """
+        # Remove special characters and spaces
+        sanitized = re.sub(r'[^a-zA-Z0-9\-_]', '_', title)
+        # Remove multiple consecutive underscores
+        sanitized = re.sub(r'_+', '_', sanitized)
+        # Truncate to 50 characters
+        sanitized = sanitized[:50]
+        return sanitized.strip('_')
+
     async def download_video(self, video_url: str, output_path: Optional[str] = None) -> Tuple[bool, str]:
         """
         Download a video from the given URL and upload it to Supabase storage.
@@ -131,16 +155,20 @@ class VideoMetadataExtractor:
             Tuple of (success: bool, storage_url: str)
         """
         temp_dir = None
+        video_path = None
         try:
             # Create a temporary directory for downloading
             temp_dir = tempfile.mkdtemp()
             domain = self.get_domain(video_url)
             
-            # Configure download options
+            # Configure download options with sanitized output template
             download_opts = {
                 **self.base_opts,
                 'format': 'best',  # Get the best quality
-                'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
+                'outtmpl': {
+                    'default': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+                    'subtitle': os.path.join(temp_dir, '%(id)s.%(ext)s')
+                },
                 'quiet': False,  # Show download progress
             }
             
@@ -164,9 +192,18 @@ class VideoMetadataExtractor:
             # Upload to Supabase storage
             try:
                 with open(video_path, 'rb') as f:
-                    # First sanitize the filename
-                    original_filename = os.path.basename(video_path)
-                    sanitized_filename = self._sanitize_filename(original_filename)
+                    # First sanitize the filename using video title if available
+                    title = video_info.get('info', {}).get('title', '')
+                    if title:
+                        sanitized_filename = self._sanitize_filename(title)
+                    else:
+                        # Fallback to using the video ID
+                        video_id = video_info.get('info', {}).get('id', str(uuid.uuid4()))
+                        sanitized_filename = f"video_{video_id}"
+                    
+                    # Add extension
+                    ext = os.path.splitext(video_path)[1] or '.mp4'
+                    sanitized_filename = f"{sanitized_filename}{ext}"
                     
                     # Ensure the storage path is clean
                     storage_path = f"videos/{sanitized_filename}"
@@ -206,11 +243,20 @@ class VideoMetadataExtractor:
             logger.error(f"Error downloading video: {str(e)}")
             return False, ""
         finally:
+            # Clean up the video file if it exists
+            if video_path and os.path.exists(video_path):
+                try:
+                    os.remove(video_path)
+                    logger.info(f"Cleaned up video file: {video_path}")
+                except Exception as e:
+                    logger.error(f"Error removing video file: {str(e)}")
+            
             # Clean up temporary directory and its contents
             if temp_dir and os.path.exists(temp_dir):
                 try:
                     import shutil
                     shutil.rmtree(temp_dir)
+                    logger.info(f"Cleaned up temporary directory: {temp_dir}")
                 except Exception as e:
                     logger.error(f"Error cleaning up temp directory: {str(e)}")
 

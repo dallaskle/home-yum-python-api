@@ -16,7 +16,11 @@ class VideoSceneExtractor:
         self.ydl_opts = {
             'quiet': True,
             'format': 'best[ext=mp4]',  # Prefer MP4 format
-            'outtmpl': '%(id)s.%(ext)s'
+            # Use video ID for all files including subtitles
+            'outtmpl': {
+                'default': '%(id)s.%(ext)s',
+                'subtitle': '%(id)s.%(ext)s'
+            }
         }
         # Store temp directory as instance variable
         self.temp_dir = None
@@ -59,7 +63,10 @@ class VideoSceneExtractor:
                 self.temp_dir = tempfile.mkdtemp()
             
             # Update options to use temporary directory
-            self.ydl_opts['outtmpl'] = os.path.join(self.temp_dir, '%(id)s.%(ext)s')
+            self.ydl_opts['outtmpl'] = {
+                'default': os.path.join(self.temp_dir, '%(id)s.%(ext)s'),
+                'subtitle': os.path.join(self.temp_dir, '%(id)s.%(ext)s')
+            }
             
             with yt_dlp.YoutubeDL(self.ydl_opts) as ydl:
                 logger.info("Downloading video...")
@@ -83,6 +90,7 @@ class VideoSceneExtractor:
         Returns:
             List of dictionaries containing scene information
         """
+        video_path = None
         try:
             # Download the video
             video_path = self.download_video(video_url)
@@ -141,11 +149,23 @@ class VideoSceneExtractor:
             logger.error(f"Error extracting scenes: {str(e)}")
             return []
         finally:
+            # Clean up the video file if it exists
+            if video_path and os.path.exists(video_path):
+                try:
+                    os.remove(video_path)
+                    logger.info(f"Cleaned up video file: {video_path}")
+                except Exception as e:
+                    logger.error(f"Error removing video file: {str(e)}")
+            
             # Clean up the temporary directory
             if self.temp_dir and os.path.exists(self.temp_dir):
-                import shutil
-                shutil.rmtree(self.temp_dir)
-                self.temp_dir = None
+                try:
+                    import shutil
+                    shutil.rmtree(self.temp_dir)
+                    self.temp_dir = None
+                    logger.info(f"Cleaned up temporary directory")
+                except Exception as e:
+                    logger.error(f"Error cleaning up temp directory: {str(e)}")
 
     def get_video_scenes(self, video_url: str) -> List[Dict[str, Any]]:
         """

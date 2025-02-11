@@ -28,7 +28,10 @@ class WhisperExtractor:
                 'preferredquality': '192',
             }],
             'quiet': True,
-            'outtmpl': '%(id)s.%(ext)s'
+            'outtmpl': {
+                'default': '%(id)s.%(ext)s',
+                'subtitle': '%(id)s.%(ext)s'
+            }
         }
 
     @traceable(name="download_audio")
@@ -47,30 +50,33 @@ class WhisperExtractor:
             temp_dir = tempfile.mkdtemp()
             
             # Update output template to use temp directory
-            self.ydl_opts['outtmpl'] = os.path.join(temp_dir, '%(id)s.%(ext)s')
+            self.ydl_opts['outtmpl'] = {
+                'default': os.path.join(temp_dir, '%(id)s.%(ext)s'),
+                'subtitle': os.path.join(temp_dir, '%(id)s.%(ext)s')
+            }
             
             # Download audio
             with yt_dlp.YoutubeDL(self.ydl_opts) as ydl:
                 info = ydl.extract_info(video_url, download=True)
+                if not info:
+                    logger.error("No information extracted from video URL")
+                    return None
+                    
+                # Get the video ID and construct the audio path
                 video_id = info['id']
+                # Note: After FFmpeg post-processing, the extension will be mp3
                 audio_path = os.path.join(temp_dir, f"{video_id}.mp3")
                 
                 if not os.path.exists(audio_path):
-                    logger.error("Audio file not found after download")
+                    logger.error(f"Audio file not found at expected path: {audio_path}")
                     return None
                     
+                logger.info(f"Audio downloaded successfully to: {audio_path}")
                 return audio_path
                     
         except Exception as e:
             logger.error(f"Error downloading audio: {str(e)}")
             return None
-        finally:
-            if temp_dir and os.path.exists(temp_dir):
-                try:
-                    import shutil
-                    shutil.rmtree(temp_dir)
-                except Exception as e:
-                    logger.error(f"Error cleaning up temp directory: {str(e)}")
 
     @traceable(name="transcribe_audio")
     def transcribe_audio(self, audio_path: str, prompt: Optional[str] = None) -> Optional[dict]:
@@ -84,6 +90,10 @@ class WhisperExtractor:
             Transcription result or None if transcription fails
         """
         try:
+            if not os.path.exists(audio_path):
+                logger.error(f"Audio file not found at: {audio_path}")
+                return None
+                
             with open(audio_path, "rb") as audio_file:
                 # Call Whisper API
                 response = self.client.audio.transcriptions.create(
@@ -109,27 +119,43 @@ class WhisperExtractor:
         Returns:
             Transcription result or None if extraction fails
         """
+        temp_dir = None
+        audio_path = None
         try:
             # Download audio from video
             audio_path = self.download_audio(video_url)
             if not audio_path:
+                logger.error("Failed to download audio")
                 return None
                 
             # Transcribe the audio
             result = self.transcribe_audio(audio_path, prompt)
-            
-            # Clean up the audio file if it still exists
-            if os.path.exists(audio_path):
-                try:
-                    os.remove(audio_path)
-                except Exception as e:
-                    logger.error(f"Error removing audio file: {str(e)}")
-            
+            if not result:
+                logger.error("Failed to transcribe audio")
+                return None
+                
             return result
                 
         except Exception as e:
             logger.error(f"Error extracting transcript: {str(e)}")
             return None
+        finally:
+            # Clean up the audio file if it exists
+            if audio_path and os.path.exists(audio_path):
+                try:
+                    os.remove(audio_path)
+                    logger.info(f"Cleaned up audio file: {audio_path}")
+                except Exception as e:
+                    logger.error(f"Error removing audio file: {str(e)}")
+            
+            # Clean up the temporary directory if it exists
+            if temp_dir and os.path.exists(temp_dir):
+                try:
+                    import shutil
+                    shutil.rmtree(temp_dir)
+                    logger.info(f"Cleaned up temporary directory: {temp_dir}")
+                except Exception as e:
+                    logger.error(f"Error cleaning up temp directory: {str(e)}")
 
 # Example usage
 if __name__ == "__main__":
