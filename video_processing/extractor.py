@@ -125,8 +125,7 @@ class VideoMetadataExtractor:
         
         Args:
             video_url: The URL of the video to download
-            output_path: Optional path for temporary storage. If not provided, 
-                        will create a temporary directory.
+            output_path: Optional path for temporary storage (deprecated, kept for compatibility)
         
         Returns:
             Tuple of (success: bool, storage_url: str)
@@ -187,9 +186,12 @@ class VideoMetadataExtractor:
                             
                             # Get the public URL (this is synchronous and fast, no need for executor)
                             public_url = supabase.storage.from_('home-yum').get_public_url(storage_path)
-                            logger.info(f"Video uploaded to Supabase storage: {public_url}")
                             
-                            return True, public_url
+                            # Clean the URL by removing query parameters
+                            cleaned_url = public_url.split('?')[0] if '?' in public_url else public_url
+                            logger.info(f"Video uploaded to Supabase storage: {cleaned_url}")
+                            
+                            return True, cleaned_url
                             
                         except Exception as upload_error:
                             logger.error(f"Supabase upload error - Path: {storage_path}, Error: {str(upload_error)}")
@@ -225,8 +227,8 @@ class VideoMetadataExtractor:
         
         Args:
             video_url: The URL of the video
-            download_video: Whether to also download the video file
-            output_path: Optional path where to save the video if downloading
+            download_video: Whether to also download the video file (deprecated, kept for compatibility)
+            output_path: Optional path where to save the video (deprecated, kept for compatibility)
         """
         try:
             logger.info(f"Attempting to extract metadata from URL: {video_url}")

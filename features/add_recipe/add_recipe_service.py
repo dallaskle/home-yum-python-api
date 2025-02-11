@@ -266,7 +266,7 @@ class AddRecipeService:
                 "videoDescription": metadata.get('description', ''),
                 "mealName": metadata.get('title', ''),  # Using title as meal name initially
                 "mealDescription": "Restaurant quality meal made right at home.",  # Default description
-                "videoUrl": metadata.get('local_video_path', ''),
+                "videoUrl": metadata.get('video_url', ''),  # Use the Supabase storage URL
                 "thumbnailUrl": metadata.get('thumbnail', ''),
                 "duration": metadata.get('duration', 0),
                 "uploadedAt": datetime.datetime.utcnow().isoformat(),
@@ -302,11 +302,14 @@ class AddRecipeService:
             metadata = await self.metadata_extractor.extract_metadata(video_url)
             platform = metadata.get('platform', 'unknown')
             
-            # Download the video to videos directory
-            logger.info(f"[{request_id}] Downloading video to videos directory")
-            success, video_path = await self.metadata_extractor.download_video(video_url)
+            # Download and upload the video to Supabase storage
+            logger.info(f"[{request_id}] Uploading video to Supabase storage")
+            success, storage_url = await self.metadata_extractor.download_video(video_url)
             if success:
-                metadata['local_video_path'] = video_path
+                metadata['video_url'] = storage_url
+            else:
+                logger.warning(f"[{request_id}] Failed to upload video to storage, using original URL")
+                metadata['video_url'] = video_url
 
             # Save video data first
             video_id = await self.save_video(user_id, metadata, request_id)
@@ -331,7 +334,7 @@ class AddRecipeService:
                     "subtitle_text": metadata.get('subtitle_text', ''),
                     "thumbnail": metadata.get('thumbnail', ''),
                     "platform": platform,
-                    "local_video_path": metadata.get('local_video_path', '')
+                    "storage_url": metadata.get('video_url', '')
                 },
                 "processingSteps": [
                     {
