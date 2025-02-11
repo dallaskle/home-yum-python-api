@@ -12,12 +12,16 @@ class VideoService:
     async def get_recipe_data(self, video_id: str) -> dict:
         """Get recipe data for a video including ingredients, instructions, and nutrition info"""
         try:
+            logger.info(f"[VideoService] Fetching recipe data for video_id: {video_id}")
+            
             # Get recipe data
             recipe_ref = self.db.collection('recipes').where('videoId', '==', video_id).limit(1).get()
             recipe = recipe_ref[0].to_dict() if recipe_ref else None
+            logger.info(f"[VideoService] Found recipe: {recipe is not None}")
             
             if recipe:
                 recipe['recipeId'] = recipe_ref[0].id
+                logger.info(f"[VideoService] Recipe ID: {recipe['recipeId']}")
                 
                 # Get recipe items (instructions)
                 recipe_items_ref = self.db.collection('recipe_items').where('recipeId', '==', recipe['recipeId']).get()
@@ -26,6 +30,7 @@ class VideoService:
                     item_data = item.to_dict()
                     item_data['recipeItemId'] = item.id
                     recipe_items.append(item_data)
+                logger.info(f"[VideoService] Found {len(recipe_items)} recipe items")
             
             # Get nutrition info (which now includes ingredients)
             nutrition_ref = self.db.collection('nutrition').where('videoId', '==', video_id).limit(1).get()
@@ -34,20 +39,24 @@ class VideoService:
             
             if nutrition:
                 nutrition['nutritionId'] = nutrition_ref[0].id
+                logger.info(f"[VideoService] Found nutrition data with ID: {nutrition['nutritionId']}")
                 # Extract ingredients from nutrition data
                 ingredients = nutrition.get('ingredients', [])
                 # Add ingredient IDs using index as we don't store them separately anymore
                 for idx, ingredient in enumerate(ingredients):
                     ingredient['ingredientId'] = f"{nutrition['nutritionId']}_ingredient_{idx}"
+                logger.info(f"[VideoService] Found {len(ingredients)} ingredients")
             
-            return {
+            response_data = {
                 "recipe": recipe,
                 "recipeItems": recipe_items if recipe else [],
                 "ingredients": ingredients,
                 "nutrition": nutrition
             }
+            logger.info(f"[VideoService] Returning recipe data: {response_data}")
+            return response_data
         except Exception as e:
-            logger.error(f"Error getting recipe data: {str(e)}")
+            logger.error(f"[VideoService] Error getting recipe data: {str(e)}")
             raise HTTPException(status_code=500, detail=str(e))
 
     async def get_video(self, video_id: str) -> dict:

@@ -75,6 +75,13 @@ class AddRecipeService:
         """Process video analysis to extract recipe information"""
         now = datetime.datetime.utcnow().isoformat()
         try:
+            # Get video ID from the log
+            log_data = log_ref.get().to_dict()
+            video_id = log_data.get('videoId')
+            if not video_id:
+                logger.error(f"[{request_id}] No videoId found in recipe log")
+                raise ValueError("No videoId found in recipe log")
+
             # Analyze video
             logger.info(f"[{request_id}] Analyzing video for recipe information")
             analysis_result = await self.video_analyzer.analyze_video(video_url)
@@ -103,13 +110,9 @@ class AddRecipeService:
             if analysis['success'] and analysis['recipe']:
                 logger.info(f"[{request_id}] Generating structured recipe data")
                 
-                # Get video ID from the video URL
-                video_ref = self.db.collection('videos').where('videoUrl', '==', video_url).limit(1).get()
-                video_id = video_ref[0].id if video_ref else None
-                
                 recipe_result = await self.recipe_generator.generate_recipe_data(
                     recipe_text=analysis['recipe'],
-                    video_id=video_id
+                    video_id=video_id  # Using videoId from log directly
                 )
                 
                 if recipe_result['success']:
@@ -168,22 +171,24 @@ class AddRecipeService:
         """Process nutrition analysis for the recipe"""
         now = datetime.datetime.utcnow().isoformat()
         try:
+            # Get video ID from the log
+            log_data = log_ref.get().to_dict()
+            video_id = log_data.get('videoId')
+            if not video_id:
+                logger.error(f"[{request_id}] No videoId found in recipe log")
+                raise ValueError("No videoId found in recipe log")
+
             # Analyze nutrition
             logger.info(f"[{request_id}] Analyzing recipe nutrition")
             nutrition_result = await self.nutrition_analyzer.analyze_recipe_nutrition(recipe_text)
             
             if nutrition_result.get('success'):
-                # Get video ID from the recipe log
-                log_data = log_ref.get().to_dict()
-                video_ref = self.db.collection('videos').where('videoUrl', '==', log_data.get('videoUrl')).limit(1).get()
-                video_id = video_ref[0].id if video_ref else None
-                
                 # Extract total nutrition values and ingredients
                 nutrition_info = nutrition_result.get('nutrition_info', {})
                 
                 # Create nutrition document with total values and ingredients
                 nutrition_data = {
-                    "videoId": video_id,
+                    "videoId": video_id,  # Using videoId from log directly
                     "calories": nutrition_info.get('calories', 0),
                     "fat": nutrition_info.get('fat', 0),
                     "carbs": nutrition_info.get('carbs', 0),
