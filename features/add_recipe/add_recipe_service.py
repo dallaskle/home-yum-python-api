@@ -172,13 +172,48 @@ class AddRecipeService:
             logger.info(f"[{request_id}] Analyzing recipe nutrition")
             nutrition_result = await self.nutrition_analyzer.analyze_recipe_nutrition(recipe_text)
             
-            # Prepare nutrition data
-            nutrition = {
-                "serving_sizes": nutrition_result.get('serving_sizes', ''),
-                "nutrition_info": nutrition_result.get('nutrition_info', {}),
-                "timestamp": now,
-                "success": nutrition_result.get('success', False)
-            }
+            if nutrition_result.get('success'):
+                # Get video ID from the recipe log
+                log_data = log_ref.get().to_dict()
+                video_ref = self.db.collection('videos').where('videoUrl', '==', log_data.get('videoUrl')).limit(1).get()
+                video_id = video_ref[0].id if video_ref else None
+                
+                # Extract total nutrition values and ingredients
+                nutrition_info = nutrition_result.get('nutrition_info', {})
+                
+                # Create nutrition document with total values and ingredients
+                nutrition_data = {
+                    "videoId": video_id,
+                    "calories": nutrition_info.get('calories', 0),
+                    "fat": nutrition_info.get('fat', 0),
+                    "carbs": nutrition_info.get('carbs', 0),
+                    "protein": nutrition_info.get('protein', 0),
+                    "fiber": nutrition_info.get('fiber', 0),
+                    "ingredients": nutrition_info.get('ingredients', []),
+                    "serving_sizes": nutrition_result.get('serving_sizes', ''),
+                    "createdAt": now,
+                    "updatedAt": now
+                }
+                
+                # Store in Firestore
+                nutrition_ref = self.db.collection('nutrition').document()
+                nutrition_ref.set(nutrition_data)
+                nutrition_id = nutrition_ref.id
+                
+                # Prepare nutrition data for log
+                nutrition = {
+                    **nutrition_data,
+                    "nutritionId": nutrition_id,
+                    "timestamp": now,
+                    "success": True
+                }
+            else:
+                nutrition = {
+                    "serving_sizes": "",
+                    "timestamp": now,
+                    "success": False,
+                    "error": nutrition_result.get('error', 'Unknown error')
+                }
             
             # Update the recipe log with nutrition data
             log_ref.update({
@@ -187,9 +222,10 @@ class AddRecipeService:
                 "updatedAt": now,
                 "processingSteps": firestore.ArrayUnion([{
                     "step": "nutrition_analysis",
-                    "status": "completed",
+                    "status": "completed" if nutrition_result.get('success') else "failed",
                     "timestamp": now,
-                    "success": nutrition_result.get('success', False)
+                    "success": nutrition_result.get('success', False),
+                    "error": nutrition_result.get('error') if not nutrition_result.get('success') else None
                 }])
             })
             
@@ -200,7 +236,6 @@ class AddRecipeService:
             # Update log with error status but don't fail the process
             error_nutrition = {
                 "serving_sizes": "",
-                "nutrition_info": {},
                 "timestamp": now,
                 "success": False,
                 "error": str(e)

@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 class NutritionAnalyzer:
+    # Class constant for serving size
+    DEFAULT_SERVING_SIZE = 4
+
     def __init__(self):
         """Initialize the NutritionAnalyzer with LangChain configuration."""
         self.chat_model = ChatOpenAI(
@@ -21,10 +24,10 @@ class NutritionAnalyzer:
         )
         
         # Define prompts
-        self.serving_size_prompt = """Would you please specify how much of each item should be in a serving size for 4 people for this recipe?
+        self.serving_size_prompt = """Would you please specify how much of each item should be in a serving size for {} people for this recipe?
 
 Recipe Information:
-{recipe_info}"""
+{recipe_info}""".format(self.DEFAULT_SERVING_SIZE, recipe_info="{recipe_info}")
 
         self.nutrition_info_prompt = """You are a JSON generator. Your task is to create a valid JSON object containing nutritional information based on the serving sizes provided.
 
@@ -184,7 +187,7 @@ Serving Sizes:
             recipe_info (str): Complete recipe information including ingredients and directions
             
         Returns:
-            Dict[str, Any]: Complete nutrition analysis results
+            Dict[str, Any]: Complete nutrition analysis results with total nutrition values
         """
         try:
             # Step 1: Get serving sizes
@@ -196,11 +199,25 @@ Serving Sizes:
             nutrition_info_result = await self.get_nutrition_info(serving_sizes_result["serving_sizes"])
             if not nutrition_info_result["success"]:
                 return nutrition_info_result
+
+            # Step 3: Calculate total nutrition values
+            ingredients = nutrition_info_result["nutrition_info"]["ingredients"]
+            total_nutrition = {
+                "calories": sum(ing["calories"] for ing in ingredients),
+                "fat": sum(ing["fat"] for ing in ingredients),
+                "carbs": sum(ing["carbs"] for ing in ingredients),
+                "protein": sum(ing["protein"] for ing in ingredients),
+                "fiber": sum(ing["fiber"] for ing in ingredients)
+            }
                 
             return {
                 "success": True,
-                "serving_sizes": serving_sizes_result["serving_sizes"],
-                "nutrition_info": nutrition_info_result["nutrition_info"]
+                "serving_sizes": self.DEFAULT_SERVING_SIZE,
+                # Include both total nutrition and ingredient details
+                "nutrition_info": {
+                    **total_nutrition,  # Total nutrition values at the top level
+                    "ingredients": ingredients  # Individual ingredient details
+                }
             }
             
         except Exception as e:
