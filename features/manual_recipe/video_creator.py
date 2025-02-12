@@ -8,15 +8,28 @@ import aiohttp
 import asyncio
 import uuid
 from pathlib import Path
+from supabase import create_client
+from supabase.client import Client
+from dotenv import load_dotenv
+import aiofiles
+
+# Load environment variables
+load_dotenv()
+
+# Initialize Supabase client
+supabase: Client = create_client(
+    os.getenv('SUPABASE_URL', ''),
+    os.getenv('SUPABASE_ANON_KEY', '')
+)
 
 logger = logging.getLogger(__name__)
 
 class VideoCreator:
     def __init__(self):
         """Initialize the VideoCreator with default settings."""
-        self.frame_rate = 1  # 1 frame per second for slideshow
+        self.frame_rate = 30  # 30 fps for smooth transitions
         self.resolution = (1080, 1920)  # 1080p vertical video
-        self.duration_per_image = 3  # seconds per image
+        self.duration_per_image = 1  # 1 second per image
         self.transition_frames = 30  # number of frames for transition
         
     def create_transition(self, img1: np.ndarray, img2: np.ndarray, num_frames: int) -> List[np.ndarray]:
@@ -81,10 +94,65 @@ class VideoCreator:
             logger.error(f"Error downloading image from {url}: {str(e)}")
             raise
 
-    async def create_slideshow(self, ingredient_images: List[Dict[str, Any]], final_image: Dict[str, Any]) -> Dict[str, Any]:
+    async def upload_to_supabase(self, video_path: str, recipe_title: str) -> str:
+        """Upload video to Supabase storage and return public URL."""
+        try:
+            # Generate sanitized filename
+            filename = f"recipe_video_{uuid.uuid4().hex}.mp4"
+            storage_path = f"recipe_videos/{filename}"
+            
+            # Read video file
+            async with aiofiles.open(video_path, 'rb') as f:
+                file_content = await f.read()
+            
+            # Upload to Supabase storage
+            supabase.storage.from_('home-yum').upload(
+                path=storage_path,
+                file=file_content,
+                file_options={"content-type": "video/mp4"}
+            )
+            
+            # Get public URL
+            public_url = supabase.storage.from_('home-yum').get_public_url(storage_path)
+            return public_url.split('?')[0] if '?' in public_url else public_url
+            
+        except Exception as e:
+            logger.error(f"Error uploading to Supabase: {str(e)}")
+            raise
+
+    async def create_video_entry(self, user_id: str, video_url: str, recipe_data: Dict[str, Any]) -> str:
+        """Create entry in videos table and return video ID."""
+        try:
+            video_data = {
+                "userId": user_id,
+                "videoTitle": f"Recipe: {recipe_data['title']}",
+                "videoDescription": recipe_data['description'],
+                "mealName": recipe_data['title'],
+                "mealDescription": recipe_data['description'],
+                "videoUrl": video_url,
+                "thumbnailUrl": recipe_data['mealImage']['url'],
+                "duration": len(recipe_data['ingredients']) + 1,  # ingredients + final image
+                "source": "manual_recipe",
+                "createdAt": "now()",
+                "updatedAt": "now()"
+            }
+            
+            # Insert into videos table
+            result = supabase.table('videos').insert(video_data).execute()
+            
+            if not result.data:
+                raise ValueError("Failed to create video entry")
+                
+            return result.data[0]['videoId']
+            
+        except Exception as e:
+            logger.error(f"Error creating video entry: {str(e)}")
+            raise
+
+    async def create_slideshow(self, ingredient_images: List[Dict[str, Any]], final_image: Dict[str, Any], user_id: str, recipe_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a slideshow video from ingredient images and final meal image."""
         temp_dir = None
-        output_path = None
+        video_path = None
         
         try:
             logger.info("Creating slideshow video from images")
@@ -116,9 +184,9 @@ class VideoCreator:
             os.makedirs(output_dir, exist_ok=True)
             
             # Create unique output filename
-            output_path = os.path.join(output_dir, f"recipe_slideshow_{uuid.uuid4().hex}.mp4")
+            temp_video_path = os.path.join(output_dir, f"recipe_slideshow_{uuid.uuid4().hex}.mp4")
             fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-            out = cv2.VideoWriter(output_path, fourcc, self.frame_rate, self.resolution)
+            out = cv2.VideoWriter(temp_video_path, fourcc, self.frame_rate, self.resolution)
             
             try:
                 # Process each image
@@ -140,14 +208,15 @@ class VideoCreator:
             finally:
                 out.release()
             
-            # Get video file size
-            video_size = os.path.getsize(output_path)
+            # Upload to Supabase and create database entry
+            video_url = await self.upload_to_supabase(temp_video_path, recipe_data['title'])
+            video_id = await self.create_video_entry(user_id, video_url, recipe_data)
             
             return {
                 "success": True,
-                "video_url": output_path,
+                "video_url": video_url,
+                "video_id": video_id,
                 "duration": total_duration,
-                "size": video_size,
                 "resolution": self.resolution,
                 "frame_rate": self.frame_rate
             }
@@ -168,4 +237,12 @@ class VideoCreator:
                     os.rmdir(temp_dir)
                     logger.info(f"Cleaned up temporary directory: {temp_dir}")
                 except Exception as e:
-                    logger.error(f"Error cleaning up temporary directory: {str(e)}") 
+                    logger.error(f"Error cleaning up temporary directory: {str(e)}")
+            
+            # Clean up temporary video file
+            if os.path.exists(temp_video_path):
+                try:
+                    os.remove(temp_video_path)
+                    logger.info(f"Cleaned up temporary video file: {temp_video_path}")
+                except Exception as e:
+                    logger.error(f"Error cleaning up video file: {str(e)}") 

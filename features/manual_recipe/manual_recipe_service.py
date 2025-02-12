@@ -200,44 +200,22 @@ class ManualRecipeService:
             # Create video from images
             video_result = await self.video_creator.create_slideshow(
                 ingredient_images,
-                log_data['mealImage']
+                log_data['mealImage'],
+                log_data['userId'],
+                {
+                    'title': log_data['recipe']['title'],
+                    'description': log_data['recipe']['description'],
+                    'mealImage': log_data['mealImage'],
+                    'ingredients': log_data['recipe']['ingredients']
+                }
             )
             
-            # Create video document
-            video_data = {
-                "userId": log_data['userId'],
-                "videoTitle": f"Manual Recipe: {log_data['recipe']['title']}",
-                "videoDescription": log_data['recipe']['description'],
-                "mealName": log_data['recipe']['title'],
-                "mealDescription": log_data['recipe']['description'],
-                "videoUrl": video_result['video_url'],
-                "thumbnailUrl": log_data['mealImage']['url'],
-                "duration": video_result['duration'],
-                "uploadedAt": now,
-                "source": "manual_recipe",
-                "createdAt": now,
-                "updatedAt": now
-            }
-            
-            # Save to videos collection
-            video_ref = self.db.collection('videos').document()
-            video_ref.set(video_data)
-            video_id = video_ref.id
-            
-            # Save nutrition information
-            nutrition_data = {
-                "videoId": video_id,
-                **nutrition_result,
-                "createdAt": now,
-                "updatedAt": now
-            }
-            
-            nutrition_ref = self.db.collection('nutrition').document()
-            nutrition_ref.set(nutrition_data)
+            if not video_result['success']:
+                raise ValueError(video_result.get('error', 'Failed to create video'))
             
             # Update log with final data
             final_update = {
-                "videoId": video_id,
+                "videoId": video_result['video_id'],
                 "nutrition": nutrition_result,
                 "ingredientImages": ingredient_images,
                 "video": video_result,
@@ -255,9 +233,12 @@ class ManualRecipeService:
             
             return {
                 "logId": log_id,
-                "videoId": video_id,
+                "videoId": video_result['video_id'],
                 "status": "completed",
-                "video": video_data,
+                "video": {
+                    "videoUrl": video_result['video_url'],
+                    "duration": video_result['duration']
+                },
                 "nutrition": nutrition_result
             }
             
