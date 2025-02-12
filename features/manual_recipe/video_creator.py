@@ -126,18 +126,20 @@ class VideoCreator:
         try:
             db = firestore.client()
             
+            # Create video data matching the Video interface from database.types.ts
             video_data = {
                 "userId": user_id,
-                "title": f"Recipe: {recipe_data['title']}",
-                "description": recipe_data['description'],
+                "videoTitle": f"Recipe: {recipe_data['title']}",
+                "videoDescription": recipe_data['description'],
                 "mealName": recipe_data['title'],
                 "mealDescription": recipe_data['description'],
                 "videoUrl": video_url,
                 "thumbnailUrl": recipe_data['mealImage']['url'],
-                "duration": len(recipe_data['ingredients']) + 1,
-                "source": "manual_recipe",
+                "duration": len(recipe_data['ingredients']) + 1,  # Duration in seconds
                 "uploadedAt": firestore.SERVER_TIMESTAMP,
-                "updatedAt": firestore.SERVER_TIMESTAMP
+                "source": "manual_recipe",
+                "userReaction": None,  # Optional field
+                "tryListItem": None,   # Optional field
             }
             
             # Insert into videos collection
@@ -180,12 +182,8 @@ class VideoCreator:
             ingredient_paths = local_image_paths[:-1]  # All but the last path are ingredients
             local_image_paths = [final_image_path] + ingredient_paths + [final_image_path]
             
-            # Create output directory if it doesn't exist
-            output_dir = os.path.join(temp_dir, "output_videos")
-            os.makedirs(output_dir, exist_ok=True)
-            
-            # Create unique output filename
-            video_path = os.path.join(output_dir, f"recipe_slideshow_{uuid.uuid4().hex}.mp4")
+            # Create unique output filename directly in temp directory
+            video_path = os.path.join(temp_dir, f"recipe_slideshow_{uuid.uuid4().hex}.mp4")
             
             # Create a text file listing all images
             image_list_path = os.path.join(temp_dir, "image_list.txt")

@@ -218,7 +218,18 @@ class ManualRecipeService:
                 "videoId": video_result['video_id'],
                 "nutrition": nutrition_result,
                 "ingredientImages": ingredient_images,
-                "video": video_result,
+                "video": {
+                    "videoId": video_result['video_id'],
+                    "videoTitle": f"Recipe: {log_data['recipe']['title']}",
+                    "videoDescription": log_data['recipe']['description'],
+                    "mealName": log_data['recipe']['title'],
+                    "mealDescription": log_data['recipe']['description'],
+                    "videoUrl": video_result['video_url'],
+                    "thumbnailUrl": log_data['mealImage']['url'],
+                    "duration": video_result['duration'],
+                    "uploadedAt": now,
+                    "source": "manual_recipe"
+                },
                 "status": "completed",
                 "updatedAt": now,
                 "processingSteps": firestore.ArrayUnion([{
@@ -233,13 +244,10 @@ class ManualRecipeService:
             
             return {
                 "logId": log_id,
-                "videoId": video_result['video_id'],
-                "status": "completed",
-                "video": {
-                    "videoUrl": video_result['video_url'],
-                    "duration": video_result['duration']
-                },
-                "nutrition": nutrition_result
+                "recipe": log_data['recipe'],
+                "mealImage": log_data['mealImage'],
+                "video": final_update['video'],
+                "status": "completed"
             }
             
         except Exception as e:
