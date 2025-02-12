@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends, Header, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 import firebase_admin
 from firebase_admin import credentials, auth, firestore, storage
 from pydantic import BaseModel
@@ -28,6 +28,7 @@ from features.try_list.try_list_service import TryListService
 from features.reactions.reactions_service import ReactionsService
 from features.feed.feed_service import FeedService
 from features.videos.video_service import VideoService
+from features.manual_recipe.manual_recipe_service import ManualRecipeService
 
 load_dotenv()
 
@@ -229,6 +230,7 @@ try_list_service = TryListService(db)
 reactions_service = ReactionsService(db)
 feed_service = FeedService(db)
 video_service = VideoService(db)
+manual_recipe_service = ManualRecipeService(db)
 
 # Routes
 @app.get("/")
@@ -517,6 +519,53 @@ async def analyze_nutrition_info(serving_sizes: str):
         )
 
 # Add more endpoints as needed based on your PRD requirements
+
+# Manual Recipe endpoints
+@app.post("/api/manual-recipe/generate")
+@log_operation("generate_manual_recipe")
+async def generate_manual_recipe(request: Request):
+    """Generate initial recipe and meal image from prompt."""
+    request_id = f"generate-recipe-{int(time.time())}"
+    uid = "61d1f2c8-2100-4b5d-92df-5e5705a0383d"  # Hardcoded UID
+    
+    # Get the prompt from request body
+    body = await request.json()
+    if 'prompt' not in body:
+        raise HTTPException(status_code=422, detail="Prompt is required in request body")
+    prompt = body['prompt']
+    
+    # Create recipe log
+    log_result = await manual_recipe_service.create_recipe_log(uid, prompt, request_id)
+    
+    # Generate initial recipe
+    result = await manual_recipe_service.generate_initial_recipe(log_result['logId'], request_id)
+    
+    return result
+
+@app.put("/api/manual-recipe/{log_id}/update")
+@log_operation("update_manual_recipe")
+async def update_manual_recipe(
+    log_id: str,
+    updates: Dict[str, Any],
+    token_data=Depends(verify_token)
+):
+    """Update recipe or image based on user feedback."""
+    request_id = f"update-recipe-{int(time.time())}"
+    return await manual_recipe_service.update_recipe(log_id, updates, request_id)
+
+@app.post("/api/manual-recipe/{log_id}/confirm")
+@log_operation("confirm_manual_recipe")
+async def confirm_manual_recipe(log_id: str, token_data=Depends(verify_token)):
+    """Confirm recipe and generate final assets."""
+    request_id = f"confirm-recipe-{int(time.time())}"
+    return await manual_recipe_service.confirm_recipe(log_id, request_id)
+
+@app.get("/api/manual-recipe/{log_id}")
+@log_operation("get_manual_recipe")
+async def get_manual_recipe(log_id: str, token_data=Depends(verify_token)):
+    """Get the current status of a manual recipe."""
+    request_id = f"get-recipe-{int(time.time())}"
+    return await manual_recipe_service.get_recipe_log(log_id, request_id)
 
 if __name__ == "__main__":
     import uvicorn

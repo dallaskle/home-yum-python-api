@@ -3,7 +3,7 @@ import os
 import replicate
 from typing import Dict, Any, List
 from dotenv import load_dotenv
-
+from langsmith import traceable
 logger = logging.getLogger(__name__)
 
 # Load environment variables
@@ -16,6 +16,7 @@ class ImageGenerator:
         if not self.replicate_api_token:
             raise ValueError("REPLICATE_API_TOKEN environment variable is required")
 
+    @traceable(name="generate_meal_image")
     async def generate_meal_image(self, prompt: str) -> Dict[str, Any]:
         """Generate a single image of the complete meal."""
         try:

@@ -20,3 +20,4 @@ opencv-python>=4.8.0
 asyncio
 supabase>=2.13.0
 aiofiles>=23.2.1
+replicate

@@ -3,6 +3,7 @@ import datetime
 from typing import Dict, Any, Optional
 from firebase_admin import firestore
 from fastapi import HTTPException
+from langsmith import traceable
 
 from .recipe_generator import RecipeGenerator
 from .image_generator import ImageGenerator
@@ -61,6 +62,7 @@ class ManualRecipeService:
                 detail=f"Failed to create recipe log: {str(e)}"
             )
 
+    @traceable(name="generate_initial_recipe")
     async def generate_initial_recipe(self, log_id: str, request_id: str) -> Dict[str, Any]:
         """Generate initial recipe and meal image from prompt."""
         try:
