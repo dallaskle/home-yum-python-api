@@ -1,5 +1,6 @@
 import logging
 import datetime
+import asyncio
 from typing import Dict, Any, Optional
 from firebase_admin import firestore
 from fastapi import HTTPException
@@ -64,7 +65,7 @@ class ManualRecipeService:
 
     @traceable(name="generate_initial_recipe")
     async def generate_initial_recipe(self, log_id: str, request_id: str) -> Dict[str, Any]:
-        """Generate initial recipe and meal image from prompt."""
+        """Generate initial recipe and meal image from prompt in parallel."""
         try:
             # Get log document
             log_ref = self.db.collection('manual_recipe_logs').document(log_id)
@@ -77,11 +78,12 @@ class ManualRecipeService:
             prompt = log_data['prompt']
             now = datetime.datetime.utcnow().isoformat()
             
-            # Generate recipe text
-            recipe_result = await self.recipe_generator.generate_recipe(prompt)
+            # Run recipe and image generation in parallel
+            recipe_task = self.recipe_generator.generate_recipe(prompt)
+            image_task = self.image_generator.generate_meal_image(prompt)
             
-            # Generate meal image
-            image_result = await self.image_generator.generate_meal_image(prompt)
+            # Wait for both tasks to complete
+            recipe_result, image_result = await asyncio.gather(recipe_task, image_task)
             
             # Update log with results
             update_data = {

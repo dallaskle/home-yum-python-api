@@ -10,7 +10,7 @@ class RecipeGenerator:
     def __init__(self):
         """Initialize the RecipeGenerator with LangChain configuration."""
         self.chat_model = ChatOpenAI(
-            model="gpt-4",
+            model="gpt-4o",
             temperature=0.7
         )
         
