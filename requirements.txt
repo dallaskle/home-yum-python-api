@@ -21,3 +21,4 @@ asyncio
 supabase>=2.13.0
 aiofiles>=23.2.1
 replicate
+aiohttp>=3.8.0
