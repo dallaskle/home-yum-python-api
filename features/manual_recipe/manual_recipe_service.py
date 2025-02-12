@@ -240,14 +240,16 @@ class ManualRecipeService:
                 }])
             }
             
+            # Update Firestore
             log_ref.update(final_update)
             
+            # Return response matching ManualRecipeResponse interface
             return {
                 "logId": log_id,
                 "recipe": log_data['recipe'],
                 "mealImage": log_data['mealImage'],
-                "video": final_update['video'],
-                "status": "completed"
+                "status": "completed",
+                "video": final_update["video"]
             }
             
         except Exception as e:
