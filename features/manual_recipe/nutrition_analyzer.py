@@ -13,21 +13,21 @@ class ManualNutritionAnalyzer:
     def __init__(self):
         """Initialize the ManualNutritionAnalyzer with LangChain configuration."""
         self.chat_model = ChatOpenAI(
-            model="gpt-4",
+            model="gpt-4o",
             temperature=0
         )
         
         # Define prompts
         self.nutrition_prompt = """Analyze the nutritional content of this recipe and return a JSON object with the following structure:
 
-{
+{{
     "calories": number,
     "fat": number (in grams),
     "carbs": number (in grams),
     "protein": number (in grams),
     "fiber": number (in grams),
     "ingredients": [
-        {
+        {{
             "name": "Ingredient name",
             "amount": number,
             "amountDescription": "unit of measurement",
@@ -36,10 +36,10 @@ class ManualNutritionAnalyzer:
             "carbs": number,
             "protein": number,
             "fiber": number
-        }
+        }}
     ],
-    "serving_sizes": "Detailed serving size information"
-}
+    "serving_sizes": number
+}}
 
 Recipe to analyze:
 {recipe}
@@ -49,7 +49,8 @@ Notes:
 2. Calculate values for {servings} servings
 3. Include all ingredients from the recipe
 4. Round numbers to one decimal place
-5. Return ONLY the JSON object, no additional text"""
+5. serving_sizes should be set to {servings}
+6. Return ONLY the JSON object, no additional text"""
 
     async def analyze_recipe(self, recipe_data: Dict[str, Any]) -> Dict[str, Any]:
         """Analyze the nutritional content of a recipe."""
