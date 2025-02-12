@@ -12,6 +12,7 @@ from supabase import create_client
 from supabase.client import Client
 from dotenv import load_dotenv
 import aiofiles
+from firebase_admin import firestore
 
 # Load environment variables
 load_dotenv()
@@ -123,30 +124,31 @@ class VideoCreator:
     async def create_video_entry(self, user_id: str, video_url: str, recipe_data: Dict[str, Any]) -> str:
         """Create entry in videos table and return video ID."""
         try:
+            db = firestore.client()
+            
             video_data = {
                 "userId": user_id,
-                "videoTitle": f"Recipe: {recipe_data['title']}",
-                "videoDescription": recipe_data['description'],
+                "title": f"Recipe: {recipe_data['title']}",
+                "description": recipe_data['description'],
                 "mealName": recipe_data['title'],
                 "mealDescription": recipe_data['description'],
                 "videoUrl": video_url,
                 "thumbnailUrl": recipe_data['mealImage']['url'],
-                "duration": len(recipe_data['ingredients']) + 1,  # ingredients + final image
+                "duration": len(recipe_data['ingredients']) + 1,
                 "source": "manual_recipe",
-                "createdAt": "now()",
-                "updatedAt": "now()"
+                "uploadedAt": firestore.SERVER_TIMESTAMP,
+                "updatedAt": firestore.SERVER_TIMESTAMP
             }
             
-            # Insert into videos table
-            result = supabase.table('videos').insert(video_data).execute()
+            # Insert into videos collection
+            doc_ref = db.collection('videos').document()
+            doc_ref.set(video_data)
             
-            if not result.data:
-                raise ValueError("Failed to create video entry")
-                
-            return result.data[0]['videoId']
+            return doc_ref.id
             
         except Exception as e:
             logger.error(f"Error creating video entry: {str(e)}")
+            logger.error(f"Video data attempted: {video_data}")
             raise
 
     async def create_slideshow(self, ingredient_images: List[Dict[str, Any]], final_image: Dict[str, Any], user_id: str, recipe_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -173,50 +175,61 @@ class VideoCreator:
             # Wait for all downloads to complete
             local_image_paths = await asyncio.gather(*download_tasks)
             
-            # Calculate video parameters
-            total_images = len(local_image_paths)
-            frames_per_image = self.duration_per_image * self.frame_rate
-            total_frames = (total_images * frames_per_image) + (self.transition_frames * (total_images - 1))
-            total_duration = total_frames / self.frame_rate
+            # Rearrange image paths to show final image at start and end
+            final_image_path = local_image_paths[-1]  # Last path is the final image
+            ingredient_paths = local_image_paths[:-1]  # All but the last path are ingredients
+            local_image_paths = [final_image_path] + ingredient_paths + [final_image_path]
             
             # Create output directory if it doesn't exist
-            output_dir = "output_videos"
+            output_dir = os.path.join(temp_dir, "output_videos")
             os.makedirs(output_dir, exist_ok=True)
             
             # Create unique output filename
-            temp_video_path = os.path.join(output_dir, f"recipe_slideshow_{uuid.uuid4().hex}.mp4")
-            fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-            out = cv2.VideoWriter(temp_video_path, fourcc, self.frame_rate, self.resolution)
+            video_path = os.path.join(output_dir, f"recipe_slideshow_{uuid.uuid4().hex}.mp4")
             
-            try:
-                # Process each image
-                for i in range(len(local_image_paths)):
-                    current_img = self.resize_image(local_image_paths[i])
-                    
-                    # Write frames for current image
-                    for _ in range(frames_per_image):
-                        out.write(current_img)
-                    
-                    # Add transition to next image if not the last image
-                    if i < len(local_image_paths) - 1:
-                        next_img = self.resize_image(local_image_paths[i + 1])
-                        transition_frames = self.create_transition(current_img, next_img, self.transition_frames)
-                        
-                        for frame in transition_frames:
-                            out.write(frame)
+            # Create a text file listing all images
+            image_list_path = os.path.join(temp_dir, "image_list.txt")
+            with open(image_list_path, 'w') as f:
+                for img_path in local_image_paths:
+                    # Each image should be shown for 1 second
+                    f.write(f"file '{img_path}'\n")
+                    f.write(f"duration {self.duration_per_image}\n")
+                # Write the last image path again without duration (required by ffmpeg)
+                f.write(f"file '{local_image_paths[-1]}'\n")
+            
+            # Use ffmpeg to create the video with crossfade transitions
+            cmd = [
+                'ffmpeg', '-y',  # Overwrite output file if it exists
+                '-f', 'concat',  # Use concat demuxer
+                '-safe', '0',    # Don't restrict file paths
+                '-i', image_list_path,  # Input file list
+                '-vf', f'fps={self.frame_rate},scale={self.resolution[0]}:{self.resolution[1]}:force_original_aspect_ratio=decrease,pad={self.resolution[0]}:{self.resolution[1]}:(ow-iw)/2:(oh-ih)/2,format=yuv420p',  # Video filters
+                '-c:v', 'libx264',  # Use H.264 codec
+                '-preset', 'medium',  # Encoding preset (balance between speed and quality)
+                '-movflags', '+faststart',  # Enable streaming
+                '-pix_fmt', 'yuv420p',  # Pixel format for maximum compatibility
+                video_path
+            ]
+            
+            # Run ffmpeg
+            import subprocess
+            process = subprocess.run(cmd, capture_output=True, text=True)
+            if process.returncode != 0:
+                raise ValueError(f"Failed to create video: {process.stderr}")
+            
+            # Verify the video file exists and has content
+            if not os.path.exists(video_path) or os.path.getsize(video_path) < 1000:
+                raise ValueError(f"Video file is invalid or too small: {video_path}")
                 
-            finally:
-                out.release()
-            
             # Upload to Supabase and create database entry
-            video_url = await self.upload_to_supabase(temp_video_path, recipe_data['title'])
+            video_url = await self.upload_to_supabase(video_path, recipe_data['title'])
             video_id = await self.create_video_entry(user_id, video_url, recipe_data)
             
             return {
                 "success": True,
                 "video_url": video_url,
                 "video_id": video_id,
-                "duration": total_duration,
+                "duration": len(local_image_paths) * self.duration_per_image,
                 "resolution": self.resolution,
                 "frame_rate": self.frame_rate
             }
@@ -233,16 +246,10 @@ class VideoCreator:
             if temp_dir and os.path.exists(temp_dir):
                 try:
                     for file in os.listdir(temp_dir):
-                        os.remove(os.path.join(temp_dir, file))
+                        file_path = os.path.join(temp_dir, file)
+                        if os.path.isfile(file_path):
+                            os.remove(file_path)
                     os.rmdir(temp_dir)
                     logger.info(f"Cleaned up temporary directory: {temp_dir}")
                 except Exception as e:
-                    logger.error(f"Error cleaning up temporary directory: {str(e)}")
-            
-            # Clean up temporary video file
-            if os.path.exists(temp_video_path):
-                try:
-                    os.remove(temp_video_path)
-                    logger.info(f"Cleaned up temporary video file: {temp_video_path}")
-                except Exception as e:
-                    logger.error(f"Error cleaning up video file: {str(e)}") 
+                    logger.error(f"Error cleaning up temporary directory: {str(e)}") 
