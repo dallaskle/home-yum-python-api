@@ -12,7 +12,7 @@ class RecipeGenerator:
     def __init__(self, db: firestore.Client):
         self.db = db
         self.chat_model = ChatOpenAI(
-            model="gpt-4",
+            model="gpt-4o",
             max_tokens=1000,
             temperature=0
         )

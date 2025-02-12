@@ -1,5 +1,5 @@
 # Use Python 3.9 or higher
-FROM --platform=linux/amd64 python:3.9-slim
+FROM python:3.9-slim
 
 # Set working directory
 WORKDIR /app
